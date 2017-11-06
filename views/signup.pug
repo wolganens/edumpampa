@@ -1,0 +1,125 @@
+extends layout
+
+block content
+    h3
+        if data.user
+            | Minha conta
+        else
+            | Novo Usuário
+    if historyData
+        if historyData.message
+            .alert.alert-danger
+            | !{historyData.message}
+    form(action="/account/signup",method="post")
+        input(type="hidden", name="_id", value=data.user ? data.user._id : null)
+        .panel.panel-default
+            .panel-heading
+                | Informações Pessoais
+            .panel-body
+                .form-group
+                    label
+                        | Nome completo *
+                    input(type="text", value=data.user ? data.user.name: null, name="name", class="form-control", placeholder="Insira o seu nome completo")
+                .form-group
+                    label
+                        | Data de Nascimento *
+                    input(type="text", value=data.user ? data.user.getFormatedBirthday: null, name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA")
+        .panel.panel-default
+            .panel-heading
+                | Formação
+            .panel-body
+                each qualification in data.qualifications                    
+                    .checkbox.block
+                        label
+                            input(type="radio", name="qualification_id", value=qualification._id, checked=(data.user && data.user.qualification_id) && data.user.qualification_id.toString == qualification._id.toString())
+                            span  
+                                | !{qualification.name}
+                .form-group
+                    label
+                        | Outra
+                    input(type="text", class="form-control js-other", value=data.user ? data.user.qualification_text ? data.user.qualification_text : null : null, name="qualification_text")
+
+
+        .panel.panel-default
+            .panel-heading
+                | Área de Atuação
+            .panel-body
+                each occupation_area in data.occupation_areas
+                    .checkbox.block
+                        label
+                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString == occupation_area._id.toString())
+                            span 
+                                | !{occupation_area.name}
+                .form-group
+                    label
+                        | Outra
+                    input(type="text", class="form-control js-other", value=data.user ? data.user.occupation_area_text ? data.user.occupation_area_text : null : null, name="occupation_area_text")
+        .panel.panel-default
+            .panel-heading
+                | Vínculo Institucional *
+            .panel-body
+                each institutional_link in data.institutional_links
+                    .checkbox.block
+                        label
+                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString == institutional_link._id.toString())
+                            span 
+                                | !{institutional_link.name}
+                .form-group
+                    label
+                        | Outro
+                    input(type="text", class="form-control js-other", value=data.user ? data.user.institutional_link_text ? data.user.institutional_link_text : null : null, name="institutional_link_text")
+        .panel.panel-default
+            .panel-heading
+                | Identificação da Instituição *
+            .panel-body
+                .form-group
+                    label
+                        | Nome da Instituição *
+                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=data.user ? data.user.institution_name : null)
+                .form-group
+                    label
+                        | Endereço da Instituição *
+                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=data.user ? data.user.institution_address : null)
+        .panel.panel-default
+            .panel-heading
+                | Cargo ou Função dentro da Instituição
+            .panel-body
+                each institutional_post in data.institutional_posts
+                    .checkbox.block
+                        label
+                            input(type="checkbox", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked=(data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1)
+                            span 
+                                | !{institutional_post.name}
+                .form-group
+                    label
+                        | Outra
+                    input(type="text", class="form-control js-other", value=data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null, name="institutional_post_text")
+        .panel.panel-default
+            .panel-heading
+                | Informações de Usuário
+            .panel-body                
+                .form-group
+                    label
+                        | Email *
+                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value=data.user ? data.user.email: null)
+                if !data.user
+                    .form-group
+                        label
+                            | Senha *
+                        input(type="password", name="password", class="form-control")
+                        p
+                            | A senha deve ter entre 8 e 20 caracteres e pelo menos, 1 número e 1 letra!
+                    .form-group
+                        label
+                            | Confirmar Senha *
+                        input(type="password", name="password_confirm", class="form-control")
+        .form-group.pull-right
+            .btn-group
+                if data.user
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") Atualizar
+                else
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") Cadastrar
+                button(type="button", value="Limpar",class="btn btn-lg btn-primary") Limpar
+                button(type="button", value="Voltar",class="btn btn-lg btn-primary") Voltar
+        .clearfix
+        

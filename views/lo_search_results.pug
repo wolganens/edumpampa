@@ -1,0 +1,65 @@
+extends layout
+
+block content
+	.row
+		.col-md-3
+			h3
+				| Filtre seus resultados
+			form(action="", method="post")
+				input(type="hidden", value="1", name="filter_flag")
+				.form-group
+					label(for="content")
+						| Conteúdo
+					select(name="content", class="form-control")
+						option(selected=true, value="")
+							| Selecione um conteúdo
+						each content in data.contents
+							option(value=content._id, selected=selected_filters ? selected_filters.content == content._id : false)
+								| !{content.name}
+				.form-group
+					label(for="content")
+						| Recurso
+					select(name="resource", class="form-control")
+						option(selected=true, value="")
+							| Selecione um recurso
+						each resource in data.resources
+							option(value=resource._id, selected=selected_filters ? selected_filters.resource == resource._id : false)
+								| !{resource.name}
+				.form-group
+					button(type="submit", class="btn btn-primary btn-lg")
+						| Filtrar
+		.col-md-9
+			h3
+				| Resultados da busca
+			if checked_string
+				p
+					| Você selecionou: 
+					strong 
+						| !{checked_string.replace(',', ', ')}
+			if search_text
+				p
+					| Você pesquisou por: 
+					strong 
+						| "!{search_text}"
+			if data.learning_object.length > 0
+				each lo in data.learning_object
+					article
+						a(href="/learning-object/single/" + lo._id)
+							| !{lo.title}
+						p
+							| Publicado em 
+							time
+								if lo.createdAt.getDate() < 10
+									| 0!{lo.createdAt.getDate()}/
+								else
+									| !{lo.createdAt.getDate()}/
+								if lo.createdAt.getMonth() < 10
+									| 0!{lo.createdAt.getMonth()}/
+								else
+									| !{lo.createdAt.getMonth()}/
+								| !{lo.createdAt.getFullYear()}
+							| - !{lo.description}
+
+			else
+				.alert.alert-info
+					| Nenhum objeto encontrado

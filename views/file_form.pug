@@ -1,0 +1,19 @@
+.panel.panel-default
+	.panel-heading 
+		| Arquivo
+	.panel-body
+		.form-group
+			input(type="hidden" name="file_name" id="file_name", value=data.lo ? typeof(data.lo.file) != null ? JSON.stringify(data.lo.file) : '' :'')
+			input(type="hidden" name="object_id" id="object_id", value=data.lo ? data.lo._id : '')
+			label
+				| Arquivo (Indicado para arquivos de até 20MB)
+			#drop
+				p(class="text-center")
+					strong
+						| Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
+				.fallback
+					input(type="file", class="form-control", name="file", multiple)
+		.form-group
+			label
+			| URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)
+			textarea(type="text", placeholder="URL do arquivo", name="file_url", class="form-control")

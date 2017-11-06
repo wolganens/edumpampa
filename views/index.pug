@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h4.page-header
+      p
+        | Este repositório possui Objetos de Aprendizagem didático-musicais que podem ser adotados em atividades de Educação Musical.      
+      p Selecione uma ou mais opções para buscar por Objetos de Aprendizagem:
+
+  if error
+    p Error getting dynamic content.
+  else
+    form(action="/learning-object/checkbox-search", method="post")
+      include lo_panels
+      .form-group
+        button(type="submit", class="btn-lg btn btn-primary pull-right")
+          | Pesquisar
+      .clearfix

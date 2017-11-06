@@ -1,0 +1,44 @@
+.row
+  input(type="hidden", name="checked_string", value="", id="checked-string")
+  .col-md-5        
+    .panel.panel-default
+      .panel-heading
+        .checkbox
+          label
+            input(type="checkbox", class="panel-checkall", data-target="teaching_levels[]")
+            |  Níveis de Ensino
+      .panel-body        
+        each tlevel in data.teaching_levels
+          .checkbox.block
+            label
+              input(type="checkbox", name="teaching_levels[]", class="checked-string", value=tlevel._id, checked=data.lo && data.lo.teaching_levels.indexOf(tlevel._id) != -1)
+              span
+                | !{tlevel.name}
+  .col-md-3
+    .panel.panel-default
+        .panel-heading
+          .checkbox
+            label
+              input(type="checkbox", class="panel-checkall", data-target="axes[]")
+              |  Eixos
+        .panel-body
+          each axe in data.axes              
+            .checkbox.block
+              label
+                input(type="checkbox", name="axes[]", class="checked-string", value=axe._id, checked=data.lo && data.lo.axes.indexOf(axe._id) != -1)
+                span
+                  | !{axe.name}
+  .col-md-4
+    .panel.panel-default
+        .panel-heading
+          .checkbox
+            label
+              input(type="checkbox", class="panel-checkall", data-target="accessibility_resources[]")
+              |  Recursos de Acessibilidade
+        .panel-body
+          each accessibility_resource in data.accessibility_resources
+            .checkbox.block             
+              label
+                input(type="checkbox", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=data.lo && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1)
+                span
+                  | !{accessibility_resource.name}

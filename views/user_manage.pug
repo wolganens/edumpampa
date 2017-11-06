@@ -1,0 +1,33 @@
+extends layout
+
+block content
+	h3
+		| Gerenciar Usuários
+	table.table
+		thead
+			th
+				| Usuário
+			th
+				| Situação
+			th
+				| Ações
+		tbody
+			each user in data
+				tr
+					td
+						strong
+							| !{user.name}<br/>
+						| !{user.email}
+					td
+						| !{user.htmlSituation}
+					td
+						.btn-group
+							a.btn.btn-default(href="/admin/user/remove/" + user._id)
+								| Apagar
+							if user.role == 'COMMON'
+								a.btn.btn-success(href="/admin/user/authorize/" + user._id)
+									| Autorizar
+							else if user.role == 'AUTHORIZED'
+								a.btn.btn-danger(href="/admin/user/unauthorize/" + user._id)
+									| Desautorizar							
+							

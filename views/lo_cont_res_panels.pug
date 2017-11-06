@@ -1,0 +1,29 @@
+.row
+  .col-md-6       
+    .panel.panel-default
+      .panel-heading
+        .checkbox
+          label
+            input(type="checkbox", class="panel-checkall", data-target="contents[]")
+            |  Conteúdos
+      .panel-body
+        .checkbox
+          each content in data.contents
+            div
+              label
+                input(type="checkbox", name="contents[]", value = content._id, checked=data.lo && data.lo.content.indexOf(content._id) != -1)
+                | !{content.name}
+  .col-md-6
+    .panel.panel-default
+        .panel-heading
+          .checkbox
+            label
+              input(type="checkbox", class="panel-checkall", data-target="resources[]")
+              |  Recursos
+        .panel-body
+          .checkbox
+            each resource in data.resources
+              div
+                label
+                  input(type="checkbox", name="resources[]",value = resource._id, checked=data.lo && data.lo.resources.indexOf(resource._id) != -1)
+                  | !{resource.name}       

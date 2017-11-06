@@ -1,0 +1,34 @@
+extends layout
+
+block content
+	h3
+		| Cadastrar Objeto de Aprendizagem
+	form(action="/learning-object/create", method="post", encType="multipart/form-data")
+		.panel.panel-default
+			.panel-heading 
+				| Dados Gerais
+			.panel-body
+				.form-group
+					label
+					| Título *
+					input(type="text", placeholder="Informe o título do objeto", required="required" name="title", class="form-control")
+				.form-group
+					label
+					| Descrição *
+					textarea(type="text", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control")
+				.form-group
+					label
+					| Autores *
+					input(type="text", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control")
+				.form-group
+					label
+					| Ano de autoria *
+					input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control")
+		include lo_panels
+		include lo_cont_res_panels
+		include licenses_form
+		include file_form
+		.form-group
+			button(type="submit", class="btn-lg btn btn-primary pull-right")
+				| Cadastrar
+			.clearfix
