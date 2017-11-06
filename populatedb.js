@@ -20,7 +20,7 @@ var InstitutionalPost = require("./models/institutional_post")
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
-mongoose.connect('mongodb://127.0.0.1:27017/edumpampa');
+mongoose.connect('mongodb://edumpampa:unipampaedumpampa@ds129459.mlab.com:29459/edumpampa');
 var db = mongoose.connection;
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -212,6 +212,9 @@ function createAresources(cb) {
 function createContents(cb) {
     async.parallel([
         function(callback) {
+          contentsCreate('Sonorização de textos, imagens ou canções' , callback);
+        },
+        function(callback) {
           contentsCreate('Instrumentos musicais' , callback);
         },
         function(callback) {
@@ -272,7 +275,13 @@ function createResources(cb) {
 function createInstitutionalPost(cb) {
     async.parallel([
         function(callback) {
-          institutionalPostsCreate('Aluno(a)' , callback);
+          institutionalPostsCreate('Estudante do Ensino Fundamental' , callback);
+        },
+        function(callback) {
+          institutionalPostsCreate('Estudante do Ensino Médio' , callback);
+        },
+        function(callback) {
+          institutionalPostsCreate('Estudante do Ensino Superior' , callback);
         },
         function(callback) {
           institutionalPostsCreate('Estagiário(a)' , callback);
@@ -414,11 +423,11 @@ function createInstitutionalLink(cb) {
 }
 
 async.series([
-    createachinglevels,
-    createAresources,
-    createContents,
-    createResources,
-    createLicenses,
+    //createachinglevels,
+    //createAxes,
+    // createContents,
+    // createResources,
+    // createLicenses,
     createQualifications,
     createOccupationArea,
     createInstitutionalLink,

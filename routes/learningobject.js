@@ -9,6 +9,7 @@ router.post('/upload-file', learningObjectController.postUploadFile);
 router.post('/remove-file', learningObjectController.postRemoveFile);
 
 router.get('/single/:loId', learningObjectController.getLearningObject);
+router.get('/details/:loId', learningObjectController.getLearningObjectDetails);
 
 router.get('/approve/:id', learningObjectController.getApproveObject);
 router.get('/remove/:id', learningObjectController.getRemoveObject);

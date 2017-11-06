@@ -21,6 +21,7 @@ module.exports.getCreate = getCreate;
 module.exports.postCreate = postCreate;
 module.exports.postUploadFile = postUploadFile;
 module.exports.getLearningObject = getLearningObject;
+module.exports.getLearningObjectDetails = getLearningObjectDetails;
 module.exports.postRemoveFile = postRemoveFile;
 module.exports.postCheckBoxSearch = postCheckBoxSearch;
 module.exports.postTextSearch = postTextSearch;
@@ -152,15 +153,54 @@ function getLearningObject(req, res) {
             LearningObject.findById(loId, callback);
         }
     }, function(err, results) {
-        
-        const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
-        
-        if (!permission.granted) {
-            res.status(403).send("Você não tem permissão!")
-            return;
+        if (req.user) {
+            const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+            
+            if (!permission.granted) {            
+                return res.redirect('/learning-object/details/'+results.lo._id);            
+            } 
+        } else {
+            return res.redirect('/learning-object/details/'+results.lo._id);
         }
         req.session.lo = results.lo;
-        res.render('lo_update', { error: err, data: results });
+        return res.render('lo_update', { error: err, data: results });
+    });
+    return;
+}
+function getLearningObjectDetails(req, res) {
+    let loId = req.params.loId;
+    async.parallel({
+        accessibility_resources: function(callback) {
+            AccessibilityResources.find(callback);
+        },
+        axes: function(callback) {
+            Axes.find(callback);
+        },
+        teaching_levels: function(callback) {
+            TeachingLevels.find(callback);
+        },
+        resources: function(callback) {
+            Resources.find(callback);
+        },
+        contents: function(callback) {
+            Contents.find(callback);
+        },
+        licenses: function(callback) {
+            Licenses.find(callback);
+        },
+        
+    }, function(err, results) {
+        var lo = LearningObject.findById(loId)
+        .populate('teaching_levels')
+        .populate('axes')
+        .populate('accessibility_resources')
+        .populate('content')
+        .populate('resources')
+        .populate('license').exec(function(err, result){
+            
+            results['lo'] = result;            
+            return res.render('lo_details', { error: err, data: results });
+        });
     });
     return;
 }

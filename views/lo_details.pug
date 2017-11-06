@@ -1,0 +1,79 @@
+extends layout
+
+block content
+	.alert.alert-danger
+		|  A página de detalhes ainda está em construção
+	h3
+		| !{data.lo.title}
+	if data.lo.file_url
+		p
+			| URL do OA: 
+			a(href=data.lo.file_url)
+				| data.lo.file_url
+	if data.lo.file
+		.row
+			.col-md-4
+				p
+					|Nome do arquivo
+					div
+						strong
+							| !{data.lo.file.name}
+			.col-md-4
+				p
+					| Tamanho do arquivo
+					div
+						strong
+							| !{data.lo.file.size}
+			.col-md-4
+				p
+					|Download
+					a(href=data.lo.file.url)
+						| Download
+	p
+		strong
+			| Título
+	p
+		| !{ data.lo.title}
+	p
+		strong
+			| Descrição do recurso
+	p
+		| !{ data.lo.description}
+	p
+		strong
+			| Autor(es)
+	p
+		| !{data.lo.authors}
+	p
+		strong 
+			| Níveis de ensino
+	each tlevel in data.lo.teaching_levels
+		p
+			| !{tlevel.name}
+	p
+		strong 
+			| Eixos
+	each axe in data.lo.axes
+		p
+			| !{axe.name}
+	p
+		strong 
+			| Recurso de Acessibilidade
+	each ares in data.lo.accessibility_resources
+		p
+			| !{ares.name}
+	p
+		strong
+			| Detentor do direito autoral
+	p
+		| !{data.lo.license_owner}
+	p
+		strong
+			| Licença
+	p
+		| !{data.lo.license}
+	
+	img(src=data.lo.license)
+	
+	p
+		| !{data.lo.license_description}
