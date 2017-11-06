@@ -25,24 +25,15 @@ var learning_object_schema = new Schema({
     	max: new Date().getFullYear(),
     	required: true
     },
-    teaching_levels: {
-    	type: [Schema.Types.ObjectId]
-    },
-    axes: {
-    	type: [Schema.Types.ObjectId]
-    },
-    accessibility_resources: {
-    	type: [Schema.Types.ObjectId]
-    },
-    content: {
-    	type: [Schema.Types.ObjectId]
-    },
-    resources: {
-    	type: [Schema.Types.ObjectId]
-    },
+    teaching_levels: [{ type: Schema.Types.ObjectId, ref: 'TeachingLevels' }],
+    axes: [{ type: Schema.Types.ObjectId, ref: 'Axes' }],
+    accessibility_resources: [{ type: Schema.Types.ObjectId, ref: 'AccessibilityResources' }],
+    content: [{ type: Schema.Types.ObjectId, ref: 'Contents' }],
+    resources: [{ type: Schema.Types.ObjectId, ref: 'Resources' }],    
     license: {
     	type: Schema.Types.ObjectId,
-    	required: true
+    	required: true,
+        ref: 'Licenses'
     },
     license_description: {
         type: String,

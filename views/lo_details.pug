@@ -1,8 +1,6 @@
 extends layout
 
-block content
-	.alert.alert-danger
-		|  A página de detalhes ainda está em construção
+block content	
 	h3
 		| !{data.lo.title}
 	if data.lo.file_url
@@ -71,9 +69,9 @@ block content
 		strong
 			| Licença
 	p
-		| !{data.lo.license}
+		| !{data.lo.license.name}
 	
-	img(src=data.lo.license)
+	img(src=data.lo.license.image)
 	
 	p
 		| !{data.lo.license_description}

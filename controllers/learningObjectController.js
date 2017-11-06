@@ -153,6 +153,7 @@ function getLearningObject(req, res) {
             LearningObject.findById(loId, callback);
         }
     }, function(err, results) {
+        console.log(results.lo);
         if (req.user) {
             const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
             
@@ -194,10 +195,9 @@ function getLearningObjectDetails(req, res) {
         .populate('teaching_levels')
         .populate('axes')
         .populate('accessibility_resources')
-        .populate('content')
-        .populate('resources')
-        .populate('license').exec(function(err, result){
-            
+        .populate('license')        
+        .exec(function(err, result){
+            console.log(result)
             results['lo'] = result;            
             return res.render('lo_details', { error: err, data: results });
         });
