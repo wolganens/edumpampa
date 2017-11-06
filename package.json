@@ -7,7 +7,7 @@
     "npm" : "3.10.10"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node app"
   },
   "dependencies": {
     "accesscontrol": "^2.0.0",
