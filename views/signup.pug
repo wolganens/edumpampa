@@ -27,7 +27,7 @@ block content
                 each qualification in data.qualifications                    
                     .checkbox.block
                         label
-                            input(type="radio", name="qualification_id", value=qualification._id, checked=(data.user && data.user.qualification_id) && data.user.qualification_id.toString == qualification._id.toString())
+                            input(type="radio", name="qualification_id", value=qualification._id, checked=(data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString())
                             span  
                                 | !{qualification.name}
                 .form-group
@@ -43,7 +43,7 @@ block content
                 each occupation_area in data.occupation_areas
                     .checkbox.block
                         label
-                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString == occupation_area._id.toString())
+                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString())
                             span 
                                 | !{occupation_area.name}
                 .form-group
@@ -57,7 +57,7 @@ block content
                 each institutional_link in data.institutional_links
                     .checkbox.block
                         label
-                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString == institutional_link._id.toString(), required="required")
+                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString(), required="required")
                             span 
                                 | !{institutional_link.name}
                 .form-group

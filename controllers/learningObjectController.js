@@ -90,7 +90,7 @@ function postCreate(req, res) {
         resources:                  getReqParamAsArray(body["resources[]"]),
         license:                    body.license,
         license_description:        body.license_description,
-        file:                       body.file_name ? body.file_name : null,
+        file:                       body.file_name ? JSON.parse(body.file_name) : null,
         file_url:                   body.file_url ? body.file_url : null
     }        
 
