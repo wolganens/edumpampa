@@ -5,6 +5,11 @@ $navbar-default-color:             #FFF !default;
 $navbar-default-link-color:        #FFF !default;
 $navbar-default-link-hover-bg:     white !default;
 $navbar-default-link-hover-color:          #000 !default;
-$navbar-default-link-active-color:         white !default;
+$navbar-default-link-active-color:         #000 !default;
+$navbar-default-link-active-bg: 			white;
 $panel-default-text:    white !default;
 $brand-primary: $default_green;
+//** Global color for active items (e.g., navs or dropdowns).
+$component-active-color:    #000 !default;
+//** Global background color for active items (e.g., navs or dropdowns).
+$component-active-bg:       white !default;

@@ -41,25 +41,25 @@ body
 						span.icon-bar
 				#bs-example-navbar-collapse-1.collapse.navbar-collapse
 					ul.nav.navbar-nav
-						li.active
-							a(href="#")
+						li(class=currentPath == '/' ? 'active' : null)
+							a(href="/")
 								| Início
 								span.sr-only (current)
 						if currentUser
 							if currentUser.role == 'AUTHORIZED' || currentUser.role == 'ADMIN'
-								li
-									a(href="/learning-object/create", title="Cadastrar objeto de aprendizagem")
+								li(class=currentPath == '/learning-object/create' ? 'active' : null)
+									a(href="/learning-object/create", class=console.log("KKKK"+currentPath), title="Cadastrar objeto de aprendizagem")
 										| Cadastrar OA
 							if currentUser.role == 'ADMIN'
-								li
+								li(class=currentPath == '/admin/learning-object/manage' ? 'active' : null)
 									a(href="/admin/learning-object/manage", title="Gerenciar objetos de aprendizagem")
 										| Gerenciar OA
-								li
+								li(class=currentPath == '/admin/user/manage' ? 'active' : null)
 									a(href="/admin/user/manage", title="Gerenciar Usuários")
 										| Gerenciar Usuarios
 					ul.nav.navbar-nav.navbar-right
 						if currentUser															
-							li.dropdown
+							li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
 								a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
 									| !{currentUser.name}
 									span.caret
@@ -69,9 +69,9 @@ body
 									li
 										a(href="/auth/signout") Sair									
 						else
-							li
+							li(class=currentPath == '/account/signin' ? 'active' : null)
 								a(href="/account/signin") Login
-							li
+							li(class=currentPath == '/account/signup' ? 'active' : null)
 								a(href="/account/signup") Cadastro
 
 		if error_messages && error_messages.length > 0
