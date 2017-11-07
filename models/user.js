@@ -10,14 +10,15 @@ var UserSchema = new Schema({
     email:  {
         type: String,
         required: true,
-        unique: true
+        unique: [true, "Informe um endereço de email!"]
     },
     name: {
-        type: String
+        type: String,
+        required: [true, "Informe seu nome completo!"]
     },
     password: {
         type: String,
-        required: true,
+        required: [true, "Informe  uma senha!"],
         select: false
     },
     passwordSalt: {
@@ -63,15 +64,15 @@ var UserSchema = new Schema({
     },
     institution_name: {
         type: String,
-        required: true,
+        required: [true, "Informe a instituição à qual está vinculado(a)!"],
     },
     institution_address: {
         type: String,
-        required: true,
+        required: [true, "Informe o endereço da instituição"],
     },
     birthday: {
         type: Date,
-        required: true
+        required: [true, "Informe sua data de nascimento!"]
     },
     createdAt: {
         type: Date,

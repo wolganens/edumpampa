@@ -46,21 +46,18 @@ exports.getSignUp = function(req,res){
     });
 }
 function signupUser(req, res, next) {
-    req.session.historyData = _.omit(req.body, 'password');
-
     // TODO: refactor validation
-
-    var userData = _.pick(req.body, 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
+    req.flash('inputs', req.body);
+    var userData = _.pick(req.body, '_id', 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
     const [day, month, year] = userData.birthday.split("/")
     userData.birthday = new Date(year, month - 1, day);
     userData['institutional_post_id'] = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
     userData['qualification_id'] = userData['qualification_id'] ? userData['qualification_id'] : null;
     userData['occupation_area_id'] = userData['occupation_area_id'] ? userData['occupation_area_id'] : null;
     userData['institutional_link_id'] = userData['institutional_link_id'] ? userData['institutional_link_id'] : null;    
-    if (req.body._id) {
-        userData['_id'] = req.body._id;
-    }    
     if (userData._id) {
+        console.log('tem id no form')
+        userData['_id'] = req.body._id;
         User.findByIdAndUpdate(userData._id, userData, function(err, result) {
             if(err){
                 return res.send(err);
@@ -69,29 +66,29 @@ function signupUser(req, res, next) {
             return res.redirect('/account/profile');
         })
     } else {    
-        if (!req.body.email) {
-            req.flash('error_messages', 'E-mail é obrigatório.');
-            return res.redirect('signup');
-        }
-
-        if (!req.body.password) {
-            req.flash('error_messages', 'Senha é obrigatória.');
-            return res.redirect('signup');
-        }
-
         if (req.body.password !== req.body.password_confirm) {
-            req.flash('error_messages', 'Ase senhas informadas não conferem.');
+            var errors = {
+                errors: {
+                    "password_confirm": {"message": "As senhas informadas não conferem!"}
+                }
+            }
+            req.flash('inputErrors', JSON.stringify(errors));
             return res.redirect('signup');
         }
         User.register(userData, function(err, user) {
             console.log(err);
             if (err && (11000 === err.code || 11001 === err.code)) {
-                req.flash('error_messages', 'E-mail is already in use.');
+                var errors = {
+                    errors: {
+                        "email": {"message": "Este email já está sendo utilizado!"}
+                    }
+                }
+                req.flash('inputErrors', JSON.stringify(errors));
                 return res.redirect('signup');
             }
 
             if (err) {
-                req.flash('error_messages', 'Something went wrong, please try later.');
+                req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
                 return res.redirect('/account/signup');
             }
             let transporter = nodemailer.createTransport({

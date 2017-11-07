@@ -7,7 +7,7 @@ block content
         else
             | Novo Usuário    
     form(action="/account/signup",method="post")
-        input(type="hidden", name="_id", value=data.user ? data.user._id : null)
+        input(type="hidden", name="_id", value=(inputs && inputs._id) || (data.user ? data.user._id : null))
         .panel.panel-default
             .panel-heading
                 | Informações Pessoais
@@ -15,11 +15,11 @@ block content
                 .form-group
                     label
                         | Nome completo *
-                    input(type="text", value=data.user ? data.user.name: null, name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
+                    input(type="text", value=(inputs && inputs.name) || (data.user ? data.user.name: null), name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
                 .form-group
                     label
                         | Data de Nascimento *
-                    input(type="text", value=data.user ? data.user.getFormatedBirthday: null, name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
+                    input(type="text", value=(inputs && inputs.birthday) || (data.user ? data.user.getFormatedBirthday: null), name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
         .panel.panel-default
             .panel-heading
                 | Formação
@@ -27,13 +27,13 @@ block content
                 each qualification in data.qualifications                    
                     .checkbox.block
                         label
-                            input(type="radio", name="qualification_id", value=qualification._id, checked=(data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString())
+                            input(type="radio", name="qualification_id", value=qualification._id, checked=(inputs && inputs.qualification_id == qualification._id.toString()) || ((data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString()))
                             span  
                                 | !{qualification.name}
                 .form-group
                     label
                         | Outra
-                    input(type="text", class="form-control js-other", value=data.user ? data.user.qualification_text ? data.user.qualification_text : null : null, name="qualification_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.qualification_text) || (data.user ? data.user.qualification_text ? data.user.qualification_text : null : null), name="qualification_text")
 
 
         .panel.panel-default
@@ -43,27 +43,27 @@ block content
                 each occupation_area in data.occupation_areas
                     .checkbox.block
                         label
-                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString())
+                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(inputs && inputs.occupation_area_id == occupation_area._id.toString()) || ((data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString()))
                             span 
                                 | !{occupation_area.name}
                 .form-group
                     label
                         | Outra
-                    input(type="text", class="form-control js-other", value=data.user ? data.user.occupation_area_text ? data.user.occupation_area_text : null : null, name="occupation_area_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.occupation_area_text) || (data.user ? data.user.occupation_area_text ? data.user.occupation_area_text : null : null), name="occupation_area_text")
         .panel.panel-default
             .panel-heading
-                | Vínculo Institucional *
+                | Vínculo Institucional
             .panel-body
                 each institutional_link in data.institutional_links
                     .checkbox.block
                         label
-                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString(), required="required")
+                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(inputs && inputs.institutional_link_id == institutional_link._id.toString()) || ((data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString()))
                             span 
                                 | !{institutional_link.name}
                 .form-group
                     label
                         | Outro
-                    input(type="text", class="form-control js-other", value=data.user ? data.user.institutional_link_text ? data.user.institutional_link_text : null : null, name="institutional_link_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_link_text) || (data.user ? data.user.institutional_link_text ? data.user.institutional_link_text : null : null), name="institutional_link_text")
         .panel.panel-default
             .panel-heading
                 | Identificação da Instituição *
@@ -71,11 +71,11 @@ block content
                 .form-group
                     label
                         | Nome da Instituição *
-                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=data.user ? data.user.institution_name : null, required="required")
+                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=(inputs && inputs.institution_name) ||(data.user ? data.user.institution_name : null), required="required")
                 .form-group
                     label
                         | Endereço da Instituição *
-                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=data.user ? data.user.institution_address : null, required="required")
+                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=(inputs && inputs.institution_address) || (data.user ? data.user.institution_address : null), required="required")
         .panel.panel-default
             .panel-heading
                 | Cargo ou Função dentro da Instituição
@@ -83,13 +83,13 @@ block content
                 each institutional_post in data.institutional_posts
                     .checkbox.block
                         label
-                            input(type="checkbox", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked=(data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1)
+                            input(type="checkbox", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked= (inputs && inputs['institutional_post_id[]'] && inputs['institutional_post_id[]'].indexOf(institutional_post._id.toString()) != -1 )|| ((data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1))
                             span 
                                 | !{institutional_post.name}
                 .form-group
                     label
                         | Outra
-                    input(type="text", class="form-control js-other", value=data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null, name="institutional_post_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text")
         .panel.panel-default
             .panel-heading
                 | Informações de Usuário
@@ -97,7 +97,7 @@ block content
                 .form-group
                     label
                         | Email *
-                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value=data.user ? data.user.email: null, required="required")
+                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value= (inputs && inputs.email) || (data.user ? data.user.email: null), required="required")
                 if !data.user
                     .form-group
                         label
