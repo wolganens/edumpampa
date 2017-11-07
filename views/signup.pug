@@ -5,11 +5,7 @@ block content
         if data.user
             | Minha conta
         else
-            | Novo Usuário
-    if historyData
-        if historyData.message
-            .alert.alert-danger
-            | !{historyData.message}
+            | Novo Usuário    
     form(action="/account/signup",method="post")
         input(type="hidden", name="_id", value=data.user ? data.user._id : null)
         .panel.panel-default
@@ -19,11 +15,11 @@ block content
                 .form-group
                     label
                         | Nome completo *
-                    input(type="text", value=data.user ? data.user.name: null, name="name", class="form-control", placeholder="Insira o seu nome completo")
+                    input(type="text", value=data.user ? data.user.name: null, name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
                 .form-group
                     label
                         | Data de Nascimento *
-                    input(type="text", value=data.user ? data.user.getFormatedBirthday: null, name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA")
+                    input(type="text", value=data.user ? data.user.getFormatedBirthday: null, name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
         .panel.panel-default
             .panel-heading
                 | Formação
@@ -61,7 +57,7 @@ block content
                 each institutional_link in data.institutional_links
                     .checkbox.block
                         label
-                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString == institutional_link._id.toString())
+                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString == institutional_link._id.toString(), required="required")
                             span 
                                 | !{institutional_link.name}
                 .form-group
@@ -75,11 +71,11 @@ block content
                 .form-group
                     label
                         | Nome da Instituição *
-                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=data.user ? data.user.institution_name : null)
+                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=data.user ? data.user.institution_name : null, required="required")
                 .form-group
                     label
                         | Endereço da Instituição *
-                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=data.user ? data.user.institution_address : null)
+                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=data.user ? data.user.institution_address : null, required="required")
         .panel.panel-default
             .panel-heading
                 | Cargo ou Função dentro da Instituição
@@ -101,18 +97,18 @@ block content
                 .form-group
                     label
                         | Email *
-                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value=data.user ? data.user.email: null)
+                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value=data.user ? data.user.email: null, required="required")
                 if !data.user
                     .form-group
                         label
                             | Senha *
-                        input(type="password", name="password", class="form-control")
+                        input(type="password", name="password", class="form-control", required="required")
                         p
                             | A senha deve ter entre 8 e 20 caracteres e pelo menos, 1 número e 1 letra!
                     .form-group
                         label
                             | Confirmar Senha *
-                        input(type="password", name="password_confirm", class="form-control")
+                        input(type="password", name="password_confirm", class="form-control", required="required")
         .form-group.pull-right
             .btn-group
                 if data.user

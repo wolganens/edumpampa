@@ -80,6 +80,9 @@ body
 		if success_messages && success_messages.length > 0
 			.alert.alert-success
 				| !{success_messages}
+		if inputErrors
+			.hidden#input-errors
+				| !{inputErrors}
 		main#irconteudo
 			block content
 		footer.text-center

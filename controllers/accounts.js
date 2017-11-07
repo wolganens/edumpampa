@@ -59,9 +59,7 @@ function signupUser(req, res, next) {
     userData['institutional_link_id'] = userData['institutional_link_id'] ? userData['institutional_link_id'] : null;    
     if (req.body._id) {
         userData['_id'] = req.body._id;
-    }
-    console.log("userData")
-    console.log(userData);
+    }    
     if (userData._id) {
         User.findByIdAndUpdate(userData._id, userData, function(err, result) {
             if(err){
@@ -72,17 +70,17 @@ function signupUser(req, res, next) {
         })
     } else {    
         if (!req.body.email) {
-            req.flash('error_messages', 'E-mail is required.');
+            req.flash('error_messages', 'E-mail é obrigatório.');
             return res.redirect('signup');
         }
 
         if (!req.body.password) {
-            req.flash('error_messages', 'Password is required.');
+            req.flash('error_messages', 'Senha é obrigatória.');
             return res.redirect('signup');
         }
 
         if (req.body.password !== req.body.password_confirm) {
-            req.flash('error_messages', 'Password confirmation should match password.');
+            req.flash('error_messages', 'Ase senhas informadas não conferem.');
             return res.redirect('signup');
         }
         User.register(userData, function(err, user) {

@@ -71,28 +71,11 @@ function getReqParamAsArray(reqparam) {
     }
 }
 function postCreate(req, res) {
-    console.log(req.session.lo);
-    console.log("==============")
-    console.log("==============")
-    console.log("==============")
     const permission = !req.session.lo ? ac.can(req.user.role).createOwn('learningObject') : req.session.lo.owner.toString() == req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
-        res.status(403).send("Você não tem permissão!")
-        return;
+        return res.status(403).send("Você não tem permissão!")        
     }   
-    const body = req.body;    
-    if (!body.file_name && body.file_url == '') {        
-        req.flash('error_messages', 'Envie um arquivo ou uma URL para o arquivo do objeto!');
-        if (body.object_id) {
-            res.redirect('/learning-object/single/'+ body.object_id);            
-        } else {
-            res.redirect('/learning-object/create');            
-        }
-        return;
-    }
-    if (body.file_name) {
-        var file = JSON.parse(body.file_name)
-    }
+    const body = req.body;                        
     var learningObject = {
         owner:                      req.user._id,
         title:                      body.title,
@@ -107,26 +90,34 @@ function postCreate(req, res) {
         resources:                  getReqParamAsArray(body["resources[]"]),
         license:                    body.license,
         license_description:        body.license_description,
-        file:                       file
+        file:                       body.file_name ? body.file_name : null,
+        file_url:                   body.file_url ? body.file_url : null
     }        
-        
-    if (req.file_url) {
-        learningObject.file_url = req.file_url;
-    }
 
     learningObject = new LearningObject(learningObject);
     learningObject.save(function(err, result) {
         if (err) {
-            return res.status(500).send(err);
+            body['teaching_levels[]'] = getReqParamAsArray(body['teaching_levels[]'] || []);
+            body['axes[]'] = getReqParamAsArray(body['axes[]'] || []);
+            body['accessibility_resources[]'] = getReqParamAsArray(body['accessibility_resources[]'] || []);
+            body['contents[]'] = getReqParamAsArray(body['contents[]'] || []);
+            body['resources[]'] = getReqParamAsArray(body['resources[]'] || []);
+            req.flash('inputs', body)
+            req.flash('inputErrors', JSON.stringify(err))
+            if (body.object_id) {
+                return res.redirect('/learning-object/single/' + learningObject._id);
+            } else {
+                return res.redirect('/learning-object/create');
+            }
         }
         var success_msg = "Objeto submetido para aprovação com sucesso!";
         if (body.object_id) {
             success_msg = "Objeto atualizado com sucesso!";
         }
+        delete req.session.lo;
         req.flash('success_messages',  success_msg);
         res.redirect('/learning-object/single/' + learningObject._id);
     });
-    return;
 }
 function getLearningObject(req, res) {
     let loId = req.params.loId;

@@ -22,7 +22,7 @@ var learning_object_schema = new Schema({
     },
     year: {
     	type: Number,
-    	max: new Date().getFullYear(),
+    	max: [new Date().getFullYear(), "O ano de autoria não pode ser maior que o ano atual!"],
     	required: true
     },
     teaching_levels: [{ type: Schema.Types.ObjectId, ref: 'TeachingLevels' }],
@@ -45,7 +45,9 @@ var learning_object_schema = new Schema({
     },
     file: {
     	type: Object,
-    	required: false
+    	required: [function(){
+                    return !this.file_url
+                }, "Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)"]
     },
     'file.name': {
         type: String
@@ -61,7 +63,9 @@ var learning_object_schema = new Schema({
     },
     file_url: {
     	type: String,
-    	required: false
+    	required: [function(){
+                    return !this.file
+                }, "Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)"]
     },
     approved: {
         type: Boolean,

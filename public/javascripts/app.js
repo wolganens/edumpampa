@@ -110,4 +110,18 @@ jQuery(document).ready(function($) {
     	$("#irbusca").focus()
     	document.getElementById("irbusca").focus();
     })
+    var inputErrors = document.getElementById('input-errors');
+    if(inputErrors) {
+    	var jsonErrors = JSON.parse(inputErrors.textContent);    	
+    	console.log(jsonErrors);
+    	for (var inputName in jsonErrors.errors) {
+    		var aux = null;
+    		    	    		
+    		var input = document.getElementsByName(inputName)[0];
+    		if (input) {
+    			input.insertAdjacentHTML('afterend', '<div class="alert alert-danger">'+jsonErrors.errors[inputName].message+'</div>');
+    		}
+    		console.log(input)
+    	}
+    }
 });

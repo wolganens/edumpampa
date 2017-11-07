@@ -12,8 +12,9 @@
 					strong
 						| Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
 				.fallback
-					input(type="file", class="form-control", name="file", multiple)
+					input(type="file", class="form-control", name="file")
 		.form-group
 			label
 			| URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)
 			textarea(type="text", placeholder="URL do arquivo", name="file_url", class="form-control")
+				| !{(inputs && inputs.file_url) || (data.lo && data.lo.file_url)}

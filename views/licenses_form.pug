@@ -6,14 +6,14 @@
 			each license in data.licenses
 				.checkbox.inline
 						label
-							input(type="radio", name="license", data-description=license.description,required="required", value=license._id, checked=data.lo && license._id == data.lo.license.toString())
+							input(type="radio", name="license", data-description=license.description,required="required", value=license._id, checked=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()))
 							img(src=license.image)
 		.form-group
 			label
 			| Detentor dos Direitos Autorais *
-			input(type="text", placeholder="Informe o nome do detentor dos direitos autorais objeto", required="required" name="license_owner", class="form-control", value=data.lo && data.lo.license_owner)
+			input(type="text", placeholder="Informe o nome do detentor dos direitos autorais objeto", required="required" name="license_owner", class="form-control", value=(inputs && inputs.license_owner) || (data.lo && data.lo.license_owner))
 		.form-group
 			label
 			| Descrição da licença *
 			textarea(type="text", id="license_description" placeholder="Descrição da licença de uso", required="required" name="license_description", class="form-control")
-				| !{data.lo && data.lo.license_description}
+				| !{(inputs && inputs.license_description) || (data.lo && data.lo.license_description)}

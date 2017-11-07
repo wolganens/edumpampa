@@ -62,6 +62,9 @@ app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
     res.locals.success_messages = req.flash('success_messages');
     res.locals.error_messages = req.flash('error_messages');    
+    res.locals.inputs = req.flash('inputs')[0];
+    res.locals.inputErrors = req.flash('inputErrors')[0];
+    console.log(res.locals.inputs);
     // mock i18n funciton
     res.locals._t = function (value) { return value; };
     res.locals._s = function (obj) { return JSON.stringify(obj); };
