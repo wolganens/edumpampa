@@ -5889,4 +5889,9 @@ footer ul {
 .loginBtn--google:focus {
   background: #E74B37; }
 
+#license-details {
+  display: none; }
+  #license-details a {
+    margin-left: 15px; }
+
 /*# sourceMappingURL=style.css.map */

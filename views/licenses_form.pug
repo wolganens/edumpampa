@@ -20,3 +20,9 @@
 			| Descrição da licença *
 			textarea(type="text", id="license_description" placeholder="Descrição da licença de uso", required="required" name="license_description", class="form-control")
 				| !{(inputs && inputs.license_description) || (data.lo && data.lo.license_description)}
+		#license-details
+			img#license-img
+			a#license-deed(target="_blank", title="Ver descrição completa da licensa")
+				| Ver descrição completa
+			a#license-legal(target="_blank", title="Ver descrição legal da licensa")
+				| Ver descrição legal

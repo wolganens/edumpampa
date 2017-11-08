@@ -77,8 +77,22 @@ jQuery(document).ready(function($) {
 			}
 		}
 	}
+	var lic_details = document.getElementById('license-details');
+	var lic_img = document.getElementById('license-img');
+	var lic_deed = document.getElementById('license-deed');
+	var lic_legal = document.getElementById('license-legal');
 	$("[name=license]").change(function(){
-		$("#license_description").text($(this).find(':selected').data("description"));
+		var selected = $(this).find(':selected');
+		var description = selected.data("description") || null;
+		$("#license_description").text(description);
+		if (description) {
+			lic_img.src = selected.data('img');
+			lic_deed.href = selected.data('deed');
+			lic_legal.href = selected.data('legal');
+			lic_details.style.display = 'block'
+		} else {
+			lic_details.style.display = 'none'
+		}
 	})
 	var checked_lo_attributes = [];
 	$(".checked-string").change(function(){

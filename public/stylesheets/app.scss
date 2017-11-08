@@ -99,3 +99,9 @@ footer {
 .loginBtn--google:focus {
   background: #E74B37;
 }
+#license-details {
+	display: none;
+	a {
+		margin-left: 15px;
+	}
+}
