@@ -9,7 +9,7 @@
 				option(value="")
 					| Selecione uma licença
 				each license in data.licenses
-					option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()))
+					option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()) || (license.name == 'Atribuição-CompartilhaIgual CC BY-SA'))
 						| !{license.name}				
 		.form-group
 			label
