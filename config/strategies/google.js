@@ -11,7 +11,7 @@ module.exports = function() {
         {
             clientID:  "303825891357-bn5tssc9q4hncnrtippn1c8i744db31h.apps.googleusercontent.com" ,
             clientSecret:  "QKeCN2408js1eYIDLLoKlg2z" ,
-            callbackURL: "http://localhost:5000/auth/oauth2callback"
+            callbackURL: "http://edumpampa.herokuapp.com/auth/oauth2callback"
         },
         function(accessToken, refreshToken, profile, cb) {
             var userData = {
