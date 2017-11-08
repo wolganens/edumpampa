@@ -10,6 +10,8 @@ var mongoose = require('mongoose');
  *  Module exports
  */
 module.exports.signin = signinUser;
+module.exports.signinGoogle = signinGoogle;
+module.exports.signinGoogleCb = signinGoogleCb;
 module.exports.signout = signoutUser;
 
 /**
@@ -56,6 +58,20 @@ function signinUser(req, res, next) {
         });
     })(req, res, next);
 };
+function signinGoogle(req, res, next) {
+    console.log('signinGoogle....')
+    passport.authenticate('google', { scope: [
+        'https://www.googleapis.com/auth/userinfo.profile',
+        'https://www.googleapis.com/auth/userinfo.email'
+    ] });    
+
+};
+function signinGoogleCb(req,res, next){
+    passport.authenticate('google', { failureRedirect: '/account/signin' }),
+    function(req, res) {
+        res.redirect('/');
+    };
+}
 
 function signoutUser(req, res, next) {
     req.logout();

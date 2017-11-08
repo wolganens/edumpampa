@@ -3,11 +3,14 @@
 		| Licenças
 	.panel-body
 		.form-group
-			each license in data.licenses
-				.checkbox.inline
-						label
-							input(type="radio", name="license", data-description=license.description,required="required", value=license._id, checked=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()))
-							img(src=license.image)
+			label
+				| Licença
+			select(name="license", required, class="form-control")
+				option(value="")
+					| Selecione uma licença
+				each license in data.licenses
+					option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()))
+						| !{license.name}				
 		.form-group
 			label
 			| Detentor dos Direitos Autorais *

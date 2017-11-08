@@ -13,6 +13,7 @@ module.exports.init = function(app) {
 		User.findById(id, done);
 	});
 
-// load strategies
-require('./strategies/local')();
+	// load strategies
+	require('./strategies/local')();
+	require('./strategies/google')();
 };

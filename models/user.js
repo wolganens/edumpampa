@@ -18,17 +18,29 @@ var UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: [true, "Informe  uma senha!"],
+        required: [function(){
+            return !this.google_id
+        }, "Informe  uma senha!"],
         select: false
     },
     passwordSalt: {
         type: String,
-        required: true,
+        required: function(){
+            return !this.google_id
+        },
         select: false
     },
     active: {
         type: Boolean,
         default: true
+    },
+    google: {
+        type: Object,
+        required: false,
+    },
+    google_id: {
+        type: String,
+        required: false
     },
     qualification_id: {
         type: Schema.Types.ObjectId,
@@ -64,15 +76,21 @@ var UserSchema = new Schema({
     },
     institution_name: {
         type: String,
-        required: [true, "Informe a instituição à qual está vinculado(a)!"],
+        required: [function(){
+            return !this.google_id
+        }, "Informe a instituição à qual está vinculado(a)!"],
     },
     institution_address: {
         type: String,
-        required: [true, "Informe o endereço da instituição"],
+        required: [function(){
+            return !this.google_id
+        }, "Informe o endereço da instituição"],
     },
     birthday: {
         type: Date,
-        required: [true, "Informe sua data de nascimento!"]
+        required: [function(){
+            return !this.google_id
+        }, "Informe sua data de nascimento!"]
     },
     createdAt: {
         type: Date,
@@ -99,29 +117,29 @@ UserSchema.statics.authenticate = function(email, password, callback) {
             return callback(err, null);
         }
 
-// no user found just return the empty user
-if (!user) {
-    return callback(err, user);
-}
+        // no user found just return the empty user
+        if (!user) {
+            return callback(err, user);
+        }
 
-// verify the password with the existing hash from the user
-passwordHelper.verify(password, user.password, user.passwordSalt, function(err, result) {
-    if (err) {
-        return callback(err, null);
-    }
+        // verify the password with the existing hash from the user
+        passwordHelper.verify(password, user.password, user.passwordSalt, function(err, result) {
+            if (err) {
+                return callback(err, null);
+            }
 
-// if password does not match don't return user
-if (result === false) {
-    return callback(err, null);
-}
+            // if password does not match don't return user
+            if (result === false) {
+                return callback(err, null);
+            }
 
-// remove password and salt from the result
-user.password = undefined;
-user.passwordSalt = undefined;
-// return user if everything is ok
-callback(err, user);
-});
-});
+            // remove password and salt from the result
+            user.password = undefined;
+            user.passwordSalt = undefined;
+            // return user if everything is ok
+            callback(err, user);
+        });
+    });
 };
 
 /**

@@ -78,7 +78,7 @@ jQuery(document).ready(function($) {
 		}
 	}
 	$("[name=license]").change(function(){
-		$("#license_description").text($(this).data("description"));
+		$("#license_description").text($(this).find(':selected').data("description"));
 	})
 	var checked_lo_attributes = [];
 	$(".checked-string").change(function(){
