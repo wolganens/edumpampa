@@ -112,10 +112,18 @@ block content
         .form-group.pull-right
             .btn-group
                 if data.user
-                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") Atualizar
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") 
+                        i(class="fa fa-floppy-o" aria-hidden="true") 
+                        | Atualizar
                 else
-                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") Cadastrar
-                button(type="reset", value="Limpar",class="btn btn-lg btn-primary") Limpar
-                a(href="/" , class="btn btn-lg btn-primary") Voltar
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")  
+                        i(class="fa fa-floppy-o", aria-hidden="true") 
+                        | Cadastrar
+                button(type="reset", value="Limpar",class="btn btn-lg btn-primary") 
+                    i(class="fa fa-undo", aria-hidden="true")
+                    | Limpar
+                a(href="/" , class="btn btn-lg btn-primary")
+                    i(class="fa fa-arrow-left", aria-hidden="true") 
+                    | Voltar
         .clearfix
         

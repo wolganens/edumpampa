@@ -1,5 +1,6 @@
 @import "./custom_variables";
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../node_modules/font-awesome/scss/font-awesome";
 
 .inline {
 	display: inline;
@@ -104,4 +105,7 @@ footer {
 	a {
 		margin-left: 15px;
 	}
+}
+.btn i {
+	margin-right: 10px;
 }
