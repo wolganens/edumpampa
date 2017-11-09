@@ -350,7 +350,7 @@ function postCheckBoxSearch(req, res) {
             }
             // Adiciona o objeto de aprendizagem nos resultados e renderiza a view
             results['learning_object'] = lo;
-            return res.render('lo_search_results', {data: results, selected_filters: selected_filters, checked_string: req.session.checked_string || "\"Nenhuma selação\""});
+            return res.render('lo_search_results', {data: results, selected_filters: selected_filters, checked_string: body.checked_string || req.session.checked_string || "\"Nenhuma selação\""});
         });
     });
 }

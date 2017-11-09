@@ -76,44 +76,42 @@ jQuery(document).ready(function($) {
 			    dropzone_hndlr.options.maxFiles = dz.options.maxFiles - 1;
 			}
 		}
-	}
+	}	
 	var lic_details = document.getElementById('license-details');
-	var lic_img = document.getElementById('license-img');
-	var lic_deed = document.getElementById('license-deed');
-	var lic_legal = document.getElementById('license-legal');
-	load_license_details($("[name=license]"));
-	$("[name=license]").change(function(){
-		load_license_details($(this));
-	})
-	function load_license_details(select) {
-		var selected = select.find(':selected');
-		var description = selected.data("description") || null;
-		$("#license_description").text(description);
-		if (description) {
-			lic_img.src = selected.data('img');
-			lic_deed.href = selected.data('deed');
-			lic_legal.href = selected.data('legal');
-			lic_details.style.display = 'block'
-		} else {
-			lic_details.style.display = 'none'
-		}
+	if (lic_details) {
+		var lic_img = document.getElementById('license-img');
+		var lic_deed = document.getElementById('license-deed');
+		var lic_legal = document.getElementById('license-legal');
+		load_license_details($("[name=license]"));
+		$("[name=license]").change(function(){
+			load_license_details($(this));
+		})
+		function load_license_details(select) {
+			var selected = select.find(':selected');
+			var description = selected.data("description") || null;
+			$("#license_description").text(description);
+			if (description) {
+				lic_img.src = selected.data('img');
+				lic_deed.href = selected.data('deed');
+				lic_legal.href = selected.data('legal');
+				lic_details.style.display = 'block'
+			} else {
+				lic_details.style.display = 'none'
+			}
 
+		}
 	}
 	var checked_lo_attributes = [];
-	$(".checked-string").change(function(){
-		var text = $(this).next().text();
-		var index = checked_lo_attributes.indexOf(text);
-		if (index != -1) {
-			if (!this.checked) {
-				checked_lo_attributes.splice(index, 1);
-			}
-		} else {
-			if(this.checked){
+	$(".checked-string, .panel-checkall").change(function(){
+		checked_lo_attributes.splice(0, checked_lo_attributes.length);
+		$(".checked-string").each(function(index, element){
+			if (element.checked) {
+				var text = $(element).next().text();
 				checked_lo_attributes.push(text);
 			}
-		}
+		})		
 		var seleted_string = checked_lo_attributes.join();		
-		$("#checked-string").val(seleted_string);
+		$("#checked-string").val(seleted_string.replace(/\,/g, ', '));
 	});
 	$(".js-other").change(function(event) {
         var parent = $(this).parent().parent();        
