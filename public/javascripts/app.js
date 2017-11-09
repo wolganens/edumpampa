@@ -81,8 +81,12 @@ jQuery(document).ready(function($) {
 	var lic_img = document.getElementById('license-img');
 	var lic_deed = document.getElementById('license-deed');
 	var lic_legal = document.getElementById('license-legal');
+	load_license_details($("[name=license]"));
 	$("[name=license]").change(function(){
-		var selected = $(this).find(':selected');
+		load_license_details($(this));
+	})
+	function load_license_details(select) {
+		var selected = select.find(':selected');
 		var description = selected.data("description") || null;
 		$("#license_description").text(description);
 		if (description) {
@@ -93,7 +97,8 @@ jQuery(document).ready(function($) {
 		} else {
 			lic_details.style.display = 'none'
 		}
-	})
+
+	}
 	var checked_lo_attributes = [];
 	$(".checked-string").change(function(){
 		var text = $(this).next().text();
