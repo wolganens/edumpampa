@@ -11,7 +11,7 @@
           each content in data.contents
             div
               label
-                input(type="checkbox", name="contents[]", value = content._id, checked=(inputs && inputs['contents[]'].indexOf(content._id.toString()) != -1) || (data.lo && data.lo.content.indexOf(content._id) != -1))
+                input(type="checkbox", name="contents[]", value = content._id, checked=(inputs && inputs['contents[]'].indexOf(content._id.toString()) != -1) || (data.lo && data.lo.content && data.lo.content.indexOf(content._id) != -1))
                 | !{content.name}
   .col-md-6
     .panel.panel-default
@@ -25,5 +25,5 @@
             each resource in data.resources
               div
                 label
-                  input(type="checkbox", name="resources[]",value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources.indexOf(resource._id) != -1))
+                  input(type="checkbox", name="resources[]",value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
                   | !{resource.name}       
