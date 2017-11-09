@@ -48,7 +48,7 @@ exports.getSignUp = function(req,res){
 function signupUser(req, res, next) {
     // TODO: refactor validation
     req.flash('inputs', req.body);
-    var userData = _.pick(req.body, '_id', 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
+    var userData = _.pick(req.body, 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
     const [day, month, year] = userData.birthday.split("/")
     userData.birthday = new Date(year, month - 1, day);
     userData['institutional_post_id'] = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
