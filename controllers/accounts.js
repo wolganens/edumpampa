@@ -14,6 +14,8 @@ var async = require('async');
 const nodemailer = require('nodemailer');
 var passwordHelper = require('../helpers/password');
 var generator = require('generate-password');
+const pug = require('pug');
+var path = require('path');
 
 /**
 *  Module exports
@@ -169,7 +171,10 @@ function postForgotPw(req, res) {
                 from: '"Equipe EduMPampa" <edumpampa@gmail.com>', // sender address
                 to: user.email, // list of receivers
                 subject: 'Senha de acesso!', // Subject line            
-                html: '<b>Olá ' + user.name + '</b><p>Sua nova senha de acesso é: '+ password +'</p>' // html body
+                html:   pug.renderFile(path.join(__appRoot, 'views', 'email_forgot_pw.pug'), {
+                            name: user.name,
+                            password: password
+                        })
             };
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
@@ -178,10 +183,11 @@ function postForgotPw(req, res) {
                 done(error, "Senha enviada para o email informado!")                
             });     
         }
-    ], function(err) {
+    ], function(err, success_msg) {
         if (err) {
             return next(err);
         }
+        req.flash("success_messages", success_msg);
         res.redirect('/account/forgot-pw');
     });    
 }
