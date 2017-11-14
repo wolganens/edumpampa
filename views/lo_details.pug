@@ -6,8 +6,12 @@ block content
 	if data.lo.file_url
 		p
 			| URL do OA: 
-			a(href=data.lo.file_url)
-				| data.lo.file_url
+			if currentUser
+				a(href=data.lo.file_url)
+					| !{data.lo.file_url}
+			else
+				strong.text-danger
+					| Apenas usuários cadastrados podem baixar arquivos!
 	if data.lo.file
 		.row
 			.col-md-4
@@ -25,8 +29,13 @@ block content
 			.col-md-4
 				p
 					|Download
-					a(href=data.lo.file.url)
-						| Download
+					div
+						if currentUser
+							a(href=data.lo.file.url)
+								| Download
+						else
+							strong.text-danger
+								| Apenas usuários cadastrados podem baixar arquivos!
 	p
 		strong
 			| Título
@@ -42,24 +51,27 @@ block content
 			| Autor(es)
 	p
 		| !{data.lo.authors}
-	p
-		strong 
-			| Níveis de ensino
-	each tlevel in data.lo.teaching_levels
+	if data.lo.teaching_levels
 		p
-			| !{tlevel.name}
-	p
-		strong 
-			| Eixos
-	each axe in data.lo.axes
+			strong 
+				| Níveis de ensino
+		each tlevel in data.lo.teaching_levels
+			p
+				| !{tlevel.name}
+	if data.lo.axes
 		p
-			| !{axe.name}
-	p
-		strong 
-			| Recurso de Acessibilidade
-	each ares in data.lo.accessibility_resources
+			strong 
+				| Eixos
+		each axe in data.lo.axes
+			p
+				| !{axe.name}
+	if data.lo.accessibility_resources
 		p
-			| !{ares.name}
+			strong 
+				| Recurso de Acessibilidade
+		each ares in data.lo.accessibility_resources
+			p
+				| !{ares.name}
 	p
 		strong
 			| Detentor do direito autoral

@@ -270,11 +270,12 @@ function postTextSearch(req, res) {
             return res.send(err);
         }
         // Se a query estiver na sessão pronta para receber filtros, usa ela e não uma nova consulta
-        const search_text = body.search_text  ? body.search_text : req.session.search_text;
+        const search_text = (body.search_text || body.search_text == '')  ? body.search_text : req.session.search_text;
         var doc_find = {
-            title: new RegExp(search_text, 'i')
+            title: {"$regex": new RegExp(search_text) , "$options": "i"}
         };
-        var lo_query = LearningObject.find(doc_find).where('approved').equals(true);;
+        console.log(doc_find);
+        var lo_query = LearningObject.find(doc_find, {"title": 1, "createdAt": 1, "description": 1}).where('approved').equals(true);        
         //Verifica se está sendo aplicado algum filtro
         if (body.filter_flag ) {
             var selected_filters = {};
@@ -308,7 +309,7 @@ function postCheckBoxSearch(req, res) {
             Contents.find(callback);
         }
     }, function(err, results) {
-        var or = {};
+        var and = {};
         if (body.checked_string || body.checked_string == '') {
             console.log("NÃO PEGOU DA SESSÃO")
             const q_acc_resources = body['accessibility_resources[]'] ? getReqParamAsArray(body['accessibility_resources[]']) : [];
@@ -316,22 +317,22 @@ function postCheckBoxSearch(req, res) {
             const q_teaching_levels = body['teaching_levels[]'] ? getReqParamAsArray(body['teaching_levels[]']) : [];
             const checked_string = body.checked_string;
             if (body.checked_string == '') {
-                or = {}
+                and = {}
             } else {
-                or = {
-                    $or :[
+                and = {
+                    $and :[
                         {accessibility_resources: {$in: q_acc_resources}},
                         {axes: {$in: q_axes}},
                         {teaching_levels: {$in: q_teaching_levels}},
                     ]
                 };
             }
-            req.session.query_object = or;
+            req.session.query_object = and;
         } else {
             console.log("PEGOU DA SESSÃO!!")
-            or = req.session.query_object;
+            and = req.session.query_object;
         } 
-        var lo_query = LearningObject.find(or).where('approved').equals(true);
+        var lo_query = LearningObject.find(and).where('approved').equals(true);
         //Verifica se está sendo aplicado algum filtro
         if (body.filter_flag ) {
             var selected_filters = {};

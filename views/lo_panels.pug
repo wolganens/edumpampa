@@ -11,7 +11,7 @@
         each tlevel in data.teaching_levels          
           .checkbox.block
             label
-              input(type="checkbox", name="teaching_levels[]", class="checked-string", value=tlevel._id, checked=(inputs && inputs['teaching_levels[]'] && inputs['teaching_levels[]'].indexOf(tlevel._id.toString()) != -1) ||(data.lo && data.lo.teaching_levels.indexOf(tlevel._id) != -1))
+              input(type="checkbox", name="teaching_levels[]", class="checked-string", value=tlevel._id, checked=(inputs && inputs['teaching_levels[]'] && inputs['teaching_levels[]'].indexOf(tlevel._id.toString()) != -1) ||(data.lo && data.lo.teaching_levels && data.lo.teaching_levels.indexOf(tlevel._id) != -1))
               span
                 | !{tlevel.name}
   .col-md-3
@@ -25,7 +25,7 @@
           each axe in data.axes              
             .checkbox.block
               label
-                input(type="checkbox", name="axes[]", class="checked-string", value=axe._id, checked=(inputs && inputs['axes[]'] && inputs['axes[]'].indexOf(axe._id.toString()) != -1) || (data.lo && data.lo.axes.indexOf(axe._id) != -1))
+                input(type="checkbox", name="axes[]", class="checked-string", value=axe._id, checked=(inputs && inputs['axes[]'] && inputs['axes[]'].indexOf(axe._id.toString()) != -1) || (data.lo && data.lo.axes && data.lo.axes.indexOf(axe._id) != -1))
                 span
                   | !{axe.name}
   .col-md-4
@@ -39,6 +39,6 @@
           each accessibility_resource in data.accessibility_resources
             .checkbox.block             
               label
-                input(type="checkbox", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=(inputs && inputs['accessibility_resources[]'] && inputs['accessibility_resources[]'].indexOf(accessibility_resource._id.toString()) != -1 ) || (data.lo && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1))
+                input(type="checkbox", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=(inputs && inputs['accessibility_resources[]'] && inputs['accessibility_resources[]'].indexOf(accessibility_resource._id.toString()) != -1 ) || (data.lo && data.lo.accessibility_resources && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1))
                 span
                   | !{accessibility_resource.name}

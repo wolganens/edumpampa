@@ -28,7 +28,7 @@ body
 					h2 Repositório de Objetos de Aprendizagem para Educação Musical Inclusiva
 		form(action="/learning-object/text-search", method="post", ).navbar-form.navbar-right
 			.form-group
-				input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" placeholder="Buscar objetos pelo título", required, id="irbusca", tabindex=5)
+				input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" placeholder="Buscar objetos pelo título", id="irbusca", tabindex=5)
 			button.btn.btn-primary(type="submit",tabindex=6) 
 				i(class="fa fa-search" aria-hidden="true") 
 				| Buscar
@@ -77,10 +77,10 @@ body
 								a(href="/account/signup") Cadastro
 
 		if error_messages && error_messages.length > 0
-			.alert.alert-danger
+			.alert.alert-danger#messages(tabindex="-1")
 				| !{error_messages}
 		if success_messages && success_messages.length > 0
-			.alert.alert-success
+			.alert.alert-success#messages(tabindex="-1")
 				| !{success_messages}
 		if inputErrors
 			.hidden#input-errors

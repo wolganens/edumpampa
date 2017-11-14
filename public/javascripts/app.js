@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 				'anonymous');
 			    dropzone_hndlr.emit('complete', mockFile);
 			    dropzone_hndlr._updateMaxFilesReachedClass();
-			    dropzone_hndlr.options.maxFiles = dz.options.maxFiles - 1;
+			    dropzone_hndlr.options.maxFiles = dropzone_hndlr.options.maxFiles - 1;
 			}
 		}
 	}	
@@ -140,5 +140,9 @@ jQuery(document).ready(function($) {
     		}
     		console.log(input)
     	}
+    }
+    var messages = document.getElementById('messages');
+    if (messages) {
+    	messages.focus();
     }
 });
