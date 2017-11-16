@@ -5,8 +5,7 @@ block content
 		.col-md-3
 			h3
 				| Filtre seus resultados
-			form(action="", method="post")
-				input(type="hidden", value="1", name="filter_flag")
+			form(action="", method="get")
 				.form-group
 					label(for="content")
 						| Conteúdo
@@ -30,17 +29,20 @@ block content
 						| Filtrar
 		.col-md-9
 			h3
-				| Resultados da busca
+				| Resultados da busca 
+				span.badge.alert-info
+							| !{count}
 			if checked_string
 				p
 					| Você selecionou: 
 					strong 
 						| !{checked_string}
+
 			if search_text
 				p
 					| Você pesquisou por: 
 					strong 
-						| "!{search_text}"
+						| "!{search_text}"						
 			if data.learning_object.length > 0
 				each lo in data.learning_object
 					article
@@ -59,7 +61,15 @@ block content
 									| !{lo.createdAt.getMonth()}/
 								| !{lo.createdAt.getFullYear()}
 							| - !{lo.description}
-
 			else
 				.alert.alert-info
 					| Nenhum objeto encontrado
+			div
+				| !{url}
+			if pages > 1
+				nav(aria-label="Page navigation")
+					ul(class="pagination")
+						- for(var i = 1; i <= pages; i++)
+							li(class=currentPage == i ? "active" : "")
+								a(href="/learning-object/text-search?search_text=" + search_text + "&page=" + i)
+									| !{i}

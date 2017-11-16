@@ -26,7 +26,7 @@ body
 					h1
 						strong EduMPampa
 					h2 Repositório de Objetos de Aprendizagem para Educação Musical Inclusiva
-		form(action="/learning-object/text-search", method="post", ).navbar-form.navbar-right
+		form(action="/learning-object/text-search", method="GET").navbar-form.navbar-right
 			.form-group
 				input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" placeholder="Buscar objetos pelo título", id="irbusca", tabindex=5)
 			button.btn.btn-primary(type="submit",tabindex=6) 

@@ -24,7 +24,7 @@ module.exports.getLearningObject = getLearningObject;
 module.exports.getLearningObjectDetails = getLearningObjectDetails;
 module.exports.postRemoveFile = postRemoveFile;
 module.exports.postCheckBoxSearch = postCheckBoxSearch;
-module.exports.postTextSearch = postTextSearch;
+module.exports.getTextSearch = getTextSearch;
 
 module.exports.getApproveObject = getApproveObject;
 module.exports.getRemoveObject = getRemoveObject;
@@ -256,7 +256,7 @@ function postRemoveFile(req, res) {
     }
     res.status(200).send({ success: "Arquivo removido com sucesso!" });
 }
-function postTextSearch(req, res) {
+function getTextSearch(req, res) {
     const body = req.body;
     async.parallel({
         resources: function(callback) {
@@ -268,36 +268,73 @@ function postTextSearch(req, res) {
     }, function(err, results) {
         if (err) {
             return res.send(err);
-        }
-        // Se a query estiver na sessão pronta para receber filtros, usa ela e não uma nova consulta
-        const search_text = (body.search_text || body.search_text == '')  ? body.search_text : req.session.search_text;
-        var doc_find = {
-            title: {"$regex": new RegExp(search_text) , "$options": "i"}
+        }        
+        /*
+            Definição do termo de busca. Pode vir da requisição GET através do campo "search_text"
+            ou da sessão caso o usuário já tenha feito uma busca e esteja aplicando filtros
+        */
+        const search_text = (req.query.search_text || req.query.search_text == '')  ? req.query.search_text : req.session.search_text;
+        /*
+            Parâmetros adicionais de paginação
+        */
+        const page = req.query && req.query.page ? req.query.page : 1;
+        const skip = (page - 1) * 10;
+        const limit = 10;        
+
+        /*
+            Definição do objeto (documento) utilizado para trazer os registros do banco de dados, no caso uma busca por expressão regular é feita sobre o campo "title" dos objetos de aprendizagem
+        */
+        var query_object = {
+            title: {
+                "$regex": new RegExp(search_text), 
+                "$options": "i"
+            }
         };
-        console.log(doc_find);
-        var lo_query = LearningObject.find(doc_find, {"title": 1, "createdAt": 1, "description": 1}).where('approved').equals(true);        
-        //Verifica se está sendo aplicado algum filtro
-        if (body.filter_flag ) {
-            var selected_filters = {};
-            if (body.content) {
-                selected_filters['content'] = body.content;
-                lo_query.where('content').equals(body.content);
+
+        /*
+            Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
+            e trazendo apenas objetos já aprovados.
+        */
+        var cursor = LearningObject.find(query_object, 
+            {
+                "title": 1,
+                "createdAt": 1,
+                "description": 1
             }
-            if(body.resource){
-                selected_filters['resource'] = body.resource;
-                lo_query.where('resources').equals(body.resource);
-            }
+        ).where('approved')        
+        .equals(true);
+
+        /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */        
+        var selected_filters = {};
+        if ("content" in req.query && req.query.content != '') {
+            selected_filters['content'] = req.query.content;
+            cursor.where('content').equals(req.query.content);
         }
+        if ("resource" in req.query && req.query.resource != '') {
+            selected_filters['resource'] = req.query.resource;
+            cursor.where('resources').equals(req.query.resource);
+        }        
+        /* Salva o termo de busca na sessão para uso posterior */
         req.session.search_text = search_text;
-        return lo_query.exec(function(err, lo){
-            if(err) {
-                return res.send(err);
-            }
-            // Adiciona o objeto de aprendizagem nos resultados e renderiza a view
-            results['learning_object'] = lo;
-            return res.render('lo_search_results', {data: results, selected_filters: selected_filters, search_text: search_text});
-        });
-    })
+
+        cursor.count(function(err, count) {            
+            cursor.skip(skip).limit(limit).exec('find', function(err, lo) {
+                if(err) {
+                    return res.send(err);
+                }
+                /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
+                results['learning_object'] = lo;                
+                return res.render('lo_search_results', {
+                    data: results,
+                    selected_filters: selected_filters,
+                    search_text: search_text,
+                    count: count,
+                    pages: Math.ceil(count / 10),
+                    currentPage: page
+                });
+            });
+        });        
+    });
 }
 function postCheckBoxSearch(req, res) {    
     const body = req.body;
@@ -332,20 +369,20 @@ function postCheckBoxSearch(req, res) {
             console.log("PEGOU DA SESSÃO!!")
             and = req.session.query_object;
         } 
-        var lo_query = LearningObject.find(and).where('approved').equals(true);
+        var cursor = LearningObject.find(and).where('approved').equals(true);
         //Verifica se está sendo aplicado algum filtro
         if (body.filter_flag ) {
             var selected_filters = {};
             if (body.content) {
                 selected_filters['content'] = body.content;
-                lo_query.where('content').equals(body.content);
+                cursor.where('content').equals(body.content);
             }
             if(body.resource){
                 selected_filters['resource'] = body.resource;
-                lo_query.where('resources').equals(body.resource);
+                cursor.where('resources').equals(body.resource);
             }
         }            
-        return lo_query.exec(function(err, lo){
+        return cursor.exec(function(err, lo){
             if(err) {
                 return res.send(err);
             }
