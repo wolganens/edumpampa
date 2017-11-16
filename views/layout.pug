@@ -29,6 +29,7 @@ body
 		form(action="/learning-object/text-search", method="GET").navbar-form.navbar-right
 			.form-group
 				label.sr-only.hidden(for="irbusca")
+					| Busca pelo título
 				input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" placeholder="Buscar objetos pelo título", id="irbusca", tabindex=5)
 			button.btn.btn-primary(type="submit",tabindex=6) 
 				i(class="fa fa-search" aria-hidden="true") 
