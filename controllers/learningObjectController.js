@@ -270,10 +270,10 @@ function getTextSearch(req, res) {
             return res.send(err);
         }        
         /*
-            Definição do termo de busca. Pode vir da requisição GET através do campo "search_text"
-            ou da sessão caso o usuário já tenha feito uma busca e esteja aplicando filtros
+            Definição do termo de busca, através do campo "search_text (GET)"            
         */
-        const search_text = (req.query.search_text || req.query.search_text == '')  ? req.query.search_text : req.session.search_text;
+        const search_text = req.query.search_text || req.query.search_text == '' ? req.query.search_text : req.session.search;
+        req.session.search = search_text;
         /*
             Parâmetros adicionais de paginação
         */
@@ -314,8 +314,6 @@ function getTextSearch(req, res) {
             selected_filters['resource'] = req.query.resource;
             cursor.where('resources').equals(req.query.resource);
         }        
-        /* Salva o termo de busca na sessão para uso posterior */
-        req.session.search_text = search_text;
 
         cursor.count(function(err, count) {            
             cursor.skip(skip).limit(limit).exec('find', function(err, lo) {
@@ -330,7 +328,8 @@ function getTextSearch(req, res) {
                     search_text: search_text,
                     count: count,
                     pages: Math.ceil(count / 10),
-                    currentPage: page
+                    currentPage: page,
+                    queryUrl: req.originalUrl
                 });
             });
         });        
@@ -346,50 +345,102 @@ function postCheckBoxSearch(req, res) {
             Contents.find(callback);
         }
     }, function(err, results) {
-        var and = {};
-        if (body.checked_string || body.checked_string == '') {
-            console.log("NÃO PEGOU DA SESSÃO")
-            const q_acc_resources = body['accessibility_resources[]'] ? getReqParamAsArray(body['accessibility_resources[]']) : [];
-            const q_axes = body['axes[]'] ? getReqParamAsArray(body['axes[]']) : [];
-            const q_teaching_levels = body['teaching_levels[]'] ? getReqParamAsArray(body['teaching_levels[]']) : [];
-            const checked_string = body.checked_string;
-            if (body.checked_string == '') {
-                and = {}
-            } else {
-                and = {
-                    $and :[
-                        {accessibility_resources: {$in: q_acc_resources}},
-                        {axes: {$in: q_axes}},
-                        {teaching_levels: {$in: q_teaching_levels}},
-                    ]
-                };
+        /*
+            Variavel responsavel por armazenar os filtros de busca da query
+        */
+        let and = {
+            "$and": []
+        };
+        let checked_string = '';
+
+        /*
+            Parâmetros adicionais de paginação
+        */
+        const page = req.query && req.query.page ? req.query.page : 1;
+        const skip = (page - 1) * 10;
+        const limit = 10;
+        
+
+        /*
+            Caso tenha sido selecionado algum checkbox para busca, constroi o and
+        */
+        if (req.query.checked_string) {            
+            checked_string = req.query.checked_string;
+            /*
+                Popula os arrays de consulta com os checkbox marcados pelo usuário
+            */
+            const q_acc_resources = req.query.accessibility_resources ? getReqParamAsArray(req.query.accessibility_resources) : [];
+            const q_axes = req.query.axes ? getReqParamAsArray(req.query.axes) : [];
+            const q_teaching_levels = req.query.teaching_levels ? getReqParamAsArray(req.query.teaching_levels) : [];
+            if (q_acc_resources.length > 0) {
+                and["$and"].push(
+                    {
+                        accessibility_resources: {$all: q_acc_resources}
+                    }
+                );
             }
-            req.session.query_object = and;
+            if (q_axes.length > 0) {
+                and["$and"].push(
+                    {
+                        axes: {$all: q_axes}
+                    }
+                );
+            }
+            if (q_teaching_levels.length > 0) {
+                and["$and"].push(
+                    {
+                        teaching_levels: {$all: q_teaching_levels}
+                    }
+                );
+            }            
+            req.session.search = and;  
+            req.session.checked_string = checked_string;
         } else {
-            console.log("PEGOU DA SESSÃO!!")
-            and = req.session.query_object;
+            checked_string = req.session.checked_string;
+            and = req.session.search;
         } 
-        var cursor = LearningObject.find(and).where('approved').equals(true);
-        //Verifica se está sendo aplicado algum filtro
-        if (body.filter_flag ) {
-            var selected_filters = {};
-            if (body.content) {
-                selected_filters['content'] = body.content;
-                cursor.where('content').equals(body.content);
+        /*
+            Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
+            e trazendo apenas objetos já aprovados.
+        */
+        var cursor = LearningObject.find(and, 
+            {
+                "title": 1,
+                "createdAt": 1,
+                "description": 1
             }
-            if(body.resource){
-                selected_filters['resource'] = body.resource;
-                cursor.where('resources').equals(body.resource);
-            }
-        }            
-        return cursor.exec(function(err, lo){
-            if(err) {
-                return res.send(err);
-            }
-            // Adiciona o objeto de aprendizagem nos resultados e renderiza a view
-            results['learning_object'] = lo;
-            return res.render('lo_search_results', {data: results, selected_filters: selected_filters, checked_string: body.checked_string || req.session.checked_string || "\"Nenhuma selação\""});
-        });
+        ).where('approved')        
+        .equals(true);
+        
+        /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */        
+        var selected_filters = {};
+        if ("content" in req.query && req.query.content != '') {
+            selected_filters['content'] = req.query.content;
+            cursor.where('content').equals(req.query.content);
+        }
+        if ("resource" in req.query && req.query.resource != '') {
+            selected_filters['resource'] = req.query.resource;
+            cursor.where('resources').equals(req.query.resource);
+        }
+        cursor.count(function(err, count) {            
+            cursor.skip(skip).limit(limit).exec('find', function(err, lo) {
+                if(err) {
+                    return res.send(err);
+                }
+                /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
+                results['learning_object'] = lo;
+                console.log(lo)          ;
+                return res.render('lo_search_results', {
+                    data: results,
+                    selected_filters: selected_filters,
+                    checked_string: checked_string || "\"Nenhuma selação\"",
+                    count: count,
+                    pages: Math.ceil(count / 10),
+                    currentPage: page,
+                    queryUrl: req.originalUrl
+                });
+            });
+        });        
     });
 }
 function getApproveObject(req, res) {

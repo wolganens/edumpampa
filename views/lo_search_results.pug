@@ -71,5 +71,5 @@ block content
 					ul(class="pagination")
 						- for(var i = 1; i <= pages; i++)
 							li(class=currentPage == i ? "active" : "")
-								a(href="/learning-object/text-search?search_text=" + search_text + "&page=" + i)
+								a(href=queryUrl.replace(/\&page=\d+/g, "") + "&page=" + i)
 									| !{i}

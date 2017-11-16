@@ -15,5 +15,5 @@ router.get('/approve/:id', learningObjectController.getApproveObject);
 router.get('/remove/:id', learningObjectController.getRemoveObject);
 
 router.get('/text-search/:search_text?', learningObjectController.getTextSearch);
-router.post('/checkbox-search', learningObjectController.postCheckBoxSearch);
+router.get('/checkbox-search', learningObjectController.postCheckBoxSearch);
 module.exports = router;
