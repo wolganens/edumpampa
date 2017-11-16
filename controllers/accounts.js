@@ -26,7 +26,7 @@ module.exports.postForgotPw = postForgotPw;
 module.exports.getProfile = getProfile;
 
 exports.getSignIn = function(req, res) {
-    res.render('signin');
+    res.render('signin', {title: "Página de login de usuário - EduMPampa" });
 }
 exports.getSignUp = function(req,res){
     async.parallel({
@@ -43,7 +43,7 @@ exports.getSignUp = function(req,res){
             Qualification.find(callback);
         }        
     }, function(err, results) {
-        res.render('signup', { error: err, data: results });
+        res.render('signup', { error: err, data: results, title: "Página de cadastro de usuário - EduMPampa" });
         return;
     });
 }
