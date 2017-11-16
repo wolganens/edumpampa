@@ -13,102 +13,106 @@ block content
                 | Informações Pessoais
             .panel-body
                 .form-group
-                    label
+                    label(for="name")
                         | Nome completo *
-                    input(type="text", value=(inputs && inputs.name) || (data.user ? data.user.name: null), name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
+                    input(type="text", id="name", value=(inputs && inputs.name) || (data.user ? data.user.name: null), name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
                 .form-group
-                    label
+                    label(for="birthday")
                         | Data de Nascimento *
-                    input(type="text", value=(inputs && inputs.birthday) || (data.user ? data.user.getFormatedBirthday: null), name="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
+                    input(type="text", value=(inputs && inputs.birthday) || (data.user ? data.user.getFormatedBirthday: null), name="birthday",id="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
         .panel.panel-default
             .panel-heading
                 | Formação
             .panel-body
-                each qualification in data.qualifications                    
-                    .checkbox.block
-                        label
-                            input(type="radio", name="qualification_id", value=qualification._id, checked=(inputs && inputs.qualification_id == qualification._id.toString()) || ((data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString()))
-                            span  
-                                | !{qualification.name}
+                fieldset
+                    each qualification in data.qualifications                    
+                        .checkbox.block
+                            label
+                                input(type="radio", name="qualification_id", value=qualification._id, checked=(inputs && inputs.qualification_id == qualification._id.toString()) || ((data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString()))
+                                span  
+                                    | !{qualification.name}
                 .form-group
-                    label
+                    label(for="qualification_text")
                         | Outra
-                    input(type="text", class="form-control js-other", value=(inputs && inputs.qualification_text) || (data.user ? data.user.qualification_text ? data.user.qualification_text : null : null), name="qualification_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.qualification_text) || (data.user ? data.user.qualification_text ? data.user.qualification_text : null : null), name="qualification_text",id="qualification_text")
 
 
         .panel.panel-default
             .panel-heading
                 | Área de Atuação
             .panel-body
-                each occupation_area in data.occupation_areas
-                    .checkbox.block
-                        label
-                            input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(inputs && inputs.occupation_area_id == occupation_area._id.toString()) || ((data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString()))
-                            span 
-                                | !{occupation_area.name}
+                fieldset
+                    each occupation_area in data.occupation_areas
+                        .checkbox.block
+                            label
+                                input(type="radio", name="occupation_area_id", value=occupation_area._id, checked=(inputs && inputs.occupation_area_id == occupation_area._id.toString()) || ((data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString()))
+                                span 
+                                    | !{occupation_area.name}
                 .form-group
-                    label
+                    label(for="occupation_area_text")
                         | Outra
-                    input(type="text", class="form-control js-other", value=(inputs && inputs.occupation_area_text) || (data.user ? data.user.occupation_area_text ? data.user.occupation_area_text : null : null), name="occupation_area_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.occupation_area_text) || (data.user ? data.user.occupation_area_text ? data.user.occupation_area_text : null : null), name="occupation_area_text", id="occupation_area_text")
         .panel.panel-default
             .panel-heading
                 | Vínculo Institucional
             .panel-body
-                each institutional_link in data.institutional_links
-                    .checkbox.block
-                        label
-                            input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(inputs && inputs.institutional_link_id == institutional_link._id.toString()) || ((data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString()))
-                            span 
-                                | !{institutional_link.name}
+                fieldset
+                    each institutional_link in data.institutional_links
+                        .checkbox.block
+                            label
+                                input(type="radio", name="institutional_link_id", value=institutional_link._id, checked=(inputs && inputs.institutional_link_id == institutional_link._id.toString()) || ((data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString()))
+                                span 
+                                    | !{institutional_link.name}
                 .form-group
-                    label
+                    label(for="institutional_link_text")
                         | Outro
-                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_link_text) || (data.user ? data.user.institutional_link_text ? data.user.institutional_link_text : null : null), name="institutional_link_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_link_text) || (data.user ? data.user.institutional_link_text ? data.user.institutional_link_text : null : null), name="institutional_link_text", id="institutional_link_text")
         .panel.panel-default
             .panel-heading
                 | Identificação da Instituição *
             .panel-body
                 .form-group
-                    label
+                    label(for="institution_name")
                         | Nome da Instituição *
-                    input(type="text", name="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=(inputs && inputs.institution_name) ||(data.user ? data.user.institution_name : null), required="required")
+                    input(type="text", name="institution_name",id="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=(inputs && inputs.institution_name) ||(data.user ? data.user.institution_name : null), required="required")
                 .form-group
-                    label
+                    label(for="institution_address")
                         | Endereço da Instituição *
-                    input(type="text", name="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=(inputs && inputs.institution_address) || (data.user ? data.user.institution_address : null), required="required")
+                    input(type="text", name="institution_address",id="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=(inputs && inputs.institution_address) || (data.user ? data.user.institution_address : null), required="required")
         .panel.panel-default
             .panel-heading
                 | Cargo ou Função dentro da Instituição
             .panel-body
-                each institutional_post in data.institutional_posts
-                    .checkbox.block
-                        label
-                            input(type="checkbox", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked= (inputs && inputs['institutional_post_id[]'] && inputs['institutional_post_id[]'].indexOf(institutional_post._id.toString()) != -1 )|| ((data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1))
-                            span 
-                                | !{institutional_post.name}
+                fieldset
+                    each institutional_post in data.institutional_posts
+                        .checkbox.block
+                            label
+                                input(type="checkbox", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked= (inputs && inputs['institutional_post_id[]'] && inputs['institutional_post_id[]'].indexOf(institutional_post._id.toString()) != -1 )|| ((data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1))
+                                span 
+                                    | !{institutional_post.name}
                 .form-group
-                    label
+                    label(for="institutional_post_text")
                         | Outra
-                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text")
+                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text", id="institutional_post_text")
         .panel.panel-default
             .panel-heading
                 | Informações de Usuário
             .panel-body                
                 .form-group
-                    label
+                    label(for="email")
                         | Email *
-                    input(type="email", name="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value= (inputs && inputs.email) || (data.user ? data.user.email: null), required="required")
+                    input(type="email", name="email",id="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value= (inputs && inputs.email) || (data.user ? data.user.email: null), required="required")
                 if !data.user
                     .form-group
-                        label
+                        label(for="password")
                             | Senha *
-                        input(type="password", name="password", class="form-control", required="required")
+                        input(type="password", name="password",id="password", class="form-control", required="required")
                         p
                             | A senha deve ter entre 8 e 20 caracteres e pelo menos, 1 número e 1 letra!
                     .form-group
-                        label
+                        label(for="password_confirm")
                             | Confirmar Senha *
-                        input(type="password", name="password_confirm", class="form-control", required="required")
+                        input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")
         .form-group.pull-right
             .btn-group
                 if data.user
