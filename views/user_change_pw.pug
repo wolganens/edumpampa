@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    #centered-content
+        h3 
+            | Alterar senha
+        form(action="/account/change-pw",method="post")
+            .form-group
+                label(for="old_pw")
+                    | Senha antiga
+                input(type="password", required, id="old_pw", name="old_pw", class="form-control", placeholder="Digite sua antiga senha")
+            .form-group
+                label(for="password")
+                    | Senha
+                input(type="password", required, id="password", name="password", class="form-control", placeholder="Digite sua nova senha")
+            .form-group
+                label(for="confirm_password")
+                    | Confirmar senha
+                input(type="password",required,  id="confirm_password", name="confirm_password", class="form-control", placeholder="Digite sua nova senha novamente")
+            .form-group                
+                button(type="submit", value="Acessar",class="btn btn-primary btn-block") Alterar senha        

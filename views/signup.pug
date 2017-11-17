@@ -93,7 +93,7 @@ block content
                 .form-group
                     label(for="institutional_post_text")
                         | Outra
-                    input(type="text", class="form-control js-other", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text", id="institutional_post_text")
+                    input(type="text", class="form-control", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text", id="institutional_post_text")
         .panel.panel-default
             .panel-heading
                 | Informações de Usuário
@@ -113,6 +113,9 @@ block content
                         label(for="password_confirm")
                             | Confirmar Senha *
                         input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")
+                else
+                    a(href="/account/change-pw", title="Alterar senha", class="btn btn-primary")
+                        | Alterar minha senha
         .form-group.pull-right
             .btn-group
                 if data.user

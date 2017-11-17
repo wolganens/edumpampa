@@ -24,6 +24,8 @@ module.exports.postSignUp = signupUser;
 module.exports.getForgotPw = getForgotPw;
 module.exports.postForgotPw = postForgotPw;
 module.exports.getProfile = getProfile;
+module.exports.getChangePw = getChangePw;
+module.exports.postChangePw = postChangePw;
 
 exports.getSignIn = function(req, res) {
     res.render('signin', {title: "Página de login de usuário - EduMPampa" });
@@ -212,4 +214,21 @@ function getProfile(req, res) {
         console.log(results.user)
         return res.render('signup', { error: err, data: results });        
     });    
+}
+function getChangePw(req, res) {
+    return res.render('user_change_pw');
+}
+function postChangePw(req, res) {
+    return User.findById(req.user._id, function(err, user){
+        if (err) {
+            res.send(err);
+        }
+        return user.changePassword(req.body.old_pw, req.body.password, function(error, result){
+            if (error) {
+                res.send(error);
+            }
+            req.flash('success_messages', "Senha alterada com sucesso!");
+            return res.redirect('/account/profile');
+        })
+    })    
 }

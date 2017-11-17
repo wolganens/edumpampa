@@ -226,7 +226,7 @@ UserSchema.methods.changePassword = function(oldPassword, newPassword, callback)
 
             // if password does not match don't return user
             if (result === false) {
-                var PassNoMatchError = new Error('Old password does not match.');
+                var PassNoMatchError = new Error('A senha anterior está incorreta!');
                 PassNoMatchError.type = 'old_password_does_not_match';
                 return callback(PassNoMatchError, null);
             }
