@@ -82,7 +82,7 @@ learning_object_schema.virtual('htmlSituation').get(function(){
     if (this.approved) {
         return '<div class="badge alert-success">Aprovado</div>'
     } else {
-        return '<div class="badge alert-danger">Desaprovado</div>'
+        return '<div class="badge alert-danger">Não aprovado</div>'
     }
 })
 

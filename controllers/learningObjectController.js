@@ -25,6 +25,7 @@ module.exports.getLearningObjectDetails = getLearningObjectDetails;
 module.exports.postRemoveFile = postRemoveFile;
 module.exports.postCheckBoxSearch = postCheckBoxSearch;
 module.exports.getTextSearch = getTextSearch;
+module.exports.getMyLearningObjects = getMyLearningObjects;
 
 module.exports.getApproveObject = getApproveObject;
 module.exports.getRemoveObject = getRemoveObject;
@@ -470,35 +471,63 @@ function getRemoveObject(req, res) {
           LearningObject.findById(req.params.id, callback)
         }        
     ],      
-    function(err, result){
-        const permission = result[0].owner == req.user._id ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
+    function(err, result){        
+        const permission = result[0].owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
         if (!permission.granted) {
             res.status(403).send("Você não tem permissão!")
             return;
         }
-        console.log(result);
-        const file_path = path.join(__appRoot, 'public', result[0].file.url);
-        fs.stat(file_path, function(err, stat) {
-            if(!err) {
-                fs.unlink(file_path, function(err, unlink_res) {                    
-                    result[0].remove({
-                        single: true 
-                    })
-                    req.flash('success_messages', "Objeto removido com sucesso!");
-                    res.redirect('/learning-object/manage')
-                });
-            } else {
-                result[0].remove({
-                    single: true
-                })
-                req.flash('success_messages', "Objeto removido com sucesso!");
-                res.redirect('/learning-object/manage')
-            }
+        if (result[0].file) {
+            console.log(result[0].file)
+            console.log(result[0].file.url)
+            const file_path = path.join(__appRoot, 'public', result[0].file.url);
+            fs.stat(file_path, function(err, stat) {
+                if(!err) {
+                    fs.unlink(file_path, function(err, unlink_res) {                    
+                        result[0].remove({
+                            single: true 
+                        })
+                        req.flash('success_messages', "Objeto removido com sucesso!");
+                        return res.redirect('back')
+                    });                
+                }
+                return res.send(err);
+            })
+        }
+        result[0].remove({
+            single: true
         })
+        req.flash('success_messages', "Objeto removido com sucesso!");
+        return res.redirect('back')
     });
     /*LearningObject.findById(req.params.id, function(err, result) {
         if (err) {
             res.send(err);
         }
     });*/
+}
+/*
+    Página de listagem de OA's do usuário autenticado
+*/
+function getMyLearningObjects(req, res) {
+    /*Apenas usuários autenticados podem ver seus OA's(Obviamente)*/
+    if (!req.user) {
+        req.flash("error_messages", "Página restrita para usuários cadastrados!");
+        return res.redirect('/');
+    }
+    /*Busca na base de dados, OA's cujo dono é o usuário autenticado (req.user)*/
+    return LearningObject.find(
+        {
+            owner: req.user._id
+        }, 
+        {
+            "title": 1,
+            "approved": 1
+        }, function(err, lo) {
+            if (err) {
+                return res.send(err);
+            }
+            return res.render('lo_retrieve', {data: lo, title:"Meus objetos de aprendizagem"});
+        }
+    )
 }

@@ -50,10 +50,13 @@ html(lang='en')
 									| Início
 									span.sr-only (current)
 							if currentUser
-								if currentUser.role == 'AUTHORIZED' || currentUser.role == 'ADMIN'
+								if currentUser.role != 'COMMON'
 									li(class=currentPath == '/learning-object/create' ? 'active' : null)
-										a(href="/learning-object/create", class=console.log("KKKK"+currentPath), title="Cadastrar objeto de aprendizagem")
+										a(href="/learning-object/create", title="Cadastrar objeto de aprendizagem")
 											| Cadastrar OA
+									li(class=currentPath == '/learning-object/retrieve' ? 'active' : null)
+										a(href="/learning-object/retrieve", title="Meus objetos de aprendizagem")
+											| Ver meus OA
 								if currentUser.role == 'ADMIN'
 									li(class=currentPath == '/admin/learning-object/manage' ? 'active' : null)
 										a(href="/admin/learning-object/manage", title="Gerenciar objetos de aprendizagem")

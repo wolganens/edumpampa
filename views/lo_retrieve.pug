@@ -1,0 +1,25 @@
+extends layout
+
+block content
+	h3
+		| Meus Objetos de Aprendizagem
+	table.table
+		thead
+			th
+				| Título
+			th
+				| Situação
+			th
+				| Ações
+		tbody
+			each lo in data
+				tr
+					td
+						| !{lo.title}				
+					td
+						| !{lo.htmlSituation}
+					td
+						.btn-group
+							a.btn.btn-default(href="/learning-object/remove/" + lo._id)
+								| Apagar							
+
