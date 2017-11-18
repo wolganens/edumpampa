@@ -56,11 +56,9 @@ jQuery(document).ready(function($) {
 	        }	
 		});	
 		
-		if ($("#file_name").val() != '') {
-			var file_info = JSON.parse($("#file_name").val());
-			file_info.url = file_info.url.replace(/\\/g,"/");
-			file_info.dataURL = file_info.url
-			console.log(file_info)
+		if ($("#file_name").val() != '') {					
+			var file_info = JSON.parse($("#file_name").val());			
+			file_info.dataURL = file_info.url			
 			if (file_info) {
 				var mockFile = { name: file_info.name, mimetype: file_info.mimetype, size: file_info.size, dataURL: file_info.url, url: file_info.url};
 			    dropzone_hndlr.files.push(mockFile);

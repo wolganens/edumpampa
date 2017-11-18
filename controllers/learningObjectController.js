@@ -94,7 +94,9 @@ function postCreate(req, res) {
         file:                       body.file_name ? JSON.parse(body.file_name) : null,
         file_url:                   body.file_url ? body.file_url : null
     }        
-
+    console.log(learningObject.file);
+    console.log("O tipo de dados do campo file é:")
+    console.log(typeof(learningObject.file))
     learningObject = new LearningObject(learningObject);
     learningObject.save(function(err, result) {
         if (err) {
@@ -144,8 +146,7 @@ function getLearningObject(req, res) {
         lo: function(callback) {
             LearningObject.findById(loId, callback);
         }
-    }, function(err, results) {
-        console.log(results.lo);
+    }, function(err, results) {        
         if (req.user) {
             const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
             
@@ -188,8 +189,7 @@ function getLearningObjectDetails(req, res) {
         .populate('axes')
         .populate('accessibility_resources')
         .populate('license')        
-        .exec(function(err, result){
-            console.log(result)
+        .exec(function(err, result){            
             results['lo'] = result;            
             return res.render('lo_details', { error: err, data: results });
         });
@@ -429,8 +429,7 @@ function postCheckBoxSearch(req, res) {
                     return res.send(err);
                 }
                 /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
-                results['learning_object'] = lo;
-                console.log(lo)          ;
+                results['learning_object'] = lo;                    
                 return res.render('lo_search_results', {
                     data: results,
                     selected_filters: selected_filters,
@@ -465,46 +464,34 @@ function getApproveObject(req, res) {
         res.redirect('/admin/learning-object/manage');
     })
 }
-function getRemoveObject(req, res) {
-    async.parallel([
-        function(callback) {
-          LearningObject.findById(req.params.id, callback)
-        }        
-    ],      
-    function(err, result){        
-        const permission = result[0].owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
+function getRemoveObject(req, res) {            
+    return LearningObject.findById(req.params.id, function (err, lo) {
+        const permission = lo.owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
+        
         if (!permission.granted) {
-            res.status(403).send("Você não tem permissão!")
-            return;
+            return res.status(403).send("Você não tem permissão!")            
         }
-        if (result[0].file) {
-            console.log(result[0].file)
-            console.log(result[0].file.url)
-            const file_path = path.join(__appRoot, 'public', result[0].file.url);
-            fs.stat(file_path, function(err, stat) {
-                if(!err) {
-                    fs.unlink(file_path, function(err, unlink_res) {                    
-                        result[0].remove({
-                            single: true 
-                        })
-                        req.flash('success_messages', "Objeto removido com sucesso!");
-                        return res.redirect('back')
-                    });                
-                }
-                return res.send(err);
+        if (lo.file) {            
+            const file_path = path.join(__appRoot, 'public', lo.file.url);
+            return fs.stat(file_path, function(err, stat) {
+                if (err) {
+                    return res.send(err);
+                }                
+                return fs.unlink(file_path, function(err, unlink_res) {
+                    lo.remove({
+                        single: true 
+                    })
+                    req.flash('success_messages', "Objeto removido com sucesso!");
+                    return res.redirect('back')
+                });
             })
         }
-        result[0].remove({
+        lo.remove({
             single: true
         })
         req.flash('success_messages', "Objeto removido com sucesso!");
         return res.redirect('back')
-    });
-    /*LearningObject.findById(req.params.id, function(err, result) {
-        if (err) {
-            res.send(err);
-        }
-    });*/
+    });    
 }
 /*
     Página de listagem de OA's do usuário autenticado
