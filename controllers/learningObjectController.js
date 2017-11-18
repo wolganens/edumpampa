@@ -465,7 +465,7 @@ function getApproveObject(req, res) {
     })
 }
 function getRemoveObject(req, res) {            
-    return LearningObject.findById(req.params.id, function (err, lo) {
+    return LearningObject.findById(req.params.id, {owner: 1, file: 1}, function (err, lo) {
         const permission = lo.owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
         
         if (!permission.granted) {
