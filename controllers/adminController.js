@@ -21,7 +21,7 @@ function getUserManage(req, res) {
             res.send(err);
             return;
         }
-        res.render('user_manage', {data: result});
+        res.render('user_manage', {data: result, title: "Gerenciar usuários - EduMPampa"});
     })
 }
 function getUserAuthorize(req, res) {
@@ -64,6 +64,6 @@ function getLearningObjectManage(req, res) {
         if (err) {
             res.send(err);
         }
-        res.render('lo_manage', {data: result});
+        res.render('lo_manage', {data: result, title:"Gerenciar OA's - EduMPampa"});
     });
 }

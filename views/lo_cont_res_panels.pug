@@ -5,13 +5,14 @@
         .checkbox
           label
             input(type="checkbox", class="panel-checkall", data-target="contents[]")
-            |  Conteúdos
+            span#contents-label
+              |  Conteúdos
       .panel-body
         .checkbox
           each content in data.contents
             div
               label
-                input(type="checkbox", name="contents[]", value = content._id, checked=(inputs && inputs['contents[]'].indexOf(content._id.toString()) != -1) || (data.lo && data.lo.content && data.lo.content.indexOf(content._id) != -1))
+                input(type="checkbox", name="contents[]", aria-labelledby="contents-label", value = content._id, checked=(inputs && inputs['contents[]'].indexOf(content._id.toString()) != -1) || (data.lo && data.lo.content && data.lo.content.indexOf(content._id) != -1))
                 | !{content.name}
   .col-md-6
     .panel.panel-default
@@ -19,11 +20,12 @@
           .checkbox
             label
               input(type="checkbox", class="panel-checkall", data-target="resources[]")
-              |  Recursos
+              span#resources-label
+                |  Recursos
         .panel-body
           .checkbox
             each resource in data.resources
               div
                 label
-                  input(type="checkbox", name="resources[]",value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
+                  input(type="checkbox", name="resources[]", aria-labelledby="resources-label", value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
                   | !{resource.name}       

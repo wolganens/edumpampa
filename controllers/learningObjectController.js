@@ -55,7 +55,7 @@ function getCreate(req, res) {
             Licenses.find(callback);
         },
     }, function(err, results) {
-        res.render('lo_create', { error: err, data: results });
+        res.render('lo_create', { error: err, data: results,title: "Cadastro de OA - EduMPampa" });
         return;
     });
 }

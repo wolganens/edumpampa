@@ -11,15 +11,15 @@ html(lang='en')
 		.container
 			ul#atalhos.nav.navbar-nav
 				li
-					a(href="#irconteudo", accesskey="1", tabindex=1) Ir Conteúdo [1]
+					a(href="#irconteudo", accesskey="1") Ir Conteúdo [1]
 				li
-					a(href="#irmenu", accesskey="2", tabindex=2) Ir Menu [2]
+					a(href="#irmenu", accesskey="2") Ir Menu [2]
 				li
-					a(href="#irbusca", accesskey="3", tabindex=3) Ir Busca [3]
+					a(href="#irbusca", accesskey="3") Ir Busca [3]
 			.clearfix
 			.row
 				.col-md-4
-					a(href="/", title="EduMPampa - Repositório de Objetos de Aprendizagem", tabindex=4)
+					a(href="/", title="EduMPampa - Repositório de Objetos de Aprendizagem")
 						img.img-responsive(src="/images/logo.png", alt="Repositório de objetos de aprendizagem EduMPampa")
 				.col-md-8
 					.header-title
@@ -30,8 +30,8 @@ html(lang='en')
 				.form-group
 					label.sr-only.hidden(for="irbusca")
 						| Busca pelo título
-					input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" placeholder="Buscar objetos pelo título", id="irbusca", tabindex=5)
-				button.btn.btn-primary(type="submit",tabindex=6) 
+					input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" title="Busca pelo título", placeholder="Buscar objetos pelo título", id="irbusca")
+				button.btn.btn-primary(type="submit") 
 					i(class="fa fa-search" aria-hidden="true") 
 					| Buscar
 			.clearfix

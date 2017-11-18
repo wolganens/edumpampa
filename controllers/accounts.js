@@ -125,7 +125,7 @@ function signupUser(req, res, next) {
     }
 };
 function getForgotPw(req, res) {
-    res.render('user_forgot_pw');
+    res.render('user_forgot_pw', {title: "Recuperar senha de acesso - EduMPampa"});
 }
 function postForgotPw(req, res) {    
     async.waterfall([
@@ -212,7 +212,7 @@ function getProfile(req, res) {
         }
     }, function(err, results) {
         console.log(results.user)
-        return res.render('signup', { error: err, data: results });        
+        return res.render('signup', { error: err, data: results, title: "Minha conta - EduMPampa" });        
     });    
 }
 function getChangePw(req, res) {

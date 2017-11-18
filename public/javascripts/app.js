@@ -92,6 +92,7 @@ jQuery(document).ready(function($) {
 			$("#license_description").text(description);
 			if (description) {
 				lic_img.src = selected.data('img');
+				lic_img.alt = selected.text()
 				lic_deed.href = selected.data('deed');
 				lic_legal.href = selected.data('legal');
 				lic_details.style.display = 'block'

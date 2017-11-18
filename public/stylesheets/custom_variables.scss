@@ -1,6 +1,11 @@
-$default_green: #006600;
-$panel-default-heading-bg:    $default_green !default;
-$navbar-default-bg:                $default_green !default;
+$gray-light:            #222222;
+$brand-primary:         #3a539b !default; // #337ab7
+$brand-success:         #20603c !default;
+$brand-info:            #20603c !default;
+$brand-warning:         #20603c !default;
+$brand-danger:          #96281b !default;
+$panel-default-heading-bg:    $brand-primary !default;
+$navbar-default-bg:                $brand-primary !default;
 $navbar-default-color:             #FFF !default;
 $navbar-default-link-color:        #FFF !default;
 $navbar-default-link-hover-bg:     white !default;
@@ -8,8 +13,23 @@ $navbar-default-link-hover-color:          #000 !default;
 $navbar-default-link-active-color:         #000 !default;
 $navbar-default-link-active-bg: 			white;
 $panel-default-text:    white !default;
-$brand-primary: $default_green;
 //** Global color for active items (e.g., navs or dropdowns).
 $component-active-color:    #000 !default;
 //** Global background color for active items (e.g., navs or dropdowns).
 $component-active-bg:       white !default;
+
+$state-success-text:             white !default;
+$state-success-bg:               $brand-success !default;
+$state-success-border:           darken(adjust-hue($state-success-bg, -10), 5%) !default;
+
+$state-info-text:                white !default;
+$state-info-bg:                  $brand-info !default;
+$state-info-border:              darken(adjust-hue($state-info-bg, -10), 7%) !default;
+
+$state-warning-text:             white !default;
+$state-warning-bg:               $brand-warning !default;
+$state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%) !default;
+
+$state-danger-text:              white !default;
+$state-danger-bg:                #b50000 !default;
+$state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%) !default;

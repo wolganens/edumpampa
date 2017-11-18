@@ -9,23 +9,23 @@ block content
 				| Dados Gerais
 			.panel-body
 				.form-group
-					label
-					| Título *
-					input(type="text", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=inputs ? inputs.title : null)
+					label(for="title")
+						| Título *
+					input(type="text", id="title", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=inputs ? inputs.title : null)
 				.form-group
-					label
-					| Descrição *
-					textarea(type="text", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control")
+					label(for="description")
+						| Descrição *
+					textarea(type="text", id="description", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control")
 						if inputs
 							| !{inputs.description}
 				.form-group
-					label
-					| Autores *
-					input(type="text", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=inputs ? inputs.authors : null)
+					label(for="authors")
+						| Autores *
+					input(type="text", id="authors", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=inputs ? inputs.authors : null)
 				.form-group
-					label
-					| Ano de autoria *
-					input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
+					label(for="year")
+						| Ano de autoria *
+					input(type="text", id="year", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
 		include lo_panels
 		include lo_cont_res_panels
 		include licenses_form
