@@ -37,7 +37,7 @@ exports.getSignUp = function(req,res){
         },
         institutional_posts: function(callback) {
             InstitutionalPost.find(callback);
-        },
+        },        
         occupation_areas: function(callback) {
             OccupationArea.find(callback);
         },
