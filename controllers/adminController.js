@@ -9,6 +9,13 @@ var OccupationArea = require('../models/occupation_area');
 var Qualification = require('../models/qualifications');
 var async = require('async');
 
+var AccessibilityResources = require("../models/accessibilityresources");
+var Axes = require("../models/axes");
+var TeachingLevels = require("../models/teachinglevels");
+var LearningObject = require("../models/learningobject");
+var Contents = require("../models/contents");
+var Resources = require("../models/resources");
+
 module.exports.getUserManage = getUserManage;
 module.exports.getLearningObjectManage = getLearningObjectManage;
 module.exports.getUserAuthorize = getUserAuthorize;
@@ -117,6 +124,42 @@ function getReportsUsers(req, res) {
     return User.count(user_query_document, function(err, count) {
         return User.find(user_query_document, function(err, users){
             return res.render('admin_reports_users_results', {count: count, users: users, title: "Resultado do Relatório - EduMPampa"})
+        });
+    });
+}
+/*
+    Relatório de Objetos de aprendizagem
+    */
+function getLoReports(req, res) {
+    async.parallel({
+        accessibility_resources: function(callback) {
+            AccessibilityResources.find(callback);
+        },
+        axes: function(callback) {
+            Axes.find(callback);
+        },
+        teaching_levels: function(callback) {
+            TeachingLevels.find(callback);
+        },
+        resources: function(callback) {
+            Resources.find(callback);
+        },
+        contents: function(callback) {
+            Contents.find(callback);
+        },
+        licenses: function(callback) {
+            Licenses.find(callback);
+        },
+        
+    }, function(err, results) {
+        var lo = LearningObject.findById(loId)
+        .populate('teaching_levels')
+        .populate('axes')
+        .populate('accessibility_resources')
+        .populate('license')        
+        .exec(function(err, result){            
+            results['lo'] = result;            
+            return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
         });
     });
 }
