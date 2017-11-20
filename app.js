@@ -60,8 +60,7 @@ app.use(function(req, res, next) {
     req.resources = req.resources || {};
     res.locals.app = config.app;
     res.locals.currentUser = req.user;
-    res.locals.currentPath = req.url;
-    console.log(req.url);
+    res.locals.currentPath = req.url;    
     res.locals.success_messages = req.flash('success_messages');
     res.locals.error_messages = req.flash('error_messages');    
     res.locals.inputs = req.flash('inputs')[0];

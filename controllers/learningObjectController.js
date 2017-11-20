@@ -10,6 +10,7 @@ var AccessibilityResources = require("../models/accessibilityresources");
 var Axes = require("../models/axes");
 var TeachingLevels = require("../models/teachinglevels");
 var LearningObject = require("../models/learningobject");
+var Downloads = require("../models/downloads");
 var Contents = require("../models/contents");
 var Resources = require("../models/resources");
 var Licenses = require("../models/licenses");
@@ -26,6 +27,7 @@ module.exports.postRemoveFile = postRemoveFile;
 module.exports.postCheckBoxSearch = postCheckBoxSearch;
 module.exports.getTextSearch = getTextSearch;
 module.exports.getMyLearningObjects = getMyLearningObjects;
+module.exports.getDownloadOaFile = getDownloadOaFile;
 
 module.exports.getApproveObject = getApproveObject;
 module.exports.getRemoveObject = getRemoveObject;
@@ -191,7 +193,7 @@ function getLearningObjectDetails(req, res) {
         .populate('license')        
         .exec(function(err, result){            
             results['lo'] = result;            
-            return res.render('lo_details', { error: err, data: results });
+            return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
         });
     });
     return;
@@ -330,7 +332,8 @@ function getTextSearch(req, res) {
                     count: count,
                     pages: Math.ceil(count / 10),
                     currentPage: page,
-                    queryUrl: req.originalUrl
+                    queryUrl: req.originalUrl,
+                    title: "Busca de objetos - EduMPampa"
                 });
             });
         });        
@@ -517,4 +520,44 @@ function getMyLearningObjects(req, res) {
             return res.render('lo_retrieve', {data: lo, title:"Meus objetos de aprendizagem"});
         }
     )
+}
+/*
+    Baixar arquivo de um objeto de aprendizagem
+*/
+function getDownloadOaFile(req, res) {
+    /*Apenas usuários autenticados podem baixar arquivos*/    
+    if (! req.user ) {
+        req.flash("error_messages", "Apenas usuários autenticados podem baixar arquivos");
+        return res.redirect("back");
+    }
+    /*Busca o objeto pelo id passado na URL*/
+    return LearningObject.findById(req.params.id, {title: 1, _id: 0, file: 1, file_url: 1}, function(err, lo){
+        if (err) {
+            return res.send(err);
+        }
+        /*Se o OA tiver um arquivo, retorna o download do mesmo e salva o registro do download*/
+        if (lo.file) {
+            return res.download(path.join(__appRoot, "public", lo.file.url), lo.title, function(err, download){
+                if (err) {
+                    res.send(err);
+                }
+                return new Downloads({
+                    user_id: req.user._id,
+                    learning_object_id: req.params.id
+                }).save();
+            });
+        /*Caso o OA não tenha um arquivo, se houver uma URL, redireciona o usuário para a URL*/            
+        } else if (lo.file_url) {
+            return new Downloads({
+                user_id: req.user._id,
+                learning_object_id: req.params.id
+            }).save(function(err, download_id) {
+                return res.redirect(lo.file_url);
+            });
+        /*Sem URL e sem Arquivo apenas retorna com erro*/
+        } else {
+            req.flash("error_messages", "O Objeto de aprendizagem não posui arquivos");
+            return res.redirect("back");
+        }
+    });    
 }

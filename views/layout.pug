@@ -64,6 +64,9 @@ html(lang='en')
 									li(class=currentPath == '/admin/user/manage' ? 'active' : null)
 										a(href="/admin/user/manage", title="Gerenciar Usuários")
 											| Gerenciar Usuarios
+									li(class=currentPath == '/admin/reports' ? 'active' : null)
+										a(href="/admin/reports", title="Relatórios")
+											| Relatórios
 						ul.nav.navbar-nav.navbar-right
 							if currentUser															
 								li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)

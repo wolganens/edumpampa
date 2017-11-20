@@ -10,8 +10,9 @@ block content
 				a(href=data.lo.file_url)
 					| !{data.lo.file_url}
 			else
-				strong.text-danger
-					| Apenas usuários cadastrados podem baixar arquivos!
+				div.alert.alert-danger
+					strong.text-danger
+						| Apenas usuários cadastrados podem baixar arquivos!
 	if data.lo.file
 		.row
 			.col-md-4
@@ -31,10 +32,10 @@ block content
 					|Download
 					div
 						if currentUser
-							a(href=data.lo.file.url)
+							a(href="/learning-object/download/" + data.lo._id, target="_blank", title="Baixar arquivo do objeto de aprendizagem")
 								| Download
 						else
-							strong.text-danger
+							.badge.alert-danger
 								| Apenas usuários cadastrados podem baixar arquivos!
 	p
 		strong

@@ -17,4 +17,6 @@ router.get('/remove/:id', learningObjectController.getRemoveObject);
 
 router.get('/text-search/:search_text?', learningObjectController.getTextSearch);
 router.get('/checkbox-search', learningObjectController.postCheckBoxSearch);
+
+router.get('/download/:id', learningObjectController.getDownloadOaFile);
 module.exports = router;

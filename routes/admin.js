@@ -9,5 +9,6 @@ router.get('/user/manage', adminController.getUserManage);
 router.get('/user/authorize/:id', adminController.getUserAuthorize);
 router.get('/user/unauthorize/:id', adminController.getUserUnauthorize);
 router.get('/learning-object/manage', adminController.getLearningObjectManage);
+router.get('/reports', adminController.getReports);
 
 module.exports = router;
