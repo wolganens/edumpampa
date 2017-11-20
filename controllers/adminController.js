@@ -22,6 +22,8 @@ module.exports.getUserAuthorize = getUserAuthorize;
 module.exports.getUserUnauthorize = getUserUnauthorize;
 module.exports.getReports = getReports;
 module.exports.getReportsUsers = getReportsUsers;
+module.exports.getLoReports = getLoReports;
+module.exports.getUserRemove = getUserRemove;
 
 function getUserManage(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
@@ -124,6 +126,24 @@ function getReportsUsers(req, res) {
     return User.count(user_query_document, function(err, count) {
         return User.find(user_query_document, function(err, users){
             return res.render('admin_reports_users_results', {count: count, users: users, title: "Resultado do Relatório - EduMPampa"})
+        });
+    });
+}
+function getUserRemove(req, res) {
+    const permission = ac.can(req.user.role).deleteAny('user');
+    if (!permission.granted) {
+        return res.status(403).send("Você não tem permissão!");
+    }
+    return LearningObject.remove({owner: req.params.id}, function (err_lo, removed){
+        if (err_lo){
+            return res.send(err_lo);
+        }
+        return User.findByIdAndRemove(req.params.id, function(err_user, removed_user){
+            if (err_user) {
+                return res.send(err_user);
+            }
+            req.flash("success_messages", "Usuário removido com sucesso!");
+            return res.redirect("/admin/user/manage");
         });
     });
 }
