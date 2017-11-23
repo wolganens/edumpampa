@@ -85,10 +85,10 @@ html(lang='en')
 									a(href="/account/signup") Cadastro
 
 			if error_messages && error_messages.length > 0
-				.alert.alert-danger#messages(tabindex="-1")
+				.alert.alert-danger#messages(tabindex="-1", role="alert")
 					| !{error_messages}
 			if success_messages && success_messages.length > 0
-				.alert.alert-success#messages(tabindex="-1")
+				.alert.alert-success#messages(tabindex="-1", role="alert")
 					| !{success_messages}
 			if inputErrors
 				.hidden#input-errors

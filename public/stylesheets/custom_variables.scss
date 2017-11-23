@@ -1,9 +1,17 @@
-$gray-light:            #222222;
-$brand-primary:         #005500 !default; // #337ab7
+$brand-primary:         #4CAF50 !default; // #337ab7
+$brand-success:         #8BC34A !default;
+$brand-info:            #2196F3 !default;
+$brand-warning:         #FF9800 !default;
+$brand-danger:          #F44336 !default;
+
+
+
+$gray-light:            #9E9E9E;
+/* $brand-primary:         #005500 !default; // #337ab7
 $brand-success:         #20603c !default;
 $brand-info:            #20603c !default;
 $brand-warning:         #20603c !default;
-$brand-danger:          #96281b !default;
+$brand-danger:          #96281b !default; */
 $panel-default-heading-bg:    $brand-primary !default;
 $navbar-default-bg:                $brand-primary !default;
 $navbar-default-color:             #FFF !default;
@@ -31,5 +39,5 @@ $state-warning-bg:               $brand-warning !default;
 $state-warning-border:           darken(adjust-hue($state-warning-bg, -10), 5%) !default;
 
 $state-danger-text:              white !default;
-$state-danger-bg:                #b50000 !default;
+$state-danger-bg:                $brand-danger !default;
 $state-danger-border:            darken(adjust-hue($state-danger-bg, -10), 5%) !default;

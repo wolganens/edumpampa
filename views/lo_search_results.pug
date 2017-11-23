@@ -26,6 +26,7 @@ block content
 								| !{resource.name}
 				.form-group
 					button(type="submit", class="btn btn-primary btn-lg")
+						i(class="fa fa-filter" aria-hidden="true")
 						| Filtrar
 		.col-md-9
 			h3
@@ -62,7 +63,7 @@ block content
 								| !{lo.createdAt.getFullYear()}
 							| - !{lo.description}
 			else
-				.alert.alert-info
+				.alert.alert-info(role="alert")
 					| Nenhum objeto encontrado
 			div
 				| !{url}

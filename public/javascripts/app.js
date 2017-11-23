@@ -141,7 +141,7 @@ jQuery(document).ready(function($) {
     	}
     }
     var messages = document.getElementById('messages');
-    if (messages) {
+    if (messages) {    	
     	messages.focus();
     }
 });
