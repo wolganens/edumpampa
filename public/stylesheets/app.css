@@ -8245,7 +8245,4 @@ input[type="checkbox"]:focus {
 .navbar a:focus {
   border-color: black; }
 
-#messages:focus {
-  border: 5px solid #ddd; }
-
 /*# sourceMappingURL=app.css.map */
