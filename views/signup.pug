@@ -67,10 +67,7 @@ block content
                     .form-group
                         label(for="password_confirm")
                             | Confirmar Senha *
-                        input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")
-                else
-                    a(href="/account/change-pw", title="Alterar senha", class="btn btn-primary")
-                        | Alterar minha senha
+                        input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")                
         .form-group.pull-right
             .btn-group
                 if data.user

@@ -75,9 +75,11 @@ html(lang='en')
 										span.caret
 									ul.dropdown-menu
 										li
-											a(href="/account/profile") Minha Conta
+											a(href="/account/profile", title="Ver minha conta") Minha Conta
 										li
-											a(href="/auth/signout") Sair									
+											a(href="/account/change-pw", title="Alterar senha") Alterar minha senha
+										li
+											a(href="/auth/signout", title="Sair do EduMPampa") Sair	
 							else
 								li(class=currentPath == '/account/signin' ? 'active' : null)
 									a(href="/account/signin") Login
