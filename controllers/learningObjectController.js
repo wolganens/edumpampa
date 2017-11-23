@@ -49,17 +49,16 @@ function getCreate(req, res) {
             TeachingLevels.find(callback);
         },
         resources: function(callback) {
-            Resources.find(callback);
+            Resources.find({}).sort('name').exec(callback);
         },
         contents: function(callback) {
-            Contents.find(callback);
+            Contents.find({}).sort('name').exec(callback);
         },
         licenses: function(callback) {
             Licenses.find(callback);
         },
     }, function(err, results) {
-        res.render('lo_create', { error: err, data: results,title: "Cadastro de OA - EduMPampa" });
-        return;
+        return; res.render('lo_create', { error: err, data: results,title: "Cadastro de OA - EduMPampa" });        
     });
 }
 function getReqParamAsArray(reqparam) {
@@ -263,10 +262,10 @@ function getTextSearch(req, res) {
     const body = req.body;
     async.parallel({
         resources: function(callback) {
-            Resources.find(callback);
+            Resources.find({}).sort('name').exec(callback);
         },
         contents: function(callback) {
-            Contents.find(callback);
+            Contents.find({}).sort('name').exec(callback);
         }
     }, function(err, results) {
         if (err) {
@@ -343,10 +342,10 @@ function postCheckBoxSearch(req, res) {
     const body = req.body;
     async.parallel({
         resources: function(callback) {
-            Resources.find(callback);
+            Resources.find({}).sort('name').exec(callback);
         },
         contents: function(callback) {
-            Contents.find(callback);
+            Contents.find({}).sort('name').exec(callback);
         }
     }, function(err, results) {
         /*
