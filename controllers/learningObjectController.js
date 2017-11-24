@@ -95,9 +95,9 @@ function postCreate(req, res) {
         file:                       body.file_name ? JSON.parse(body.file_name) : null,
         file_url:                   body.file_url ? body.file_url : null
     }        
-    console.log(learningObject.file);
-    console.log("O tipo de dados do campo file é:")
-    console.log(typeof(learningObject.file))
+    if (req.user.role == 'ADMIN') {
+        learningObject.approved = true;
+    }
     learningObject = new LearningObject(learningObject);
     learningObject.save(function(err, result) {
         if (err) {
@@ -117,6 +117,8 @@ function postCreate(req, res) {
         var success_msg = "Objeto submetido para aprovação com sucesso!";
         if (body.object_id) {
             success_msg = "Objeto atualizado com sucesso!";
+        } else if (req.user.role == 'ADMIN') {
+            success_msg = "Objeto cadastrado com sucesso!";
         }
         delete req.session.lo;
         req.flash('success_messages',  success_msg);
