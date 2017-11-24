@@ -144,4 +144,8 @@ jQuery(document).ready(function($) {
     if (messages) {    	
     	messages.focus();
     }
+    $("#contrast").click(function(event){
+    	event.preventDefault();
+    	$("body").toggleClass("contrast");
+    })
 });

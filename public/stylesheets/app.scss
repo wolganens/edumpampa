@@ -129,3 +129,10 @@ input[type="checkbox"]:focus{
 .navbar a:focus{
 	border-color: black;
 }
+body.contrast {
+	div, &, a, .btn, .navbar, .dropdown-menu, input, .badge, select {
+		background-color: #000 !important;
+		color: white !important;
+		border-color: white;
+	}
+}

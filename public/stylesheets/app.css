@@ -8245,4 +8245,9 @@ input[type="checkbox"]:focus {
 .navbar a:focus {
   border-color: black; }
 
+body.contrast div, body.contrast, body.contrast a, body.contrast .btn, body.contrast .navbar, body.contrast .dropdown-menu, body.contrast input, body.contrast .badge, body.contrast select {
+  background-color: #000 !important;
+  color: white !important;
+  border-color: white; }
+
 /*# sourceMappingURL=app.css.map */
