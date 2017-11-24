@@ -24,6 +24,19 @@ module.exports.getReports = getReports;
 module.exports.getReportsUsers = getReportsUsers;
 module.exports.getLoReports = getLoReports;
 module.exports.getUserRemove = getUserRemove;
+module.exports.getLoReportsResults = getLoReportsResults;
+
+function getReqParamAsArray(reqparam) {
+    if (reqparam) {
+        if (Array.isArray(reqparam)) {
+            return reqparam;
+        } else {
+            return [reqparam];
+        }
+    } else {
+        return null;
+    }
+}
 
 function getUserManage(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
@@ -151,6 +164,11 @@ function getUserRemove(req, res) {
     Relatório de Objetos de aprendizagem
     */
 function getLoReports(req, res) {
+    const permission = ac.can(req.user.role).updateAny('learningObject');
+    if (!permission.granted) {
+        res.status(403).send("Você não tem permissão!");
+        return;
+    }
     async.parallel({
         accessibility_resources: function(callback) {
             AccessibilityResources.find(callback);
@@ -162,24 +180,81 @@ function getLoReports(req, res) {
             TeachingLevels.find(callback);
         },
         resources: function(callback) {
-            Resources.find(callback);
+            Resources.find({}).sort('name').exec(callback);
         },
         contents: function(callback) {
-            Contents.find(callback);
+            Contents.find({}).sort('name').exec(callback);
         },
-        licenses: function(callback) {
-            Licenses.find(callback);
-        },
-        
     }, function(err, results) {
-        var lo = LearningObject.findById(loId)
-        .populate('teaching_levels')
-        .populate('axes')
-        .populate('accessibility_resources')
-        .populate('license')        
-        .exec(function(err, result){            
-            results['lo'] = result;            
-            return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
-        });
+        if (err) {
+            return res.send(err);
+        }
+        res.render('admin_reports_oa', { title: 'Relatórios OA - EduMPampa', data: results });
+    });
+}
+
+function getLoReportsResults(req, res) {
+    /*
+        Variavel responsavel por armazenar os filtros de busca da query
+    */
+    let and = {
+        "$and": []
+    };
+    /*
+        Popula os arrays de consulta com os checkbox marcados pelo usuário
+    */
+    const q_acc_resources = req.query.accessibility_resources ? getReqParamAsArray(req.query.accessibility_resources) : [];
+    const q_axes = req.query.axes ? getReqParamAsArray(req.query.axes) : [];
+    const q_teaching_levels = req.query.teaching_levels ? getReqParamAsArray(req.query.teaching_levels) : [];
+    const q_resources = req.query.resources ? getReqParamAsArray(req.query.resources) : [];
+    const q_contents = req.query.contents ? getReqParamAsArray(req.query.contents) : [];
+    if (q_acc_resources.length > 0) {
+        and["$and"].push(
+            {
+                accessibility_resources: {$all: q_acc_resources}
+            }
+        );
+    }
+    if (q_axes.length > 0) {
+        and["$and"].push(
+            {
+                axes: {$all: q_axes}
+            }
+        );
+    }
+    if (q_teaching_levels.length > 0) {
+        and["$and"].push(
+            {
+                teaching_levels: {$all: q_teaching_levels}
+            }
+        );
+    }
+    if (q_contents.length > 0) {
+        and["$and"].push(
+            {
+                content: {$all: q_contents}
+            }
+        );
+    }
+    if (q_resources.length > 0) {
+        and["$and"].push(
+            {
+                resources: {$all: q_resources}
+            }
+        );
+    }
+    console.log(JSON.stringify(and) );
+    LearningObject.aggregate([       
+        {
+            "$match": and
+        },
+        {
+            $project: {title: "$title"}
+        }
+    ], function(err, result) {
+        if (err) {
+            return res.send(err);
+        }
+        return res.send(result);
     });
 }
