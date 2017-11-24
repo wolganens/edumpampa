@@ -164,38 +164,16 @@ function getLearningObject(req, res) {
 }
 function getLearningObjectDetails(req, res) {
     let loId = req.params.loId;
-    async.parallel({
-        accessibility_resources: function(callback) {
-            AccessibilityResources.find(callback);
-        },
-        axes: function(callback) {
-            Axes.find(callback);
-        },
-        teaching_levels: function(callback) {
-            TeachingLevels.find(callback);
-        },
-        resources: function(callback) {
-            Resources.find(callback);
-        },
-        contents: function(callback) {
-            Contents.find(callback);
-        },
-        licenses: function(callback) {
-            Licenses.find(callback);
-        },
-        
-    }, function(err, results) {
-        var lo = LearningObject.findById(loId)
-        .populate('teaching_levels')
-        .populate('axes')
-        .populate('accessibility_resources')
-        .populate('license')        
-        .exec(function(err, result){            
-            results['lo'] = result;            
-            return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
-        });
-    });
-    return;
+    let results = {};    
+    return LearningObject.findById(loId)
+    .populate('teaching_levels')
+    .populate('axes')
+    .populate('accessibility_resources')
+    .populate('license')        
+    .exec(function(err, result){            
+        results['lo'] = result;            
+        return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
+    });    
 }
 function postUploadFile(req, res) {
     const file = req.files.file;
