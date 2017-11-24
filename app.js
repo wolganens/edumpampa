@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
 var index = require('./routes/index');
-var users = require('./routes/users');
+var auth = require('./routes/authentication');
+var admin = require('./routes/admin')
 var lo = require('./routes/learningobject');
 var accounts = require('./routes/accounts');
 var config = require('./config/index');
@@ -75,9 +76,8 @@ app.use(function(req, res, next) {
 
 
 app.use('/', index);
-app.use('/users', users);
 app.use('/account', accounts);
-app.use('/auth', require('./routes/authentication'));
+app.use('/auth', auth);
 
 app.use('/admin', function(req,res, next){
   if(!req.user || req.user.role != 'ADMIN') {
@@ -86,7 +86,7 @@ app.use('/admin', function(req,res, next){
   } else {
     next();
   }
-},require('./routes/admin'));
+}, admin);
 
 app.use('/learning-object', lo);
 
