@@ -130,7 +130,7 @@ input[type="checkbox"]:focus{
 	border-color: black;
 }
 body.contrast {
-	div, &, a, .btn, .navbar, .dropdown-menu, input, .badge, select {
+	div, &, a, .btn, .navbar, .dropdown-menu, input, .badge, select, textarea {
 		background-color: #000 !important;
 		color: white !important;
 		border-color: white;
