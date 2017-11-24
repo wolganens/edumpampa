@@ -413,7 +413,7 @@ function postCheckBoxSearch(req, res) {
                 return res.render('lo_search_results', {
                     data: results,
                     selected_filters: selected_filters,
-                    checked_string: checked_string || "\"Nenhuma selação\"",
+                    checked_string: checked_string || "\"Nenhuma seleção\"",
                     count: count,
                     pages: Math.ceil(count / 10),
                     currentPage: page,
