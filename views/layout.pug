@@ -70,6 +70,9 @@ html(lang='en')
 										a(href="/admin/reports", title="Relatórios")
 											| Relatórios
 						ul.nav.navbar-nav.navbar-right
+							li(class=currentPath == '/contact' ? 'active' : null)
+								a(href="/contact", title="Enviar uma mensagem de contato")
+									| Contato
 							if currentUser															
 								li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
 									a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")

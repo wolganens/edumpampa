@@ -11,11 +11,11 @@ var InstitutionalPost = require('../models/institutional_post');
 var OccupationArea = require('../models/occupation_area');
 var Qualification = require('../models/qualifications');
 var async = require('async');
-const nodemailer = require('nodemailer');
 var passwordHelper = require('../helpers/password');
 var generator = require('generate-password');
 const pug = require('pug');
 var path = require('path');
+var email = require('../config/email');
 
 /**
 *  Module exports
@@ -94,29 +94,18 @@ function signupUser(req, res, next) {
             if (err) {
                 req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
                 return res.redirect('/account/signup');
-            }
-            let transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true, // true for 465, false for other ports
-                auth: {
-                    user: 'edumpampa@gmail.com', // generated ethereal user
-                    pass: 'unipampa123'  // generated ethereal password
-                }
-            });
-            let mailOptions = {
-                from: '"Equipe EduMPampa" <edumpampa@gmail.com>', // sender address
-                to: user.email, // list of receivers
-                subject: 'Seja bem-vindo ao EduMPampa!', // Subject line            
-                html: '<b>Olá ' + user.name + '</b><p>Seja bem-vindo ao EduMPampa</p>' // html body
+            }            
+            let mailOptions = {                
+                to: user.email,
+                subject: 'Seja bem-vindo ao EduMPampa!',
+                html: '<b>Olá ' + user.name + '</b><p>Seja bem-vindo ao EduMPampa</p>'
             };
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);            
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            email.sendMail(mailOptions, function (err, info){
+                if (err) {
+                    return res.send(err);
+                }                
             });
+
             req.logIn(user, function(err) {
                 req.flash('success_messages', 'Seja bem-vindo ao EduMPampa '+ user.name +'!')
                 res.redirect('/');
@@ -157,28 +146,16 @@ function postForgotPw(req, res) {
                 });
             });
         },
-        function(user, password, done) {
-            console.log(password);
-            console.log(user);
-            let transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true, // true for 465, false for other ports
-                auth: {
-                    user: 'edumpampa@gmail.com', // generated ethereal user
-                    pass: 'unipampa123'  // generated ethereal password
-                }
-            });
-            let mailOptions = {
-                from: '"Equipe EduMPampa" <edumpampa@gmail.com>', // sender address
-                to: user.email, // list of receivers
-                subject: 'Senha de acesso!', // Subject line            
-                html:   pug.renderFile(path.join(__appRoot, 'views', 'email_forgot_pw.pug'), {
-                            name: user.name,
-                            password: password
-                        })
+        function(user, password, done) {                        
+            let mailOptions = {                
+                to: user.email,
+                subject: 'Senha de acesso!',
+                html: pug.renderFile(path.join(__appRoot, 'views', 'email_forgot_pw.pug'), {
+                    name: user.name,
+                    password: password
+                })
             };
-            transporter.sendMail(mailOptions, (error, info) => {
+            email.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     return console.log(error);
                 }
