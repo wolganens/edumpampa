@@ -31,7 +31,7 @@ function getContact(req, res) {
     return res.render('index_contact', {title: "Entre em contato - EduMPampa"});
 }
 /*
-    Envia a mensagem de suporte para o email do administrador
+    Envia a mensagem de contato para o email do administrador
 */
 function postContact(req, res) {
     const subjects = ["Problema", "Sugestão", "Outro"];
