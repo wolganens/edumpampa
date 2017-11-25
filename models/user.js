@@ -44,27 +44,39 @@ var UserSchema = new Schema({
     },
     qualification_id: {
         type: Schema.Types.ObjectId,
-        required: false
+        required: [function(){
+            return !this.qualification_text;
+        }, "Escolha ou informe uma formação!"]
     },
     qualification_text:{
         type: String,
-        required: false
+        required: [function(){
+            return !this.qualification_id;
+        }, "Escolha ou informe uma formação!"]
     },
     occupation_area_id: {
         type: Schema.Types.ObjectId,
-        required: false
+        required: [function(){
+            return !this.occupation_area_text;
+        }, "Escolha ou informe uma área de atuação!"]
     },
     occupation_area_text:{
         type: String,
-        required: false
+        required: [function(){
+            return !this.occupation_area_id;
+        }, "Escolha ou informe uma área de atuação!"]
     },
     institutional_link_id: {
         type: Schema.Types.ObjectId,
-        required: false
+        required: [function(){
+            return !this.institutional_link_text;
+        }, "Escolha ou informe um vínculo institucional!"]
     },
     institutional_link_text:{
         type: String,
-        required: false
+        required: [function(){
+            return !this.institutional_link_id;
+        }, "Escolha ou informe um vínculo institucional!"]
     },
     institutional_post_id: {
         type: [Schema.Types.ObjectId],
