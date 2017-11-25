@@ -10,23 +10,24 @@ block content
 			if currentUser
 				input(class="form-control", name="name", value=currentUser.name, readonly, required, placeholder="Digite seu nome")
 			else
-				input(class="form-control", name="name", required, placeholder="Digite seu nome")
+				input(class="form-control", name="name", value=inputs && inputs.name, required, placeholder="Digite seu nome")
 		.form-group
 			label(for="subject")
-				| Assunto
+				| Assunto				
 			select(class="form-control", name="subject")
 				option(value="")
 					| Selectione um assunto
-				option(value="Problema")
+				option(value="Problema" selected=inputs && (inputs.subject == "Problema"))
 					| Problema
-				option(value="Sugestão")
+				option(value="Sugestão" selected=inputs && (inputs.subject == "Sugestão"))
 					| Sugestão
-				option(value="Outro")
+				option(value="Outro" selected=inputs && (inputs.subject == "Outro"))
 					| Outro
 		.form-group
 			lanel(for="message")
 				| Mensagem
 			textarea(class="form-control", name="message", required, placeholder="Insira sua mensagem de contato")
+				| !{inputs && inputs.message}
 		.form-group
 			button(type="submit", class="btn-lg btn btn-primary pull-right")
 				i(class="fa fa-envelope-o" aria-hidden="true")

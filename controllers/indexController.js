@@ -59,6 +59,7 @@ exports.postContact = function(req, res) {
     }
     if (hasErrors) {
         req.flash('inputErrors', JSON.stringify(inputErrors));
+        req.flash('inputs', req.body);
         return res.redirect("/contact");
     }
 
