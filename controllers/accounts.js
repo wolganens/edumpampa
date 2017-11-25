@@ -138,7 +138,7 @@ exports.postForgotPw = function(req, res) {
             let mailOptions = {                
                 to: user.email,
                 subject: 'Senha de acesso!',
-                html: pug.renderFile(path.join(__appRoot, 'views', 'email_forgot_pw.pug'), {
+                html: pug.renderFile(path.join(__dirname, '..', 'views', 'email_forgot_pw.pug'), {
                     name: user.name,
                     password: password
                 })

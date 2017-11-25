@@ -192,7 +192,7 @@ exports.postUploadFile = function (req, res) {
         file_attrs.size = req.headers['content-length'];
         file_attrs.url = path.join('/uploads', 'lo', storage_name);
 
-        const file_path = path.join(__appRoot, 'public', 'uploads', 'lo', storage_name);
+        const file_path = path.join(__dirname, '..', 'public', 'uploads', 'lo', storage_name);
 
         fs.writeFileSync(file_path, file.data);    
 
@@ -217,7 +217,7 @@ exports.postRemoveFile = function(req, res) {
             }            
             result.file = null;
             result.save()
-            const file_path = path.join(__appRoot, 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
+            const file_path = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
             fs.stat(file_path, function(err, stat) {
                 if(!err) {
                     fs.unlink(file_path, function(err, res) {
@@ -229,7 +229,7 @@ exports.postRemoveFile = function(req, res) {
             })        
         });
     } else {
-        const file_path = path.join(__appRoot, 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
+        const file_path = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
         fs.stat(file_path, function(err, stat) {
             if(!err) {
                 fs.unlink(file_path, function(err, res) {
@@ -458,7 +458,7 @@ exports.getRemoveObject = function (req, res) {
             return res.status(403).send("Você não tem permissão!")            
         }
         if (lo.file) {            
-            const file_path = path.join(__appRoot, 'public', lo.file.url);
+            const file_path = path.join(__dirname, '..', 'public', lo.file.url);
             return fs.stat(file_path, function(err, stat) {
                 if (err) {
                     return res.send(err);
@@ -520,7 +520,7 @@ exports.getDownloadOaFile = function(req, res) {
         }
         /*Se o OA tiver um arquivo, retorna o download do mesmo e salva o registro do download*/
         if (lo.file) {
-            return res.download(path.join(__appRoot, "public", lo.file.url), lo.title, function(err, download){
+            return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, function(err, download){
                 if (err) {
                     res.send(err);
                 }

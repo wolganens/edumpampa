@@ -18,9 +18,6 @@ var accounts = require('./routes/accounts');
 var config = require('./config/index');
 var configPassport = require('./config/passport');
 
-global.__appRoot = __dirname;
-
-
 var app = express();
 
 //Set up mongoose connection
