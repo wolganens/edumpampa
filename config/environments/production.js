@@ -2,8 +2,8 @@
 
 module.exports = {
   port: process.env.PORT,
-  hostname: "tranquil-peak-52271.herokuapp.com",
-  baseUrl: 'https://tranquil-peak-52271.herokuapp.com',
+  hostname: "edumpampa.herokuapp.com",
+  baseUrl: 'edumpampa.herokuapp.com',
   mongodb: {
     uri: 'mongodb://edumpampa:unipampaedumpampa@ds129459.mlab.com:29459/edumpampa'
   },

@@ -8250,4 +8250,7 @@ body.contrast div, body.contrast, body.contrast a, body.contrast .btn, body.cont
   color: white !important;
   border-color: white; }
 
+tr:target {
+  border: 2px dotted green; }
+
 /*# sourceMappingURL=app.css.map */

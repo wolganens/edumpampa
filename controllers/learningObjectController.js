@@ -14,7 +14,9 @@ var Downloads = require("../models/downloads");
 var Contents = require("../models/contents");
 var Resources = require("../models/resources");
 var Licenses = require("../models/licenses");
-var ac = require("../config/roles")
+var ac = require("../config/roles");
+var email = require("../config/email");
+var config = require("../config/index");
 
 exports.getCreate = function(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
@@ -98,11 +100,26 @@ exports.postCreate = function (req, res) {
                 return res.redirect('/learning-object/create');
             }
         }
-        var success_msg = "Objeto submetido para aprovação com sucesso!";
+        var success_msg = "";
         if (body.object_id) {
             success_msg = "Objeto atualizado com sucesso!";
         } else if (req.user.role == 'ADMIN') {
             success_msg = "Objeto cadastrado com sucesso!";
+        } else {
+            success_msg = "Objeto submetido para aprovação com sucesso!";
+            let mailOptions = {                
+                to: "edumpampa@gmail.com",
+                subject: "Novo OA submetido para aprovação",
+                html: 
+                `   <p>O usuário ${req.user.name} submeteu um OA chamado ${learningObject.title} para aprovação: </p>
+                    <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
+                `
+            };
+            email.sendMail(mailOptions, function (err, info){
+                if (err) {
+                    return res.send(err);
+                }                
+            });
         }
         delete req.session.lo;
         req.flash('success_messages',  success_msg);
@@ -133,7 +150,10 @@ exports.getLearningObject = function(req, res) {
         lo: function(callback) {
             LearningObject.findById(loId, callback);
         }
-    }, function(err, results) {        
+    }, function(err, results) {
+        if (err) {
+            return res.send(err);
+        }
         if (req.user) {
             const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
             

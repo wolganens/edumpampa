@@ -136,3 +136,6 @@ body.contrast {
 		border-color: white;
 	}
 }
+tr:target {
+	border: 2px dotted green;
+}

@@ -13,7 +13,7 @@ block content
 				| Ações
 		tbody
 			each lo in data
-				tr
+				tr(id=lo._id)
 					td
 						| !{lo.title}				
 					td
