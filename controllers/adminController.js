@@ -1,30 +1,20 @@
 'use strict';
 
 
+var async = require('async');
+
 var LearningObject = require("../models/learningobject");
 var User = require("../models/user");
-var ac = require("../config/roles").grants
+var ac = require("../config/roles");
 var InstitutionalLink = require('../models/institutional_link');
 var OccupationArea = require('../models/occupation_area');
 var Qualification = require('../models/qualifications');
-var async = require('async');
-
 var AccessibilityResources = require("../models/accessibilityresources");
 var Axes = require("../models/axes");
 var TeachingLevels = require("../models/teachinglevels");
 var LearningObject = require("../models/learningobject");
 var Contents = require("../models/contents");
 var Resources = require("../models/resources");
-
-module.exports.getUserManage = getUserManage;
-module.exports.getLearningObjectManage = getLearningObjectManage;
-module.exports.getUserAuthorize = getUserAuthorize;
-module.exports.getUserUnauthorize = getUserUnauthorize;
-module.exports.getReports = getReports;
-module.exports.getReportsUsers = getReportsUsers;
-module.exports.getLoReports = getLoReports;
-module.exports.getUserRemove = getUserRemove;
-module.exports.getLoReportsResults = getLoReportsResults;
 
 function getReqParamAsArray(reqparam) {
     if (reqparam) {
@@ -38,7 +28,7 @@ function getReqParamAsArray(reqparam) {
     }
 }
 
-function getUserManage(req, res) {
+exports.getUserManage = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -52,7 +42,7 @@ function getUserManage(req, res) {
         res.render('user_manage', {data: result, title: "Gerenciar usuários - EduMPampa"});
     })
 }
-function getUserAuthorize(req, res) {
+exports.getUserAuthorize = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -67,7 +57,7 @@ function getUserAuthorize(req, res) {
         res.redirect('/admin/user/manage');
     });
 }
-function getUserUnauthorize(req, res) {
+exports.getUserUnauthorize = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -82,7 +72,7 @@ function getUserUnauthorize(req, res) {
         res.redirect('/admin/user/manage');
     });
 }
-function getLearningObjectManage(req, res) {
+exports.getLearningObjectManage = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -98,7 +88,7 @@ function getLearningObjectManage(req, res) {
 /*
     Página de relatórios
 */
-function getReports(req, res) {
+exports.getReports = function(req, res) {
     async.parallel({
         institutional_links: function(callback) {
             InstitutionalLink.find(callback);
@@ -116,7 +106,7 @@ function getReports(req, res) {
 /*
     Relatórios de usuários com base na área de atuação, formação e vínculo instituicional 
 */
-function getReportsUsers(req, res) {
+exports.getReportsUsers = function(req, res) {
     let user_query_document = {};
     
     if (req.query.qualification_id) {
@@ -142,7 +132,7 @@ function getReportsUsers(req, res) {
         });
     });
 }
-function getUserRemove(req, res) {
+exports.getUserRemove = function(req, res) {
     const permission = ac.can(req.user.role).deleteAny('user');
     if (!permission.granted) {
         return res.status(403).send("Você não tem permissão!");
@@ -163,7 +153,7 @@ function getUserRemove(req, res) {
 /*
     Relatório de Objetos de aprendizagem
     */
-function getLoReports(req, res) {
+exports.getLoReports = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -193,7 +183,7 @@ function getLoReports(req, res) {
     });
 }
 
-function getLoReportsResults(req, res) {
+exports.getLoReportsResults = function(req, res) {
     /*
         Variavel responsavel por armazenar os filtros de busca da query
     */

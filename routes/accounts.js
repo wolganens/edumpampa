@@ -1,6 +1,8 @@
 var express = require('express');
-var router = express.Router();
+
 var accountCtrl = require('../controllers/accounts');
+
+var router = express.Router();
 
 router.post('/change-pw', accountCtrl.postChangePw);
 router.get('/change-pw', accountCtrl.getChangePw);

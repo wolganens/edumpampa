@@ -1,7 +1,9 @@
 var express = require('express');
-var router = express.Router();
+
 var indexController = require('../controllers/indexController');
-/* GET home page. */
+
+var router = express.Router();
+
 router.get('/', indexController.getIndex);
 router.get('/contact', indexController.getContact);
 router.post('/contact', indexController.postContact);

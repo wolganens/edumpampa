@@ -1,14 +1,11 @@
+var async = require('async');
+
 var AccessibilityResources = require("../models/accessibilityresources");
 var Axes = require("../models/axes");
 var TeachingLevels = require("../models/teachinglevels");
-var async = require('async');
 var email = require('../config/email');
 
-exports.getIndex = getIndex;
-exports.getContact = getContact;
-exports.postContact = postContact;
-
-function getIndex(req, res){    
+exports.getIndex = function (req, res){
 	async.parallel({
         accessibility_resources: function(callback) {
             AccessibilityResources.find(callback);
@@ -27,13 +24,13 @@ function getIndex(req, res){
 /*
     Renderiza a página de formulário de contato
 */
-function getContact(req, res) {
+exports.getContact = function(req, res) {
     return res.render('index_contact', {title: "Entre em contato - EduMPampa"});
 }
 /*
     Envia a mensagem de contato para o email do administrador
 */
-function postContact(req, res) {
+exports.postContact = function(req, res) {
     const subjects = ["Problema", "Sugestão", "Outro"];
     let hasErrors = false;
     let inputErrors = {

@@ -1,36 +1,24 @@
 'use strict';
 
-/**
-*  Module dependencies
-*/
 var _ = require('lodash');
 var mongoose = require('mongoose');
+var async = require('async');
+const pug = require('pug');
+var path = require('path');
+var generator = require('generate-password');
+
 var User = require('../models/user');
 var InstitutionalLink = require('../models/institutional_link');
 var InstitutionalPost = require('../models/institutional_post');
 var OccupationArea = require('../models/occupation_area');
 var Qualification = require('../models/qualifications');
-var async = require('async');
 var passwordHelper = require('../helpers/password');
-var generator = require('generate-password');
-const pug = require('pug');
-var path = require('path');
 var email = require('../config/email');
-
-/**
-*  Module exports
-*/
-module.exports.postSignUp = signupUser;
-module.exports.getForgotPw = getForgotPw;
-module.exports.postForgotPw = postForgotPw;
-module.exports.getProfile = getProfile;
-module.exports.getChangePw = getChangePw;
-module.exports.postChangePw = postChangePw;
 
 exports.getSignIn = function(req, res) {
     res.render('signin', {title: "Página de login de usuário - EduMPampa" });
 }
-exports.getSignUp = function(req,res){
+exports.getSignUp = function(req,res) {
     async.parallel({
         institutional_links: function(callback) {
             InstitutionalLink.find(callback);
@@ -49,7 +37,7 @@ exports.getSignUp = function(req,res){
         return;
     });
 }
-function signupUser(req, res, next) {
+exports.postSignUp = function(req, res, next) {
     // TODO: refactor validation
     req.flash('inputs', req.body);
     var userData = _.pick(req.body, 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
@@ -113,10 +101,10 @@ function signupUser(req, res, next) {
         });
     }
 };
-function getForgotPw(req, res) {
+exports.getForgotPw = function(req, res) {
     res.render('user_forgot_pw', {title: "Recuperar senha de acesso - EduMPampa"});
 }
-function postForgotPw(req, res) {    
+exports.postForgotPw = function(req, res) {
     async.waterfall([
         function(done) {
             User.findOne({ email: req.body.email }, function(err, user) {
@@ -170,7 +158,7 @@ function postForgotPw(req, res) {
         res.redirect('/account/forgot-pw');
     });    
 }
-function getProfile(req, res) {
+exports.getProfile = function(req, res) {
     async.parallel({
         institutional_links: function(callback) {
             InstitutionalLink.find(callback);
@@ -192,10 +180,10 @@ function getProfile(req, res) {
         return res.render('signup', { error: err, data: results, title: "Minha conta - EduMPampa" });        
     });    
 }
-function getChangePw(req, res) {
+exports.getChangePw = function(req, res) {
     return res.render('user_change_pw');
 }
-function postChangePw(req, res) {
+exports.postChangePw = function(req, res) {
     return User.findById(req.user._id, function(err, user){
         if (err) {
             res.send(err);

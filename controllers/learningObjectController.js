@@ -1,11 +1,11 @@
 'use strict';
 
-/**
- *  Module dependencies
- */
 var passport = require('passport');
 var mongoose = require('mongoose');
 var async = require('async');
+var path = require('path');
+var fs = require('fs-extra');
+
 var AccessibilityResources = require("../models/accessibilityresources");
 var Axes = require("../models/axes");
 var TeachingLevels = require("../models/teachinglevels");
@@ -14,25 +14,9 @@ var Downloads = require("../models/downloads");
 var Contents = require("../models/contents");
 var Resources = require("../models/resources");
 var Licenses = require("../models/licenses");
-var path = require('path');
-var fs = require('fs-extra');
-var ac = require("../config/roles").grants
+var ac = require("../config/roles")
 
-module.exports.getCreate = getCreate;
-module.exports.postCreate = postCreate;
-module.exports.postUploadFile = postUploadFile;
-module.exports.getLearningObject = getLearningObject;
-module.exports.getLearningObjectDetails = getLearningObjectDetails;
-module.exports.postRemoveFile = postRemoveFile;
-module.exports.postCheckBoxSearch = postCheckBoxSearch;
-module.exports.getTextSearch = getTextSearch;
-module.exports.getMyLearningObjects = getMyLearningObjects;
-module.exports.getDownloadOaFile = getDownloadOaFile;
-
-module.exports.getApproveObject = getApproveObject;
-module.exports.getRemoveObject = getRemoveObject;
-
-function getCreate(req, res) {
+exports.getCreate = function(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -72,7 +56,7 @@ function getReqParamAsArray(reqparam) {
         return null;
     }
 }
-function postCreate(req, res) {
+exports.postCreate = function (req, res) {
     const permission = !req.session.lo ? ac.can(req.user.role).createOwn('learningObject') : req.session.lo.owner.toString() == req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
         return res.status(403).send("Você não tem permissão!")        
@@ -125,7 +109,7 @@ function postCreate(req, res) {
         res.redirect('/learning-object/single/' + learningObject._id);
     });
 }
-function getLearningObject(req, res) {
+exports.getLearningObject = function(req, res) {
     let loId = req.params.loId;
     async.parallel({
         accessibility_resources: function(callback) {
@@ -164,7 +148,7 @@ function getLearningObject(req, res) {
     });
     return;
 }
-function getLearningObjectDetails(req, res) {
+exports.getLearningObjectDetails = function (req, res) {
     let loId = req.params.loId;
     let results = {};    
     return LearningObject.findById(loId)
@@ -177,7 +161,7 @@ function getLearningObjectDetails(req, res) {
         return res.render('lo_details', { error: err, data: results, title: "Detalhes do Objeto de Aprendizagem - EduMPampa" });
     });    
 }
-function postUploadFile(req, res) {
+exports.postUploadFile = function (req, res) {
     const file = req.files.file;
 
     var file_attrs = {};
@@ -199,7 +183,7 @@ function postUploadFile(req, res) {
     return;
     
 }
-function postRemoveFile(req, res) {    
+exports.postRemoveFile = function(req, res) {
     if (req.body.object_id) {
         const permission = req.session.lo.owner.toString() == req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
         if (!permission.granted) {
@@ -238,7 +222,7 @@ function postRemoveFile(req, res) {
     }
     res.status(200).send({ success: "Arquivo removido com sucesso!" });
 }
-function getTextSearch(req, res) {
+exports.getTextSearch = function(req, res) {
     const body = req.body;
     async.parallel({
         resources: function(callback) {
@@ -318,7 +302,7 @@ function getTextSearch(req, res) {
         });        
     });
 }
-function postCheckBoxSearch(req, res) {    
+exports.postCheckBoxSearch = function(req, res) {
     const body = req.body;
     async.parallel({
         resources: function(callback) {
@@ -425,7 +409,7 @@ function postCheckBoxSearch(req, res) {
         });        
     });
 }
-function getApproveObject(req, res) {
+exports.getApproveObject = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
         res.status(403).send("Você não tem permissão!");
@@ -446,7 +430,7 @@ function getApproveObject(req, res) {
         res.redirect('/admin/learning-object/manage');
     })
 }
-function getRemoveObject(req, res) {            
+exports.getRemoveObject = function (req, res) {
     return LearningObject.findById(req.params.id, {owner: 1, file: 1}, function (err, lo) {
         const permission = lo.owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
         
@@ -478,7 +462,7 @@ function getRemoveObject(req, res) {
 /*
     Página de listagem de OA's do usuário autenticado
 */
-function getMyLearningObjects(req, res) {
+exports.getMyLearningObjects = function(req, res) {
     /*Apenas usuários autenticados podem ver seus OA's(Obviamente)*/
     if (!req.user) {
         req.flash("error_messages", "Página restrita para usuários cadastrados!");
@@ -503,7 +487,7 @@ function getMyLearningObjects(req, res) {
 /*
     Baixar arquivo de um objeto de aprendizagem
 */
-function getDownloadOaFile(req, res) {
+exports.getDownloadOaFile = function(req, res) {
     /*Apenas usuários autenticados podem baixar arquivos*/    
     if (! req.user ) {
         req.flash("error_messages", "Apenas usuários autenticados podem baixar arquivos");

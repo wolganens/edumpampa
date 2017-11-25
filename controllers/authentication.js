@@ -1,23 +1,12 @@
 'use strict';
 
-/**
- *  Module dependencies
- */
 var passport = require('passport');
 var mongoose = require('mongoose');
 
 /**
- *  Module exports
- */
-module.exports.signin = signinUser;
-module.exports.signinGoogle = signinGoogle;
-module.exports.signinGoogleCb = signinGoogleCb;
-module.exports.signout = signoutUser;
-
-/**
  *  Uses Passport's local strategy to sign in a user
  */
-function signinUser(req, res, next) {
+exports.signin = function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
         if (err || !user) {
             return res.format({
@@ -58,7 +47,7 @@ function signinUser(req, res, next) {
         });
     })(req, res, next);
 };
-function signinGoogle(req, res, next) {
+exports.signinGoogle = function(req, res, next) {
     console.log('signinGoogle....')
     passport.authenticate('google', { scope: [
         'https://www.googleapis.com/auth/userinfo.profile',
@@ -66,14 +55,14 @@ function signinGoogle(req, res, next) {
     ] });    
 
 };
-function signinGoogleCb(req,res, next){
+exports.signinGoogleCb = function(req,res, next){
     passport.authenticate('google', { failureRedirect: '/account/signin' }),
     function(req, res) {
         res.redirect('/');
     };
 }
 
-function signoutUser(req, res, next) {
+exports.signout = function(req, res, next) {
     req.logout();
     delete req.session.historyData;
     res.redirect('/');
