@@ -1,7 +1,8 @@
 const AccessControl = require('accesscontrol');
 
 const ac = new AccessControl();
-ac.grant('COMMON')
+
+module.exports = ac.grant('COMMON')
   .readAny('learningObject')  
   .updateOwn('user')
   .deleteOwn('user')
@@ -20,5 +21,3 @@ ac.grant('COMMON')
   .readAny('learningObject')
   .updateAny('learningObject')
   .deleteAny('learningObject')
-
-module.exports.grants = ac;

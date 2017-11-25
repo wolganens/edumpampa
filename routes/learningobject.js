@@ -1,7 +1,9 @@
 var express = require('express');
-var router = express.Router();
+
 var learningObjectController = require('../controllers/learningObjectController');
-/* GET home page. */
+
+var router = express.Router();
+
 router.get('/create', learningObjectController.getCreate);
 router.post('/create', learningObjectController.postCreate);
 
@@ -19,4 +21,5 @@ router.get('/text-search/:search_text?', learningObjectController.getTextSearch)
 router.get('/checkbox-search', learningObjectController.postCheckBoxSearch);
 
 router.get('/download/:id', learningObjectController.getDownloadOaFile);
+
 module.exports = router;

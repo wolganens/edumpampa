@@ -6,27 +6,30 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var passport = require('passport');
+var fileUpload = require('express-fileupload');
+var flash = require('connect-flash');
+var mongoose = require('mongoose');
+
 var index = require('./routes/index');
 var auth = require('./routes/authentication');
 var admin = require('./routes/admin')
 var lo = require('./routes/learningobject');
 var accounts = require('./routes/accounts');
 var config = require('./config/index');
-const fileUpload = require('express-fileupload');
+var configPassport = require('./config/passport');
+
 global.__appRoot = __dirname;
-var flash = require('connect-flash');
 
 
 var app = express();
 
 //Set up mongoose connection
-var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 var mongoDB = process.env.MONGODB_URI || 'mongodb://edumpampa:unipampaedumpampa@ds129459.mlab.com:29459/edumpampa';
 
 
-require('./config/passport').init(app);
+configPassport(app);
 
 mongoose.connect(mongoDB, {
   useMongoClient: true

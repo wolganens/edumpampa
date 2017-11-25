@@ -2,8 +2,10 @@
 
 var express = require('express');
 var passport = require('passport'); 
-var router = express.Router();
+
 var authCtrl = require('../controllers/authentication');
+
+var router = express.Router();
 
 router.post('/signin', authCtrl.signin);
 router.get('/signin-google', 

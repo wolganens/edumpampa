@@ -2,9 +2,13 @@
 
 var passport = require('passport');  
 var mongoose = require('mongoose');  
+
+var localStrategy = require('./strategies/local');
+var googleStrategy = require('./strategies/google')
+
 var User = mongoose.model('User');
 
-module.exports.init = function(app) {  
+module.exports = function(app) {  
 	passport.serializeUser(function(user, done) {
 		done(null, user.id);
 	});
@@ -14,6 +18,6 @@ module.exports.init = function(app) {
 	});
 
 	// load strategies
-	require('./strategies/local')();
-	require('./strategies/google')();
+	localStrategy();
+	googleStrategy();
 };
