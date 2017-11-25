@@ -148,4 +148,81 @@ jQuery(document).ready(function($) {
     	event.preventDefault();
     	$("body").toggleClass("contrast");
     })
+    $(".remove").click(function(event){
+    	event.preventDefault();
+    	if (confirm("Você tem certeza?")) {
+    		window.location = this.href
+    	}
+    })
+    $(".table-checkall").change(function(event){
+    	parent = this.parentElement;
+    	while (parent.tagName.toLowerCase() != 'table') {
+    		parent = parent.parentElement
+    	}
+    	if (this.checked) {
+    		$(parent).find('[type="checkbox"]').prop("checked", true);
+    	} else {
+    		$(parent).find('[type="checkbox"]').prop("checked", false);
+    		$(parent).find('[type="checkbox"]').removeAttr("checked");
+    	}
+    });
+    function getMassSelectedCheckbox() {
+    	var mass_checkbox = document.getElementsByClassName('mass-checkbox');
+    	var i, n;
+    	user_ids = [];
+    	for (i = 0, n = mass_checkbox.length ; i < n ; i++){
+    		if(mass_checkbox[i].checked) {
+    			user_ids.push(mass_checkbox[i].value)
+    		} else {
+    			var index = user_ids.indexOf(mass_checkbox[i].value);
+    			if (index != -1) {
+    				users_id.slice(index, 1);
+    			}
+    		}
+    	}
+    	return user_ids;
+    }
+    $(".table-checkall, .mass-checkbox").change(function(event){
+    	user_ids = getMassSelectedCheckbox();
+    	if (user_ids.length > 0) {
+    		$(".mass-actions").removeClass("disabled");
+    		$(".mass-actions").removeAttr("disabled");
+    	} else {
+    		$(".mass-actions").addClass("disabled");
+    		$(".mass-actions").attr("disabled", "disabled");
+    	}
+    })
+    $(".mass-actions").click(function(){
+    	var action = $(this).data('action');
+    	user_ids = getMassSelectedCheckbox();
+    	switch (action) {    		
+			case 'approve-all':
+				$.post('/admin/approve-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
+					console.log(data);
+					if (data.ok == 1) {
+						alert("Ação realizada com sucesso");
+					}
+				});
+				break;
+			case 'disapprove-all':
+				$.post('/admin/disapprove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
+					console.log(data);
+					if (data.ok == 1) {
+						alert("Ação realizada com sucesso");
+					}
+				});
+				break;
+			case 'remove-all':
+				$.post('/admin/remove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
+					console.log(data);
+					if (data.ok == 1) {
+						alert("Ação realizada com sucesso");
+					}
+				});
+				break;
+    		default:
+    			alert("Ação em massa inválida")
+    			break;
+    	}
+    });
 });

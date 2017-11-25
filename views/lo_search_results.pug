@@ -47,7 +47,7 @@ block content
 			if data.learning_object.length > 0
 				each lo in data.learning_object
 					article
-						a(href="/learning-object/single/" + lo._id)
+						a(href="/learning-object/single/" + lo._id.toString())
 							| !{lo.title}
 						p
 							| Publicado em 

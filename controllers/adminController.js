@@ -34,13 +34,33 @@ exports.getUserManage = function(req, res) {
         res.status(403).send("Você não tem permissão!");
         return;
     }
-    User.find(function(err, result) {
-        if(err){
-            res.send(err);
-            return;
+    let query = User.find();
+    if (req.query.situation) {
+        if (req.query.situation == "aut") {
+            query.where("role").equals('AUTHORIZED');
+        } else if (req.query.situation == "des") {
+            query.where("role").equals('COMMON');
         }
-        res.render('user_manage', {data: result, title: "Gerenciar usuários - EduMPampa"});
-    })
+    }
+    if (req.query.name) {
+        query.where("name").equals(new RegExp(req.query.name, 'i'));
+    }
+    query.exec(function(err, result) {
+        if (err) {
+            res.send(err);
+        }
+        result.sort(function(a, b){
+            var nameA = a.name.toUpperCase();
+            var nameB = b.name.toUpperCase();
+
+            if (nameA > nameB) {
+                return 1;
+            }
+                return 0;
+            });
+        req.flash('inputs', req.query)        
+        res.render('user_manage', {data: result, title: "Gerenciar usuários - EduMPampa", situation: req.query.situation || '', name: req.query.name || ''});
+    });
 }
 exports.getUserAuthorize = function(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
@@ -78,11 +98,32 @@ exports.getLearningObjectManage = function(req, res) {
         res.status(403).send("Você não tem permissão!");
         return;
     }
-    LearningObject.find(function(err, result) {
+    let query = LearningObject.find();
+    if (req.query.situation) {
+        if (req.query.situation == "hab") {
+            query.where("approved").equals(true);
+        } else if (req.query.situation == "des") {
+            query.where("approved").equals(false);
+        }
+    }
+    if (req.query.title) {
+        query.where("title").equals(new RegExp(req.query.title, 'i'));
+    }
+    query.exec(function(err, result) {
         if (err) {
             res.send(err);
         }
-        res.render('lo_manage', {data: result, title:"Gerenciar OA's - EduMPampa"});
+        result.sort(function(a, b){
+            var nameA = a.title.toUpperCase();
+            var nameB = b.title.toUpperCase();
+
+            if (nameA > nameB) {
+                return 1;
+            }
+                return 0;
+            });
+        req.flash('inputs', req.query)        
+        res.render('lo_manage', {data: result, title:"Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || ''});
     });
 }
 /*
@@ -247,4 +288,77 @@ exports.getLoReportsResults = function(req, res) {
         }
         return res.send(result);
     });
+}
+
+module.exports.postAprroveUserOa = postAprroveUserOa;
+module.exports.postDisapproveUserOa = postDisapproveUserOa;
+module.exports.postRemoveUserOa = postRemoveUserOa;
+
+function postAprroveUserOa(req, res){
+    const permission = ac.can(req.user.role).updateAny('learningObject');
+    if (!permission.granted) {
+        return res.status(403).send("Você não tem permissão!");        
+    }    
+    return LearningObject.updateMany(
+        {
+            owner: {
+                $in: req.body['user_ids[]']
+            }
+        },
+        {
+            $set: {
+                approved: true
+            }
+        }, function(err, result) {
+            if (err) {
+                return res.send(err);
+            } else {
+                return res.send(result);
+            }
+        }
+    );
+
+}
+function postDisapproveUserOa(req, res){
+    const permission = ac.can(req.user.role).updateAny('learningObject');
+    if (!permission.granted) {
+        return res.status(403).send("Você não tem permissão!");        
+    }
+    return LearningObject.updateMany(
+        {
+            owner: {
+                $in: req.body['user_ids[]']
+            }
+        },
+        {
+            $set: {
+                approved: false
+            }
+        }, function(err, result) {
+            if (err) {
+                return res.send(err);
+            } else {
+                return res.send(result);
+            }
+        }
+    );
+}
+function postRemoveUserOa(req, res){
+    const permission = ac.can(req.user.role).deleteAny('user');
+    if (!permission.granted) {
+        return res.status(403).send("Você não tem permissão!");
+    }
+    return LearningObject.deleteMany(
+        {
+            owner: {
+                $in: req.body['user_ids[]']
+            }
+        }, function(err, result) {
+            if (err) {
+                return res.send(err);
+            } else {
+                return res.send(result);
+            }
+        }
+    );
 }

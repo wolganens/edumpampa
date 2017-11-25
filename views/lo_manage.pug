@@ -3,6 +3,20 @@ extends layout
 block content
 	h3
 		| Gerenciar Objetos de Aprendizagem
+	form(class="form-inline", action="", method="GET")
+		.form-group
+			label(for="situation")
+				| Situação:
+			select.form-control(name="situation", id="situation")
+				option(value="") Selecionar situação
+				option(value="hab", selected=situation == "hab") Habilitados
+				option(value="des", selected=situation == "des") Desabilitados
+		.form-group
+			label(for="title")
+				| Título
+			input(placeholder="Filtrar por título", name="title", id="title", class="form-control", value=oatitle)
+		.form-group
+			button(type="submit", class="btn btn-primary") Aplicar
 	table.table
 		thead
 			th
@@ -20,12 +34,15 @@ block content
 						| !{lo.htmlSituation}
 					td
 						.btn-group
-							a.btn.btn-default(href="/learning-object/remove/" + lo._id)
-								| Apagar
 							if !lo.approved
 								a.btn.btn-success(href="/learning-object/approve/"+lo._id)
-									| Aprovar
+									i(class="fa fa-thumbs-o-up" aria-hidden="true") 
+									| Habilitar
 							else
 								a.btn.btn-danger(href="/learning-object/approve/"+lo._id)
-									| Desaprovar
+									i(class="fa fa-thumbs-o-down" aria-hidden="true") 
+									| Desabilitar
+							a.btn.btn-default.remove(href="/learning-object/remove/" + lo._id)
+								i(class="fa fa-trash-o" aria-hidden="true") 
+								| Remover
 
