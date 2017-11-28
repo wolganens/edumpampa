@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var teaching_levels = new Schema({
-    name: String
+const teaching_levels = new Schema({
+  name: String,
 });
 
 
-module.exports = mongoose.model('TeachingLevels', teaching_levels );
+module.exports = mongoose.model('TeachingLevels', teaching_levels);

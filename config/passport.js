@@ -1,23 +1,23 @@
-'use strict';
 
-var passport = require('passport');  
-var mongoose = require('mongoose');  
 
-var localStrategy = require('./strategies/local');
-var googleStrategy = require('./strategies/google')
+const passport = require('passport');
+const mongoose = require('mongoose');
 
-var User = mongoose.model('User');
+const localStrategy = require('./strategies/local');
+const googleStrategy = require('./strategies/google');
 
-module.exports = function(app) {  
-	passport.serializeUser(function(user, done) {
-		done(null, user.id);
-	});
+const User = mongoose.model('User');
 
-	passport.deserializeUser(function(id, done) {
-		User.findById(id, done);
-	});
+module.exports = function (app) {
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
 
-	// load strategies
-	localStrategy();
-	googleStrategy();
+  passport.deserializeUser((id, done) => {
+    User.findById(id, done);
+  });
+
+  // load strategies
+  localStrategy();
+  googleStrategy();
 };

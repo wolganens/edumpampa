@@ -1,33 +1,33 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var licenses = new Schema({
-    name: {
+const licenses = new Schema({
+  name: {
     	type: String,
     	unique: true,
-    	maxlength: 80
-    },
-    deed: {
+    	maxlength: 80,
+  },
+  deed: {
     	type: String,
     	unique: true,
-    	maxlength: 150
-    },
-    legal: {
+    	maxlength: 150,
+  },
+  legal: {
     	type: String,
     	unique: true,
-    	maxlength: 150
-    },
-    description: {
+    	maxlength: 150,
+  },
+  description: {
     	type: String,
     	unique: true,
-    	maxlength: 1000
-    },
-    image: {
+    	maxlength: 1000,
+  },
+  image: {
     	type: String,
     	unique: true,
-    	maxlength: 200
-    },
+    	maxlength: 200,
+  },
 });
 
-module.exports = mongoose.model('Licenses', licenses );
+module.exports = mongoose.model('Licenses', licenses);

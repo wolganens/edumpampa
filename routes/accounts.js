@@ -1,8 +1,8 @@
-var express = require('express');
+const express = require('express');
 
-var accountCtrl = require('../controllers/accounts');
+const accountCtrl = require('../controllers/accounts');
 
-var router = express.Router();
+const router = express.Router();
 
 router.post('/change-pw', accountCtrl.postChangePw);
 router.get('/change-pw', accountCtrl.getChangePw);

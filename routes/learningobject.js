@@ -1,8 +1,8 @@
-var express = require('express');
+const express = require('express');
 
-var learningObjectController = require('../controllers/learningObjectController');
+const learningObjectController = require('../controllers/learningObjectController');
 
-var router = express.Router();
+const router = express.Router();
 
 router.get('/create', learningObjectController.getCreate);
 router.post('/create', learningObjectController.postCreate);

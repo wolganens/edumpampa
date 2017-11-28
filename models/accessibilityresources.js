@@ -1,13 +1,13 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var accessibility_resources = new Schema({
-    name: {
+const accessibility_resources = new Schema({
+  name: {
     	type: String,
     	unique: true,
-    	maxlength: 200
-    }
+    	maxlength: 200,
+  },
 });
 
-module.exports = mongoose.model('AccessibilityResources', accessibility_resources );
+module.exports = mongoose.model('AccessibilityResources', accessibility_resources);

@@ -3,7 +3,7 @@ const AccessControl = require('accesscontrol');
 const ac = new AccessControl();
 
 ac.grant('COMMON')
-  .readAny('learningObject')  
+  .readAny('learningObject')
   .updateOwn('user')
   .deleteOwn('user')
   .grant('AUTHORIZED')
@@ -12,7 +12,7 @@ ac.grant('COMMON')
   .updateOwn('learningObject')
   .deleteOwn('learningObject')
   .grant('ADMIN')
-  .extend(['COMMON','AUTHORIZED'])
+  .extend(['COMMON', 'AUTHORIZED'])
   .createAny('user')
   .readAny('user')
   .updateAny('user')
@@ -20,6 +20,6 @@ ac.grant('COMMON')
   .createAny('learningObject')
   .readAny('learningObject')
   .updateAny('learningObject')
-  .deleteAny('learningObject')
+  .deleteAny('learningObject');
 
 module.exports = ac;

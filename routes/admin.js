@@ -1,11 +1,11 @@
-'use strict';
 
-var express = require('express');
-var passport = require('passport');
 
-var adminController = require("../controllers/adminController");
+const express = require('express');
+const passport = require('passport');
 
-var router = express.Router();
+const adminController = require('../controllers/adminController');
+
+const router = express.Router();
 
 router.get('/user/manage', adminController.getUserManage);
 router.get('/user/authorize/:id', adminController.getUserAuthorize);

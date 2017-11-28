@@ -1,17 +1,17 @@
-'use strict';
+
 
 /**
  * Constants
  */
-var LEN = 256;
-var SALT_LEN = 64;
-var ITERATIONS = 10000;
-var DIGEST = 'sha256';
+const LEN = 256;
+const SALT_LEN = 64;
+const ITERATIONS = 10000;
+const DIGEST = 'sha256';
 
 /**
  * Module dependencies
  */
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 
 /**
@@ -29,10 +29,10 @@ module.exports.verify = verify;
  * @param {Function} callback
  */
 function hashPassword(password, salt, callback) {
-  var len = LEN / 2;
+  const len = LEN / 2;
 
-  if (3 === arguments.length) {
-    crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, function(err, derivedKey) {
+  if (arguments.length === 3) {
+    crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, (err, derivedKey) => {
       if (err) {
         return callback(err);
       }
@@ -41,13 +41,13 @@ function hashPassword(password, salt, callback) {
     });
   } else {
     callback = salt;
-    crypto.randomBytes(SALT_LEN / 2, function(err, salt) {
+    crypto.randomBytes(SALT_LEN / 2, (err, salt) => {
       if (err) {
         return callback(err);
       }
 
       salt = salt.toString('hex');
-      crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, function(err, derivedKey) {
+      crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, (err, derivedKey) => {
         if (err) {
           return callback(err);
         }
@@ -68,7 +68,7 @@ function hashPassword(password, salt, callback) {
  * @param {Function} callback
  */
 function verify(password, hash, salt, callback) {
-  hashPassword(password, salt, function(err, hashedPassword) {
+  hashPassword(password, salt, (err, hashedPassword) => {
     if (err) {
       return callback(err);
     }

@@ -1,13 +1,13 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var resources = new Schema({
-    name: {
+const resources = new Schema({
+  name: {
     	type: String,
     	unique: true,
-    	maxlength: 200
-    }
+    	maxlength: 200,
+  },
 });
 
-module.exports = mongoose.model('Resources', resources );
+module.exports = mongoose.model('Resources', resources);

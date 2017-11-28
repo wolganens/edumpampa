@@ -1,13 +1,13 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var institutional_link = new Schema({
-    name: {
+const institutional_link = new Schema({
+  name: {
     	type: String,
     	unique: true,
-    	maxlength: 200
-    }
+    	maxlength: 200,
+  },
 });
 
-module.exports = mongoose.model('InstitutionalLink', institutional_link );
+module.exports = mongoose.model('InstitutionalLink', institutional_link);

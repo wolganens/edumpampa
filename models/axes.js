@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var axes = new Schema({
-    name: String
+const axes = new Schema({
+  name: String,
 });
 
-module.exports = mongoose.model('Axes', axes );
+module.exports = mongoose.model('Axes', axes);
