@@ -118,7 +118,7 @@ module.exports = {
   getForgotPw(req, res) {
     res.render('user_forgot_pw', { title: 'Recuperar senha de acesso - EduMPampa' });
   },
-  postForgotPw(req, res) {
+  postForgotPw(req, res, next) {
     async.waterfall([
       function (done) {
         User.findOne({ email: req.body.email }, (err, user) => {
@@ -164,7 +164,7 @@ module.exports = {
           done(error, 'Senha enviada para o email informado!');
         });
       },
-    ], (err, successMsg, next) => {
+    ], (err, successMsg) => {
       if (err) {
         return next(err);
       }
