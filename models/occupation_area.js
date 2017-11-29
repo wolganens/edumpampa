@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const occupation_area = new Schema({
   name: {

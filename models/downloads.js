@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const downloads = new Schema({
   user_id: {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const learning_object_schema = new Schema({
   owner: {

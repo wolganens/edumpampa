@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const accessibility_resources = new Schema({
   name: {
