@@ -7,7 +7,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/user');
 
 // expose this function to our app using module.exports
-module.exports = function (passport) {
+module.exports = (passport) => {
   // =========================================================================
   // passport session setup ==================================================
   // =========================================================================
@@ -41,8 +41,8 @@ module.exports = function (passport) {
     },
     ((req, email, password, done) => {
       // asynchronous
-    // User.findOne wont fire unless data is sent back
-      process.nextTick(() => {
+      // User.findOne wont fire unless data is sent back
+      process.nextTick(() =>
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         User.findOne({ 'local.email': email }, (err, user) => {
@@ -63,12 +63,11 @@ module.exports = function (passport) {
           newUser.local.password = newUser.generateHash(password);
 
           // save the user
-          newUser.save((err) => {
-            if (err) { throw err; }
+          return newUser.save((saveErr) => {
+            if (saveErr) { throw saveErr; }
             return done(null, newUser);
           });
-        });
-      });
+        }));
     }),
   ));
 };
