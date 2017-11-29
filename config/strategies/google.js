@@ -1,13 +1,13 @@
 
 
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const { OAuth2Strategy } = require('passport-google-oauth');
 const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 
-module.exports = function () {
-  passport.use(new GoogleStrategy(
+module.exports = function googleStrategy() {
+  passport.use(new OAuth2Strategy(
     {
       clientID: '303825891357-bn5tssc9q4hncnrtippn1c8i744db31h.apps.googleusercontent.com',
       clientSecret: 'QKeCN2408js1eYIDLLoKlg2z',
