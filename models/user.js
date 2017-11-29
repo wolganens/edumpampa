@@ -101,7 +101,7 @@ const UserSchema = new Schema({
 * @param {String password
 * @param {Function} callback
 */
-UserSchema.statics.authenticate = function authenticate(email, password, callback) { 
+UserSchema.statics.authenticate = function authenticate(email, password, callback) {
   return this.findOne({ email }).select('+password +passwordSalt').exec((userErr, user) => {
     const authUser = user;
     if (userErr) {
@@ -133,9 +133,9 @@ UserSchema.statics.authenticate = function authenticate(email, password, callbac
         authUser.passwordSalt = undefined;
         // return user if everything is ok
         return callback(err, authUser);
-      }
+      },
     );
-  })
+  });
 };
 
 /**
