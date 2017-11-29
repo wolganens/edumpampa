@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const institutional_post = new Schema({
+const institutionalPost = new Schema({
   name: {
-    	type: String,
-    	unique: true,
-    	maxlength: 200,
+    type: String,
+    unique: true,
+    maxlength: 200,
   },
 });
 
-module.exports = mongoose.model('InstitutionalPost', institutional_post);
+module.exports = mongoose.model('InstitutionalPost', institutionalPost);
