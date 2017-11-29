@@ -1,10 +1,10 @@
-
-
+const generator = require('generate-password');
 const mongoose = require('mongoose');
-
-const Schema = mongoose.Schema;
 const _ = require('lodash');
+
 const passwordHelper = require('../helpers/password');
+
+const { Schema } = mongoose;
 
 const UserSchema = new Schema({
   email: {
@@ -18,16 +18,12 @@ const UserSchema = new Schema({
   },
   password: {
     type: String,
-    required: [function () {
-      return !this.google_id;
-    }, 'Informe  uma senha!'],
+    required: [function required() { return !this.google_id; }, 'Informe  uma senha!'],
     select: false,
   },
   passwordSalt: {
     type: String,
-    required() {
-      return !this.google_id;
-    },
+    required: () => !this.google_id,
     select: false,
   },
   active: {
@@ -44,39 +40,27 @@ const UserSchema = new Schema({
   },
   qualification_id: {
     type: Schema.Types.ObjectId,
-    required: [function () {
-      return !this.qualification_text;
-    }, 'Escolha ou informe uma formação!'],
+    required: [function required() { return !this.qualification_text; }, 'Escolha ou informe uma formação!'],
   },
   qualification_text: {
     type: String,
-    required: [function () {
-      return !this.qualification_id;
-    }, 'Escolha ou informe uma formação!'],
+    required: [function required() { return !this.qualification_id; }, 'Escolha ou informe uma formação!'],
   },
   occupation_area_id: {
     type: Schema.Types.ObjectId,
-    required: [function () {
-      return !this.occupation_area_text;
-    }, 'Escolha ou informe uma área de atuação!'],
+    required: [function required() { return !this.occupation_area_text; }, 'Escolha ou informe uma área de atuação!'],
   },
   occupation_area_text: {
     type: String,
-    required: [function () {
-      return !this.occupation_area_id;
-    }, 'Escolha ou informe uma área de atuação!'],
+    required: [function required() { return !this.occupation_area_id; }, 'Escolha ou informe uma área de atuação!'],
   },
   institutional_link_id: {
     type: Schema.Types.ObjectId,
-    required: [function () {
-      return !this.institutional_link_text;
-    }, 'Escolha ou informe um vínculo institucional!'],
+    required: [function required() { return !this.institutional_link_text; }, 'Escolha ou informe um vínculo institucional!'],
   },
   institutional_link_text: {
     type: String,
-    required: [function () {
-      return !this.institutional_link_id;
-    }, 'Escolha ou informe um vínculo institucional!'],
+    required: [function required() { return !this.institutional_link_id; }, 'Escolha ou informe um vínculo institucional!'],
   },
   institutional_post_id: {
     type: [Schema.Types.ObjectId],
@@ -88,21 +72,15 @@ const UserSchema = new Schema({
   },
   institution_name: {
     type: String,
-    required: [function () {
-      return !this.google_id;
-    }, 'Informe a instituição à qual está vinculado(a)!'],
+    required: [function required() { return !this.google_id; }, 'Informe a instituição à qual está vinculado(a)!'],
   },
   institution_address: {
     type: String,
-    required: [function () {
-      return !this.google_id;
-    }, 'Informe o endereço da instituição'],
+    required: [function required() { return !this.google_id; }, 'Informe o endereço da instituição'],
   },
   birthday: {
     type: Date,
-    required: [function () {
-      return !this.google_id;
-    }, 'Informe sua data de nascimento!'],
+    required: [function required() { return !this.google_id; }, 'Informe sua data de nascimento!'],
   },
   createdAt: {
     type: Date,
@@ -123,35 +101,41 @@ const UserSchema = new Schema({
 * @param {String password
 * @param {Function} callback
 */
-UserSchema.statics.authenticate = function (email, password, callback) {
-  this.findOne({ email }).select('+password +passwordSalt').exec((err, user) => {
-    if (err) {
-      return callback(err, null);
+UserSchema.statics.authenticate = function authenticate(email, password, callback) { 
+  return this.findOne({ email }).select('+password +passwordSalt').exec((userErr, user) => {
+    const authUser = user;
+    if (userErr) {
+      return callback(userErr, null);
     }
 
     // no user found just return the empty user
-    if (!user) {
-      return callback(err, user);
+    if (!authUser) {
+      return callback(userErr, authUser);
     }
 
     // verify the password with the existing hash from the user
-    passwordHelper.verify(password, user.password, user.passwordSalt, (err, result) => {
-      if (err) {
-        return callback(err, null);
-      }
+    return passwordHelper.verify(
+      password,
+      authUser.password,
+      authUser.passwordSalt,
+      (err, result) => {
+        if (err) {
+          return callback(err, null);
+        }
 
-      // if password does not match don't return user
-      if (result === false) {
-        return callback(err, null);
-      }
+        // if password does not match don't return user
+        if (result === false) {
+          return callback(err, null);
+        }
 
-      // remove password and salt from the result
-      user.password = undefined;
-      user.passwordSalt = undefined;
-      // return user if everything is ok
-      callback(err, user);
-    });
-  });
+        // remove password and salt from the result
+        authUser.password = undefined;
+        authUser.passwordSalt = undefined;
+        // return user if everything is ok
+        return callback(err, authUser);
+      }
+    );
+  })
 };
 
 /**
@@ -160,30 +144,31 @@ UserSchema.statics.authenticate = function (email, password, callback) {
 * @param {Object} opts - user data
 * @param {Function} callback
 */
-UserSchema.statics.register = function (opts, callback) {
+UserSchema.statics.register = function register(opts, callback) {
   const self = this;
   const data = _.cloneDeep(opts);
 
   // hash the password
-  passwordHelper.hash(opts.password, (err, hashedPassword, salt) => {
-    if (err) {
-      return callback(err);
+  return passwordHelper.hash(opts.password, (hashErr, hashedPassword, salt) => {
+    if (hashErr) {
+      return callback(hashErr);
     }
 
     data.password = hashedPassword;
     data.passwordSalt = salt;
 
     // create the user
-    self.model('User').create(data, (err, user) => {
+    return self.model('User').create(data, (err, user) => {
+      const authUser = user;
       if (err) {
         return callback(err, null);
       }
 
       // remove password and salt from the result
-      user.password = undefined;
-      user.passwordSalt = undefined;
+      authUser.password = undefined;
+      authUser.passwordSalt = undefined;
       // return user if everything is ok
-      callback(err, user);
+      return callback(err, authUser);
     });
   });
 };
@@ -192,7 +177,7 @@ UserSchema.statics.register = function (opts, callback) {
 * Create an instance method to change password
 *
 */
-UserSchema.methods.resetPassword = function (email, callback) {
+UserSchema.methods.resetPassword = () => {
   const self = this;
   const password = generator.generate({
     length: 8,
@@ -200,84 +185,94 @@ UserSchema.methods.resetPassword = function (email, callback) {
     symbols: true,
     strict: true,
   });
-  passwordHelper.hash(password, (err, hashedPassword, salt, callback) => {
+  return passwordHelper.hash(password, (hashErr, hashedPassword, salt, callback) => {
+    if (hashErr) {
+      return callback(hashErr, null);
+    }
     self.password = hashedPassword;
     self.passwordSalt = salt;
 
-    self.save((err, saved) => {
+    return self.save((err, saved) => {
       if (err) {
         return callback(err, null);
       }
-      if (callback) {
-        return callback(err, {
-          success: true,
-          message: 'Password changed successfully.',
-          type: 'password_change_success',
-          password,
-        });
-      }
-    });
-  });
-};
-UserSchema.methods.changePassword = function (oldPassword, newPassword, callback) {
-  const self = this;
-  // get the user from db with password and salt
-  self.model('User').findById(self.id).select('+password +passwordSalt').exec((err, user) => {
-    if (err) {
-      return callback(err, null);
-    }
-    // no user found just return the empty user
-    if (!user) {
-      return callback(err, user);
-    }
-
-    passwordHelper.verify(oldPassword, user.password, user.passwordSalt, (err, result) => {
-      if (err) {
-        return callback(err, null);
-      }
-
-      // if password does not match don't return user
-      if (result === false) {
-        const PassNoMatchError = new Error('A senha anterior está incorreta!');
-        PassNoMatchError.type = 'old_password_does_not_match';
-        return callback(PassNoMatchError, null);
-      }
-
-      // generate the new password and save the changes
-      passwordHelper.hash(newPassword, (err, hashedPassword, salt) => {
-        self.password = hashedPassword;
-        self.passwordSalt = salt;
-
-        self.save((err, saved) => {
-          if (err) {
-            return callback(err, null);
-          }
-          if (callback) {
-            return callback(err, {
-              success: true,
-              message: 'Password changed successfully.',
-              type: 'password_change_success',
-            });
-          }
-        });
+      return callback(err, {
+        saved,
+        success: true,
+        message: 'Password changed successfully.',
+        type: 'password_change_success',
+        password,
       });
     });
   });
 };
+UserSchema.methods.changePassword = function changePassword(oldPassword, newPassword, callback) {
+  const self = this;
+  // get the user from db with password and salt
+  return self.model('User').findById(self.id).select('+password +passwordSalt').exec((findErr, user) => {
+    if (findErr) {
+      return callback(findErr, null);
+    }
+    // no user found just return the empty user
+    if (!user) {
+      return callback(findErr, user);
+    }
 
-UserSchema.virtual('htmlSituation').get(function () {
-  if (this.role == 'COMMON') {
+    return passwordHelper.verify(
+      oldPassword,
+      user.password,
+      user.passwordSalt,
+      (verifyErr, result) => {
+        if (verifyErr) {
+          return callback(verifyErr, null);
+        }
+        // if password does not match don't return user
+        if (result === false) {
+          const PassNoMatchError = new Error('A senha anterior está incorreta!');
+          PassNoMatchError.type = 'old_password_does_not_match';
+          return callback(PassNoMatchError, null);
+        }
+
+        // generate the new password and save the changes
+        return passwordHelper.hash(newPassword, (hashErr, hashedPassword, salt) => {
+          if (hashErr) {
+            return callback(hashErr, null);
+          }
+          self.password = hashedPassword;
+          self.passwordSalt = salt;
+
+          return self.save((saveErr, saved) => {
+            if (saveErr) {
+              return callback(saveErr, null);
+            }
+            return callback(saveErr, {
+              saved,
+              success: true,
+              message: 'Password changed successfully.',
+              type: 'password_change_success',
+            });
+          });
+        });
+      },
+    );
+  });
+};
+
+UserSchema.virtual('htmlSituation').get(function htmlSituation() {
+  if (this.role === 'COMMON') {
     return '<div class="badge alert-danger">Desautorizado</div>';
-  } else if (this.role == 'AUTHORIZED') {
+  } else if (this.role === 'AUTHORIZED') {
     return '<div class="badge alert-success">Autorizado</div>';
   }
   return '<div class="badge"><strong>Admin</strong></div>';
 });
-UserSchema.virtual('getFormatedBirthday').get(function () {
-  const birthday = this.birthday;
-  const date = this.birthday.getDate();
-  const month = this.birthday.getMonth();
 
+UserSchema.virtual('getFormatedBirthday').get(function getFormatedBirthday() {
+  const [
+    birthday,
+    date,
+    month,
+  ] = [this.birthday, this.birthday.getDate(), this.birthday.getMonth()];
   return `${date < 10 ? `0${date}` : date}/${month < 10 ? `0${month}` : month}/${birthday.getFullYear()}`;
 });
 // compile User model

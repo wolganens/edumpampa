@@ -36,27 +36,44 @@ exports.getSignUp = function (req, res) {
     res.render('signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
   });
 };
-exports.postSignUp = function (req, res, next) {
+exports.postSignUp = function (req, res, next) {  
   // TODO: refactor validation
   req.flash('inputs', req.body);
-  const userData = _.pick(req.body, 'name', 'email', 'password', 'birthday', 'qualification_id', 'occupation_area_id', 'institutional_link_id', 'institution_name', 'institution_address', 'institutional_post_id[]', 'qualification_text', 'occupation_area_text', 'institutional_link_text', 'institutional_post_text');
+  const userData = _.pick(
+    req.body, 
+    'name',
+    'email',
+    'password',
+    'birthday',
+    'qualification_id',
+    'occupation_area_id',
+    'institutional_link_id',
+    'institution_name',
+    'institution_address',
+    'institutional_post_id[]',
+    'qualification_text',
+    'occupation_area_text',
+    'institutional_link_text',
+    'institutional_post_text'
+  );
   const [day, month, year] = userData.birthday.split('/');
+
   userData.birthday = new Date(year, month - 1, day);
   userData.institutional_post_id = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
   userData.qualification_id = userData.qualification_id ? userData.qualification_id : null;
   userData.occupation_area_id = userData.occupation_area_id ? userData.occupation_area_id : null;
   userData.institutional_link_id = userData.institutional_link_id ? userData.institutional_link_id : null;
-  if (userData._id) {
-    console.log('tem id no form');
-    userData._id = req.body._id;
-    User.findByIdAndUpdate(userData._id, userData, (err, result) => {
+  userData._id = req.body._id;
+
+  if (userData._id) {    
+    return User.findByIdAndUpdate(userData._id, userData, (err, result) => {
       if (err) {
         return res.send(err);
       }
       req.flash('success_messages', 'Perfil atualizado com sucesso!');
       return res.redirect('/account/profile');
     });
-  } else {
+  } else {    
     if (req.body.password !== req.body.password_confirm) {
       const errors = {
         errors: {

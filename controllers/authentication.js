@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
  */
 exports.signin = function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
+    console.log(err, user, info)
     if (err || !user) {
       return res.format({
         html() {
