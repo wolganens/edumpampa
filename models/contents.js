@@ -4,9 +4,9 @@ const { Schema } = mongoose;
 
 const contents = new Schema({
   name: {
-    	type: String,
-    	unique: true,
-    	maxlength: 200,
+    type: String,
+    unique: true,
+    maxlength: 200,
   },
 });
 
