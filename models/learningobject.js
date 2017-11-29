@@ -2,28 +2,28 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const learning_object_schema = new Schema({
+const learningObjectSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     required: true,
   },
   title: {
-    	type: String,
-    	maxlength: 255,
-    	required: true,
+    type: String,
+    maxlength: 255,
+    required: true,
   },
   description: {
-    	type: String,
-    	required: true,
+    type: String,
+    required: true,
   },
   authors: {
-    	type: String,
-    	required: true,
+    type: String,
+    required: true,
   },
   year: {
-    	type: Number,
-    	max: [new Date().getFullYear(), 'O ano de autoria não pode ser maior que o ano atual!'],
-    	required: true,
+    type: Number,
+    max: [new Date().getFullYear(), 'O ano de autoria não pode ser maior que o ano atual!'],
+    required: true,
   },
   teaching_levels: [{ type: Schema.Types.ObjectId, ref: 'TeachingLevels' }],
   axes: [{ type: Schema.Types.ObjectId, ref: 'Axes' }],
@@ -31,8 +31,8 @@ const learning_object_schema = new Schema({
   content: [{ type: Schema.Types.ObjectId, ref: 'Contents' }],
   resources: [{ type: Schema.Types.ObjectId, ref: 'Resources' }],
   license: {
-    	type: Schema.Types.ObjectId,
-    	required: true,
+    type: Schema.Types.ObjectId,
+    required: true,
     ref: 'Licenses',
   },
   license_description: {
@@ -40,12 +40,12 @@ const learning_object_schema = new Schema({
     required: false,
   },
   license_owner: {
-    	type: String,
-    	required: true,
+    type: String,
+    required: true,
   },
   file: {
-    	type: Object,
-    	required: [function () {
+    type: Object,
+    required: [function required() {
       return !this.file_url;
     }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],
   },
@@ -62,8 +62,8 @@ const learning_object_schema = new Schema({
     type: String,
   },
   file_url: {
-    	type: String,
-    	required: [function () {
+    type: String,
+    required: [function required() {
       return !this.file;
     }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],
   },
@@ -78,11 +78,11 @@ const learning_object_schema = new Schema({
   },
 });
 
-learning_object_schema.virtual('htmlSituation').get(function () {
+learningObjectSchema.virtual('htmlSituation').get(function htmlSituation() {
   if (this.approved) {
     return '<div class="badge alert-success">Habilitado</div>';
   }
   return '<div class="badge alert-danger">Desabilitado</div>';
 });
 
-module.exports = mongoose.model('LearningObject', learning_object_schema);
+module.exports = mongoose.model('LearningObject', learningObjectSchema);
