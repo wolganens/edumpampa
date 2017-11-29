@@ -1,5 +1,3 @@
-
-
 const passport = require('passport');
 const mongoose = require('mongoose');
 
@@ -8,7 +6,7 @@ const googleStrategy = require('./strategies/google');
 
 const User = mongoose.model('User');
 
-module.exports = function (app) {
+module.exports = function configPassport() {
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });

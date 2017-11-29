@@ -1,7 +1,4 @@
-
-
 const express = require('express');
-const passport = require('passport');
 
 const adminController = require('../controllers/adminController');
 

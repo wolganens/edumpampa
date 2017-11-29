@@ -1,5 +1,3 @@
-
-
 /**
  * Constants
  */
@@ -13,13 +11,6 @@ const DIGEST = 'sha256';
  */
 const crypto = require('crypto');
 
-
-/**
- * Module exports
- */
-module.exports.hash = hashPassword;
-module.exports.verify = verify;
-
 /**
  * Creates a hash based on a salt from a given password
  * if there is no salt a new salt will be generated
@@ -28,7 +19,7 @@ module.exports.verify = verify;
  * @param {String} salt - optional
  * @param {Function} callback
  */
-function hashPassword(password, salt, callback) {
+module.exports.hash = function hashPassword(password, salt, callback) {
   const len = LEN / 2;
 
   if (arguments.length === 3) {
@@ -56,7 +47,7 @@ function hashPassword(password, salt, callback) {
       });
     });
   }
-}
+};
 
 /**
  * Verifies if a password matches a hash by hashing the password
@@ -67,7 +58,7 @@ function hashPassword(password, salt, callback) {
  * @param {String} salt
  * @param {Function} callback
  */
-function verify(password, hash, salt, callback) {
+exports.verify = function verify(password, hash, salt, callback) {
   hashPassword(password, salt, (err, hashedPassword) => {
     if (err) {
       return callback(err);
@@ -79,4 +70,4 @@ function verify(password, hash, salt, callback) {
       callback(null, false);
     }
   });
-}
+};
