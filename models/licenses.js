@@ -4,29 +4,29 @@ const { Schema } = mongoose;
 
 const licenses = new Schema({
   name: {
-    	type: String,
-    	unique: true,
-    	maxlength: 80,
+    type: String,
+    unique: true,
+    maxlength: 80,
   },
   deed: {
-    	type: String,
-    	unique: true,
-    	maxlength: 150,
+    type: String,
+    unique: true,
+    maxlength: 150,
   },
   legal: {
-    	type: String,
-    	unique: true,
-    	maxlength: 150,
+    type: String,
+    unique: true,
+    maxlength: 150,
   },
   description: {
-    	type: String,
-    	unique: true,
-    	maxlength: 1000,
+    type: String,
+    unique: true,
+    maxlength: 1000,
   },
   image: {
-    	type: String,
-    	unique: true,
-    	maxlength: 200,
+    type: String,
+    unique: true,
+    maxlength: 200,
   },
 });
 
