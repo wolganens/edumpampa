@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
-const teaching_levels = new Schema({
+const teachingLevels = new Schema({
   name: String,
 });
 
 
-module.exports = mongoose.model('TeachingLevels', teaching_levels);
+module.exports = mongoose.model('TeachingLevels', teachingLevels);
