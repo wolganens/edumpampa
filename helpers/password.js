@@ -19,7 +19,7 @@ const crypto = require('crypto');
  * @param {String} salt - optional
  * @param {Function} callback
  */
-module.exports.hash = function hashPassword(password, salt, callback) {
+function hashPassword(password, salt, callback) {
   const len = LEN / 2;
 
   if (arguments.length === 3) {
@@ -31,23 +31,24 @@ module.exports.hash = function hashPassword(password, salt, callback) {
       return callback(null, derivedKey.toString('hex'));
     });
   } else {
-    callback = salt;
-    crypto.randomBytes(SALT_LEN / 2, (err, salt) => {
-      if (err) {
-        return callback(err);
+    const cb = salt;
+    crypto.randomBytes(SALT_LEN / 2, (rbErr, newSalt) => {
+      let nSalt = newSalt;
+      if (rbErr) {
+        return cb(rbErr);
       }
-
-      salt = salt.toString('hex');
-      crypto.pbkdf2(password, salt, ITERATIONS, len, DIGEST, (err, derivedKey) => {
-        if (err) {
-          return callback(err);
+      nSalt = newSalt.toString('hex');
+      return crypto.pbkdf2(password, nSalt, ITERATIONS, len, DIGEST, (pbkf2Err, derivedKey) => {
+        if (pbkf2Err) {
+          return cb(pbkf2Err);
         }
-
-        callback(null, derivedKey.toString('hex'), salt);
+        return cb(null, derivedKey.toString('hex'), nSalt);
       });
     });
   }
-};
+}
+
+module.exports.hash = hashPassword;
 
 /**
  * Verifies if a password matches a hash by hashing the password
@@ -58,16 +59,16 @@ module.exports.hash = function hashPassword(password, salt, callback) {
  * @param {String} salt
  * @param {Function} callback
  */
-exports.verify = function verify(password, hash, salt, callback) {
-  hashPassword(password, salt, (err, hashedPassword) => {
+exports.verify = (password, hash, salt, callback) => hashPassword(
+  password,
+  salt,
+  (err, hashedPassword) => {
     if (err) {
       return callback(err);
     }
-
     if (hashedPassword === hash) {
-      callback(null, true);
-    } else {
-      callback(null, false);
+      return callback(null, true);
     }
-  });
-};
+    return callback(null, false);
+  },
+);
