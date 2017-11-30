@@ -14,7 +14,7 @@ const email = require('../config/email');
 
 module.exports = {
   getSignIn(req, res) {
-    res.render('signin', { title: 'Página de login de usuário - EduMPampa' });
+    return res.render('signin', { title: 'Página de login de usuário - EduMPampa' });
   },
   getSignUp(req, res) {
     async.parallel({
@@ -31,7 +31,10 @@ module.exports = {
         Qualification.find(callback);
       },
     }, (err, results) => {
-      res.render('signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
+      if (err) {
+        return res.send(err);
+      }
+      return res.render('signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
     });
   },
   postSignUp(req, res) {
@@ -60,7 +63,9 @@ module.exports = {
     userData.institutional_post_id = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
     userData.qualification_id = userData.qualification_id ? userData.qualification_id : null;
     userData.occupation_area_id = userData.occupation_area_id ? userData.occupation_area_id : null;
-    userData.institutional_link_id = userData.institutional_link_id ? userData.institutional_link_id : null;
+    userData.institutional_link_id = (
+      userData.institutional_link_id ? userData.institutional_link_id : null
+    );
     userData._id = req.body._id;
 
     if (userData._id) {
@@ -71,84 +76,86 @@ module.exports = {
         req.flash('success_messages', 'Perfil atualizado com sucesso!');
         return res.redirect('/account/profile');
       });
-    } else {
-      if (req.body.password !== req.body.password_confirm) {
+    }
+    if (req.body.password !== req.body.password_confirm) {
+      const errors = {
+        errors: {
+          password_confirm: { message: 'As senhas informadas não conferem!' },
+        },
+      };
+      req.flash('inputErrors', JSON.stringify(errors));
+      return res.redirect('signup');
+    }
+    return User.register(userData, (err, user) => {
+      console.log(err);
+      if (err && (err.code === 11000 || err.code === 11001)) {
         const errors = {
           errors: {
-            password_confirm: { message: 'As senhas informadas não conferem!' },
+            email: { message: 'Este email já está sendo utilizado!' },
           },
         };
         req.flash('inputErrors', JSON.stringify(errors));
         return res.redirect('signup');
       }
-      User.register(userData, (err, user) => {
-        console.log(err);
-        if (err && (err.code === 11000 || err.code === 11001)) {
-          const errors = {
-            errors: {
-              email: { message: 'Este email já está sendo utilizado!' },
-            },
-          };
-          req.flash('inputErrors', JSON.stringify(errors));
-          return res.redirect('signup');
+      if (err) {
+        req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
+        return res.redirect('/account/signup');
+      }
+      const mailOptions = {
+        to: user.email,
+        subject: 'Seja bem-vindo ao EduMPampa!',
+        html: `<b>Olá ${user.name}</b><p>Seja bem-vindo ao EduMPampa</p>`,
+      };
+      return email.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          return res.send(mailErr);
         }
-
-        if (err) {
-          req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
-          return res.redirect('/account/signup');
-        }
-        const mailOptions = {
-          to: user.email,
-          subject: 'Seja bem-vindo ao EduMPampa!',
-          html: `<b>Olá ${user.name}</b><p>Seja bem-vindo ao EduMPampa</p>`,
-        };
-        email.sendMail(mailOptions, (err) => {
-          if (err) {
-            return res.send(err);
+        return req.logIn(user, (loginErr) => {
+          if (loginErr) {
+            return res.send(loginErr);
           }
-        });
-
-        req.logIn(user, (err) => {
           req.flash('success_messages', `Seja bem-vindo ao EduMPampa ${user.name}!`);
-          res.redirect('/');
+          return res.redirect('/');
         });
       });
-    }
+    });
   },
   getForgotPw(req, res) {
-    res.render('user_forgot_pw', { title: 'Recuperar senha de acesso - EduMPampa' });
+    return res.render('user_forgot_pw', { title: 'Recuperar senha de acesso - EduMPampa' });
   },
   postForgotPw(req, res, next) {
     async.waterfall([
-      function (done) {
-        User.findOne({ email: req.body.email }, (err, user) => {
+      (done) => {
+        const userEmail = req.body.email;
+        return User.findOne({ userEmail }, (err, user) => {
           if (!user) {
             req.flash('error_messages', 'Não há nenhum cadastro com este email!');
             return res.redirect('/account/forgot-pw');
           }
-          done(err, user);
+          return done(err, user);
         });
       },
-      function (user, done) {
+      (user, done) => {
+        const authUser = user;
         const password = generator.generate({
           length: 8,
           numbers: true,
           symbols: true,
           strict: true,
         });
-        passwordHelper.hash(password, (err, hashedPassword, salt, callback) => {
-          user.password = hashedPassword;
-          user.passwordSalt = salt;
+        return passwordHelper.hash(password, (err, hashedPassword, salt, callback) => {
+          authUser.password = hashedPassword;
+          authUser.passwordSalt = salt;
 
-          user.save((err) => {
-            if (err) {
-              return callback(err, null);
+          return authUser.save((saveErr) => {
+            if (saveErr) {
+              return callback(saveErr, null);
             }
-            done(err, user, password);
+            return done(saveErr, authUser, password);
           });
         });
       },
-      function (user, password, done) {
+      (user, password, done) => {
         const mailOptions = {
           to: user.email,
           subject: 'Senha de acesso!',
@@ -157,11 +164,11 @@ module.exports = {
             password,
           }),
         };
-        email.sendMail(mailOptions, (error) => {
+        return email.sendMail(mailOptions, (error) => {
           if (error) {
             return console.log(error);
           }
-          done(error, 'Senha enviada para o email informado!');
+          return done(error, 'Senha enviada para o email informado!');
         });
       },
     ], (err, successMsg) => {
@@ -169,7 +176,7 @@ module.exports = {
         return next(err);
       }
       req.flash('success_messages', successMsg);
-      res.redirect('/account/forgot-pw');
+      return res.redirect('/account/forgot-pw');
     });
   },
   getProfile(req, res) {
