@@ -13,7 +13,7 @@ block content
 						option(selected=true, value="")
 							| Selecione um recurso
 						each resource in data.resources
-							option(value=resource._id, selected=selected_filters ? selected_filters.resource == resource._id : false)
+							option(value=resource._id, selected=selectedFilters ? selectedFilters.resource == resource._id : false)
 								| !{resource.name}
 				.form-group
 					label(for="content")
@@ -22,7 +22,7 @@ block content
 						option(selected=true, value="")
 							| Selecione um conteúdo
 						each content in data.contents
-							option(value=content._id, selected=selected_filters ? selected_filters.content == content._id : false)
+							option(value=content._id, selected=selectedFilters ? selectedFilters.content == content._id : false)
 								| !{content.name}
 				.form-group
 					button(type="submit", class="btn btn-primary btn-lg")
@@ -44,8 +44,8 @@ block content
 					| Você pesquisou por: 
 					strong 
 						| "!{search_text}"						
-			if data.learning_object.length > 0
-				each lo in data.learning_object
+			if data.learningObject.length > 0
+				each lo in data.learningObject
 					article
 						a(href="/learning-object/single/" + lo._id.toString())
 							| !{lo.title}

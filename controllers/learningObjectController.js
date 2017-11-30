@@ -121,10 +121,11 @@ module.exports = {
                       <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
                   `,
         };
-        email.sendMail(mailOptions, (mailErr) => {
+        return email.sendMail(mailOptions, (mailErr) => {
           if (mailErr) {
             return res.send(mailErr);
           }
+          return res.status(200).send('Sucesso');
         });
       }
       delete req.session.lo;
@@ -161,7 +162,7 @@ module.exports = {
         return res.send(err);
       }
       if (req.user) {
-        const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+        const permission = (req.user._id === results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
@@ -202,43 +203,43 @@ module.exports = {
     }
   },
   postRemoveFile(req, res) {
+    const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
     if (req.body.object_id) {
-      const permission = req.session.lo.owner.toString() == req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+      const permission = req.session.lo.owner.toString() === req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
       if (!permission.granted) {
-        res.status(403).send('Você não tem permissão!');
-        return;
+        return res.status(403).send('Você não tem permissão!');
       }
-      const lo = LearningObject.findById(req.body.object_id, (err, result) => {
-        if (err) {
-          res.status(500).send({ error: err });
-          return;
+      return LearningObject.findById(req.body.object_id, (findErr, result) => {
+        if (findErr) {
+          return res.status(500).send({ error: findErr });
         }
-        result.file = null;
-        result.save();
-        const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
-        fs.stat(filePath, (err) => {
-          if (!err) {
-            fs.unlink(filePath, (err, res) => {
-              if (err) {
-                res.status(500).send({ error: err });
-              }
-            });
+        const lo = result;
+        lo.file = null;
+        lo.save();
+        return fs.stat(filePath, (statErr) => {
+          if (statErr) {
+            return res.send(statErr);
           }
+          return fs.unlink(filePath, (unlinkErr) => {
+            if (unlinkErr) {
+              return res.status(500).send({ error: unlinkErr });
+            }
+            return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+          });
         });
       });
-    } else {
-      const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
-      fs.stat(filePath, (err) => {
-        if (!err) {
-          fs.unlink(filePath, (err, res) => {
-            if (err) {
-              res.status(500).send({ error: err });
-            }
-          });
-        }
-      });
     }
-    res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+    return fs.stat(filePath, (statErr) => {
+      if (statErr) {
+        return res.send(statErr);
+      }
+      return fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) {
+          return res.status(500).send({ error: unlinkErr });
+        }
+        return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+      });
+    });
   },
   getTextSearch(req, res) {
     async.parallel({
@@ -255,7 +256,7 @@ module.exports = {
       /*
               Definição do termo de busca, através do campo "search_text (GET)"
           */
-      const searchText = req.query.search_text || req.query.search_text == '' ? req.query.search_text : req.session.search;
+      const searchText = req.query.search_text || req.query.search_text === '' ? req.query.search_text : req.session.search;
       req.session.search = searchText;
       /*
               Parâmetros adicionais de paginação
@@ -264,20 +265,22 @@ module.exports = {
       const skip = (page - 1) * 10;
       const limit = 10;
       /*
-              Definição do objeto (documento) utilizado para trazer os registros do banco de dados, no caso uma busca por expressão regular é feita sobre o campo "title" dos objetos de aprendizagem
+              Definição do objeto (documento) utilizado para trazer os registros
+              do banco de dados, no caso uma busca por expressão regular é feita
+              sobre o campo "title" dos objetos de aprendizagem
           */
-      const query_object = {
+      const queryObject = {
         title: {
           $regex: new RegExp(searchText),
           $options: 'i',
         },
       };
       /*
-              Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
-              e trazendo apenas objetos já aprovados.
-          */
+        Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
+        e trazendo apenas objetos já aprovados.
+      */
       const cursor = LearningObject.find(
-        query_object,
+        queryObject,
         {
           title: 1,
           createdAt: 1,
@@ -287,23 +290,27 @@ module.exports = {
         .equals(true);
       /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */
       const selectedFilters = {};
-      if ('content' in req.query && req.query.content != '') {
+      if ('content' in req.query && req.query.content !== '') {
         selectedFilters.content = req.query.content;
         cursor.where('content').equals(req.query.content);
       }
-      if ('resource' in req.query && req.query.resource != '') {
+      if ('resource' in req.query && req.query.resource !== '') {
         selectedFilters.resource = req.query.resource;
         cursor.where('resources').equals(req.query.resource);
       }
-      cursor.count((err, count) => {
-        cursor.skip(skip).limit(limit).exec('find', (err, lo) => {
-          if (err) {
-            return res.send(err);
+      return cursor.count((countErr, count) => {
+        if (countErr) {
+          return res.send(countErr);
+        }
+        return cursor.skip(skip).limit(limit).exec('find', (findErr, lo) => {
+          if (findErr) {
+            return res.send(findErr);
           }
           /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
-          results.learning_object = lo;
+          const data = results;
+          data.learningObject = lo;
           return res.render('lo_search_results', {
-            data: results,
+            data,
             selectedFilters,
             searchText,
             count,
@@ -339,41 +346,50 @@ module.exports = {
       const skip = (page - 1) * 10;
       const limit = 10;
       /*
-              Caso tenha sido selecionado algum checkbox para busca, constroi o and
-          */
-      if (req.query.checked_string) {
-        checkedString = req.query.checked_string;
+        Caso tenha sido selecionado algum checkbox para busca, constroi o and
+      */
+      if (req.query.checkedString) {
+        ({ checkedString } = req.query);
         /*
-                  Popula os arrays de consulta com os checkbox marcados pelo usuário
-              */
-        const q_acc_resources = req.query.accessibility_resources ? getReqParamAsArray(req.query.accessibility_resources) : [];
-        const q_axes = req.query.axes ? getReqParamAsArray(req.query.axes) : [];
-        const q_teaching_levels = req.query.teaching_levels ? getReqParamAsArray(req.query.teaching_levels) : [];
-        if (q_acc_resources.length > 0) {
+          Popula os arrays de consulta com os checkbox marcados pelo usuário
+        */
+        let qAccResources = [];
+        if (req.query.accessibilityResources) {
+          qAccResources = getReqParamAsArray(req.query.accessibilityResources);
+        }
+        let qAxes = [];
+        if (req.query.axes) {
+          qAxes = getReqParamAsArray(req.query.axes);
+        }
+        let qTeachingLevels = [];
+        if (req.query.teachingLevels) {
+          qTeachingLevels = getReqParamAsArray(req.query.teachingLevels);
+        }
+        if (qAccResources.length > 0) {
           and.$and.push({
-            accessibility_resources: { $all: q_acc_resources },
+            accessibilityResources: { $all: qAccResources },
           });
         }
-        if (q_axes.length > 0) {
+        if (qAxes.length > 0) {
           and.$and.push({
-            axes: { $all: q_axes },
+            axes: { $all: qAxes },
           });
         }
-        if (q_teaching_levels.length > 0) {
+        if (qTeachingLevels.length > 0) {
           and.$and.push({
-            teaching_levels: { $all: q_teaching_levels },
+            teachingLevels: { $all: qTeachingLevels },
           });
         }
         req.session.search = and;
-        req.session.checked_string = checked_string;
+        req.session.checkedString = checkedString;
       } else {
-        checkedString = req.session.checked_string;
+        ({ checkedString } = req.session);
         and = req.session.search;
       }
       /*
-              Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
-              e trazendo apenas objetos já aprovados.
-          */
+        Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
+        e trazendo apenas objetos já aprovados.
+      */
       const cursor = LearningObject.find(
         and,
         {
@@ -384,25 +400,29 @@ module.exports = {
       ).where('approved')
         .equals(true);
       /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */
-      const selected_filters = {};
-      if ('content' in req.query && req.query.content != '') {
-        selected_filters.content = req.query.content;
+      const selectedFilters = {};
+      if ('content' in req.query && req.query.content !== '') {
+        selectedFilters.content = req.query.content;
         cursor.where('content').equals(req.query.content);
       }
-      if ('resource' in req.query && req.query.resource != '') {
-        selected_filters.resource = req.query.resource;
+      if ('resource' in req.query && req.query.resource !== '') {
+        selectedFilters.resource = req.query.resource;
         cursor.where('resources').equals(req.query.resource);
       }
-      cursor.count((err, count) => {
-        cursor.skip(skip).limit(limit).exec('find', (err, lo) => {
-          if (err) {
-            return res.send(err);
+      return cursor.count((countErr, count) => {
+        if (countErr) {
+          return res.send(countErr);
+        }
+        return cursor.skip(skip).limit(limit).exec('find', (findErr, lo) => {
+          if (findErr) {
+            return res.send(findErr);
           }
           /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
-          results.learning_object = lo;
+          const data = results;
+          data.learningObject = lo;
           return res.render('lo_search_results', {
-            data: results,
-            selected_filters,
+            data,
+            selectedFilters,
             checkedString: checkedString || '"Nenhuma seleção"',
             count,
             pages: Math.ceil(count / 10),
@@ -423,30 +443,38 @@ module.exports = {
       if (err) {
         res.send(err);
       }
-      const lo_approved = result.approved;
-      result.approved = !lo_approved;
-      result.save();
-      if (result.approved) {
+      const lo = result;
+      lo.approved = !lo.approved;
+      lo.save();
+      if (lo.approved) {
         req.flash('success_messages', 'Objeto aprovado com sucesso!');
       } else {
         req.flash('success_messages', 'Objeto desaprovado com sucesso!');
       }
-      res.redirect('/admin/learning-object/manage');
+      return res.redirect('/admin/learning-object/manage');
     });
   },
   getRemoveObject(req, res) {
-    return LearningObject.findById(req.params.id, { owner: 1, file: 1 }, (err, lo) => {
-      const permission = lo.owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
+    return LearningObject.findById(req.params.id, { owner: 1, file: 1 }, (findErr, lo) => {
+      if (findErr) {
+        return res.send(findErr);
+      }
+      const permission = lo.owner.toString() === req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
       if (!permission.granted) {
         return res.status(403).send('Você não tem permissão!');
       }
       if (lo.file) {
         const filePath = path.join(__dirname, '..', 'public', lo.file.url);
-        return fs.stat(filePath, (err, stat) => {
-          if (err) {
-            return res.send(err);
+        return fs.stat(filePath, (statErr, stat) => {
+          if (statErr) {
+            return res.send(statErr);
           }
-          return fs.unlink(filePath, (err, unlink_res) => {
+          console.log(`O diretório existe: ${stat}`);
+          return fs.unlink(filePath, (err, unlinkRes) => {
+            if (err) {
+              return res.send(err);
+            }
+            console.log(`Arquivo removido: ${unlinkRes}`);
             lo.remove({
               single: true,
             });
@@ -499,15 +527,15 @@ module.exports = {
     /* Busca o objeto pelo id passado na URL */
     return LearningObject.findById(req.params.id, {
       title: 1, _id: 0, file: 1, file_url: 1,
-    }, (err, lo) => {
-      if (err) {
-        return res.send(err);
+    }, (findErr, lo) => {
+      if (findErr) {
+        return res.send(findErr);
       }
       /* Se o OA tiver um arquivo, retorna o download do mesmo e salva o registro do download */
       if (lo.file) {
-        return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, (err) => {
-          if (err) {
-            res.send(err);
+        return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, (downloadErr) => {
+          if (downloadErr) {
+            res.send(downloadErr);
           }
           return new Downloads({
             user_id: req.user._id,
