@@ -58,7 +58,7 @@ module.exports = {
       permission = ac.can(req.user.role).createOwn('learningObject');
     } else {
       /* Caso um OA esteja sendo atualizado, verifica se é o dono do mesmo que está atualizando */
-      const userOwnsOa = req.session.lo.owner.toString() === req.user._id;
+      const userOwnsOa = req.session.lo.owner.toString() === req.user._id.toString();
       if (userOwnsOa) {
         permission = userOwnsOa && ac.can(req.user.role).updateOwn('learningObject');
       } else {
