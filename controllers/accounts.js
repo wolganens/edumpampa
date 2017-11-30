@@ -66,7 +66,9 @@ module.exports = {
     userData.institutional_link_id = (
       userData.institutional_link_id ? userData.institutional_link_id : null
     );
-    userData._id = req.body._id;
+    if (req.body._id) {
+      userData._id = req.body._id;
+    }
 
     if (userData._id) {
       return User.findByIdAndUpdate(userData._id, userData, (err) => {

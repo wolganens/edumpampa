@@ -113,24 +113,23 @@ module.exports = {
         successMsg = 'Objeto cadastrado com sucesso!';
       } else {
         successMsg = 'Objeto submetido para aprovação com sucesso!';
-        const mailOptions = {
-          to: 'edumpampa@gmail.com',
-          subject: 'Novo OA submetido para aprovação',
-          html:
-                  `   <p>O usuário ${req.user.name} submeteu um OA chamado ${learningObject.title} para aprovação: </p>
-                      <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
-                  `,
-        };
-        return email.sendMail(mailOptions, (mailErr) => {
-          if (mailErr) {
-            return res.send(mailErr);
-          }
-          return res.status(200).send('Sucesso');
-        });
       }
-      delete req.session.lo;
-      req.flash('success_messages', successMsg);
-      return res.redirect(`/learning-object/single/${learningObject._id}`);
+      const mailOptions = {
+        to: 'edumpampa@gmail.com',
+        subject: 'Novo OA submetido para aprovação',
+        html:
+                `   <p>O usuário ${req.user.name} submeteu um OA chamado ${learningObject.title} para aprovação: </p>
+                    <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
+                `,
+      };
+      return email.sendMail(mailOptions, (mailErr) => {
+        if (mailErr) {
+          return res.send(mailErr);
+        }
+        delete req.session.lo;
+        req.flash('success_messages', successMsg);
+        return res.redirect(`/learning-object/single/${learningObject._id}`);
+      });
     });
   },
   getLearningObject(req, res) {
@@ -162,7 +161,7 @@ module.exports = {
         return res.send(err);
       }
       if (req.user) {
-        const permission = (req.user._id === results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+        const permission = (req.user._id.toString() === results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
