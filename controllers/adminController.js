@@ -31,9 +31,9 @@ module.exports = {
     }
     const query = User.find();
     if (req.query.situation) {
-      if (req.query.situation == 'aut') {
+      if (req.query.situation === 'aut') {
         query.where('role').equals('AUTHORIZED');
-      } else if (req.query.situation == 'des') {
+      } else if (req.query.situation === 'des') {
         query.where('role').equals('COMMON');
       }
     }
@@ -97,9 +97,9 @@ module.exports = {
     }
     const query = LearningObject.find();
     if (req.query.situation) {
-      if (req.query.situation == 'hab') {
+      if (req.query.situation === 'hab') {
         query.where('approved').equals(true);
-      } else if (req.query.situation == 'des') {
+      } else if (req.query.situation === 'des') {
         query.where('approved').equals(false);
       }
     }
@@ -166,7 +166,20 @@ module.exports = {
     } else if (req.query.institutional_link_text) {
       userQueryDocument.institutional_link_text = req.query.institutional_link_text;
     }
-    return User.count(userQueryDocument, (err, count) => User.find(userQueryDocument, (err, users) => res.render('admin_reports_users_results', { count, users, title: 'Resultado do Relatório - EduMPampa' })));
+    return User.count(userQueryDocument, (countErr, count) => {
+      if (countErr) {
+        return res.send(countErr);
+      }
+      return User.find(userQueryDocument, (err, users) => {
+        if (err) {
+          return res.send(err);
+        }
+        return res.render(
+          'admin_reports_users_results',
+          { count, users, title: 'Resultado do Relatório - EduMPampa' },
+        );
+      });
+    });
   },
   getUserRemove(req, res) {
     const permission = ac.can(req.user.role).deleteAny('user');
@@ -215,7 +228,7 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
-      res.render('admin_reports_oa', { title: 'Relatórios OA - EduMPampa', data: results });
+      return res.render('admin_reports_oa', { title: 'Relatórios OA - EduMPampa', data: results });
     });
   },
   getLoReportsResults(req, res) {
@@ -225,14 +238,29 @@ module.exports = {
     const and = {
       $and: [],
     };
-      /*
+    /*
           Popula os arrays de consulta com os checkbox marcados pelo usuário
       */
-    const qAccResources = req.query.accessibility_resources ? getReqParamAsArray(req.query.accessibility_resources) : [];
-    const qAxes = req.query.axes ? getReqParamAsArray(req.query.axes) : [];
-    const qTeachingLevels = req.query.teaching_levels ? getReqParamAsArray(req.query.teaching_levels) : [];
-    const qResources = req.query.resources ? getReqParamAsArray(req.query.resources) : [];
-    const qContents = req.query.contents ? getReqParamAsArray(req.query.contents) : [];
+    let qAccResources = [];
+    if (req.query.accessibility_resources) {
+      qAccResources = getReqParamAsArray(req.query.accessibility_resources);
+    }
+    let qAxes = [];
+    if (req.query.axes) {
+      qAxes = getReqParamAsArray(req.query.axes);
+    }
+    let qTeachingLevels = [];
+    if (req.query.teaching_levels) {
+      qTeachingLevels = getReqParamAsArray(req.query.teaching_levels);
+    }
+    let qResources = [];
+    if (req.query.resources) {
+      qResources = getReqParamAsArray(req.query.resources);
+    }
+    let qContents = [];
+    if (req.query.contents) {
+      qContents = getReqParamAsArray(req.query.contents);
+    }
     if (qAccResources.length > 0) {
       and.$and.push({
         accessibility_resources: { $all: qAccResources },
