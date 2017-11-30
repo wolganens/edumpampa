@@ -64,9 +64,11 @@ app.use((req, res, next) => {
   res.locals.error_messages = req.flash('error_messages');
   [res.locals.inputs] = req.flash('inputs');
   [res.locals.inputErrors] = req.flash('inputErrors');
-  // mock i18n funciton
-  res.locals._t = function (value) { return value; };
-  res.locals._s = function (obj) { return JSON.stringify(obj); };
+  // mock i18n funciton (Por enquanto não é necessário)
+  /*
+        res.locals._t = function (value) { return value; };
+        res.locals._s = function (obj) { return JSON.stringify(obj); };
+    */
 
   next();
 });
@@ -77,11 +79,11 @@ app.use('/account', accounts);
 app.use('/auth', auth);
 
 app.use('/admin', (req, res, next) => {
-  if (!req.user || req.user.role != 'ADMIN') {
+  if (!req.user || req.user.role !== 'ADMIN') {
     req.flash('error_messages', 'Acesso exclusivo para administradores');
     return res.redirect('back');
   }
-  next();
+  return next();
 }, admin);
 
 app.use('/learning-object', lo);
