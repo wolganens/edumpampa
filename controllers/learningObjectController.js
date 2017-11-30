@@ -214,16 +214,21 @@ module.exports = {
         }
         const lo = result;
         lo.file = null;
-        lo.save();
-        return fs.stat(filePath, (statErr) => {
-          if (statErr) {
-            return res.send(statErr);
+        return lo.save((err) => {
+          if (err) {
+            console.log(err);
           }
-          return fs.unlink(filePath, (unlinkErr) => {
-            if (unlinkErr) {
-              return res.status(500).send({ error: unlinkErr });
+          return fs.stat(filePath, (statErr) => {
+            if (statErr) {
+              console.log(`Falha ao remover arquivo: ${JSON.stringify(statErr)}`);
+              return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
             }
-            return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+            return fs.unlink(filePath, (unlinkErr) => {
+              if (unlinkErr) {
+                return res.status(500).send({ error: unlinkErr });
+              }
+              return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+            });
           });
         });
       });
