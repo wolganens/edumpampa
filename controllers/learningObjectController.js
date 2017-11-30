@@ -352,26 +352,26 @@ module.exports = {
       /*
         Caso tenha sido selecionado algum checkbox para busca, constroi o and
       */
-      if (req.query.checkedString) {
+      if (req.query.checked_string) {
         ({ checkedString } = req.query);
         /*
           Popula os arrays de consulta com os checkbox marcados pelo usuário
         */
         let qAccResources = [];
-        if (req.query.accessibilityResources) {
-          qAccResources = getReqParamAsArray(req.query.accessibilityResources);
+        if (req.query['accessibility_resources[]']) {
+          qAccResources = getReqParamAsArray(req.query['accessibility_resources[]']);
         }
         let qAxes = [];
         if (req.query.axes) {
           qAxes = getReqParamAsArray(req.query.axes);
         }
         let qTeachingLevels = [];
-        if (req.query.teachingLevels) {
-          qTeachingLevels = getReqParamAsArray(req.query.teachingLevels);
+        if (req.query['teaching_levels[]']) {
+          qTeachingLevels = getReqParamAsArray(req.query['teaching_levels[]']);
         }
         if (qAccResources.length > 0) {
           and.$and.push({
-            accessibilityResources: { $all: qAccResources },
+            accessibility_resources: { $all: qAccResources },
           });
         }
         if (qAxes.length > 0) {
@@ -381,7 +381,7 @@ module.exports = {
         }
         if (qTeachingLevels.length > 0) {
           and.$and.push({
-            teachingLevels: { $all: qTeachingLevels },
+            teaching_levels: { $all: qTeachingLevels },
           });
         }
         req.session.search = and;
