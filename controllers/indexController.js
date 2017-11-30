@@ -47,7 +47,7 @@ module.exports = {
       inputErrors.errors.subject = {};
       inputErrors.errors.subject.message = 'Selecione um assunto!';
       hasErrors = true;
-    } else if (subjects.indexOf(req.body.subject) == -1) {
+    } else if (subjects.indexOf(req.body.subject) === -1) {
       inputErrors.errors.subject = {};
       inputErrors.errors.subject.message = 'Assunto inválido';
       hasErrors = true;
@@ -68,7 +68,7 @@ module.exports = {
       subject: req.body.subject,
       html: req.body.message,
     };
-    email.sendMail(mailOptions, (error) => {
+    return email.sendMail(mailOptions, (error) => {
       if (error) {
         return console.log(error);
       }
