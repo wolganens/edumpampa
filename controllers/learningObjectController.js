@@ -1,7 +1,6 @@
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
-
 const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
@@ -23,7 +22,6 @@ function getReqParamAsArray(reqparam) {
   }
   return null;
 }
-
 module.exports = {
   getCreate(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
@@ -53,7 +51,22 @@ module.exports = {
     }, (err, results) => res.render('lo_create', { error: err, data: results, title: 'Cadastro de OA - EduMPampa' }));
   },
   postCreate(req, res) {
-    const permission = !req.session.lo ? ac.can(req.user.role).createOwn('learningObject') : req.session.lo.owner.toString() == req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+    let permission;
+    /* Se um objeto estiver sendo criado (não atualizado) */
+    if (!req.session.lo) {
+      /* Verifica se o papel do usuário permite que o mesmo crie seu OA */
+      permission = ac.can(req.user.role).createOwn('learningObject');
+    } else {
+      /* Caso um OA esteja sendo atualizado, verifica se é o dono do mesmo que está atualizando */
+      const userOwnsOa = req.session.lo.owner.toString() === req.user._id;
+      if (userOwnsOa) {
+        permission = userOwnsOa && ac.can(req.user.role).updateOwn('learningObject');
+      } else {
+        /* Se não for o dono do OA que está atualizando, verifica se o usuário tem permissão
+        para atualizar qualquer OA */
+        permission = ac.can(req.user.role).updateAny('learningObject');
+      }
+    }
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
@@ -75,11 +88,11 @@ module.exports = {
       file: body.file_name ? JSON.parse(body.file_name) : null,
       file_url: body.file_url ? body.file_url : null,
     };
-    if (req.user.role == 'ADMIN') {
+    if (req.user.role === 'ADMIN') {
       learningObject.approved = true;
     }
     learningObject = new LearningObject(learningObject);
-    learningObject.save((err) => {
+    return learningObject.save((err) => {
       if (err) {
         body['teaching_levels[]'] = getReqParamAsArray(body['teaching_levels[]'] || []);
         body['axes[]'] = getReqParamAsArray(body['axes[]'] || []);
@@ -96,7 +109,7 @@ module.exports = {
       let successMsg = '';
       if (body.object_id) {
         successMsg = 'Objeto atualizado com sucesso!';
-      } else if (req.user.role == 'ADMIN') {
+      } else if (req.user.role === 'ADMIN') {
         successMsg = 'Objeto cadastrado com sucesso!';
       } else {
         successMsg = 'Objeto submetido para aprovação com sucesso!';
@@ -108,15 +121,15 @@ module.exports = {
                       <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
                   `,
         };
-        email.sendMail(mailOptions, (err) => {
-          if (err) {
-            return res.send(err);
+        email.sendMail(mailOptions, (mailErr) => {
+          if (mailErr) {
+            return res.send(mailErr);
           }
         });
       }
       delete req.session.lo;
       req.flash('success_messages', successMsg);
-      res.redirect(`/learning-object/single/${learningObject._id}`);
+      return res.redirect(`/learning-object/single/${learningObject._id}`);
     });
   },
   getLearningObject(req, res) {
@@ -149,7 +162,6 @@ module.exports = {
       }
       if (req.user) {
         const permission = (req.user._id == results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
-
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
@@ -175,7 +187,6 @@ module.exports = {
   },
   postUploadFile(req, res) {
     const { file } = req.files;
-
     const fileAttrs = {};
     const storageName = req.user._id + file.name;
     if (req.files && file) {
@@ -183,11 +194,8 @@ module.exports = {
       fileAttrs.mimetype = file.mimetype;
       fileAttrs.size = req.headers['content-length'];
       fileAttrs.url = path.join('/uploads', 'lo', storageName);
-
       const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', storageName);
-
       fs.writeFileSync(filePath, file.data);
-
       res.status(200).send({ file: fileAttrs });
     } else {
       res.status(500).send({ error: 'Arquivo não especificado' });
@@ -255,7 +263,6 @@ module.exports = {
       const page = req.query && req.query.page ? req.query.page : 1;
       const skip = (page - 1) * 10;
       const limit = 10;
-
       /*
               Definição do objeto (documento) utilizado para trazer os registros do banco de dados, no caso uma busca por expressão regular é feita sobre o campo "title" dos objetos de aprendizagem
           */
@@ -265,7 +272,6 @@ module.exports = {
           $options: 'i',
         },
       };
-
       /*
               Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
               e trazendo apenas objetos já aprovados.
@@ -279,7 +285,6 @@ module.exports = {
         },
       ).where('approved')
         .equals(true);
-
       /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */
       const selectedFilters = {};
       if ('content' in req.query && req.query.content != '') {
@@ -290,7 +295,6 @@ module.exports = {
         selectedFilters.resource = req.query.resource;
         cursor.where('resources').equals(req.query.resource);
       }
-
       cursor.count((err, count) => {
         cursor.skip(skip).limit(limit).exec('find', (err, lo) => {
           if (err) {
@@ -328,15 +332,12 @@ module.exports = {
         $and: [],
       };
       let checkedString = '';
-
       /*
               Parâmetros adicionais de paginação
           */
       const page = req.query && req.query.page ? req.query.page : 1;
       const skip = (page - 1) * 10;
       const limit = 10;
-
-
       /*
               Caso tenha sido selecionado algum checkbox para busca, constroi o and
           */
@@ -382,7 +383,6 @@ module.exports = {
         },
       ).where('approved')
         .equals(true);
-
       /* Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca */
       const selected_filters = {};
       if ('content' in req.query && req.query.content != '') {
@@ -437,7 +437,6 @@ module.exports = {
   getRemoveObject(req, res) {
     return LearningObject.findById(req.params.id, { owner: 1, file: 1 }, (err, lo) => {
       const permission = lo.owner.toString() == req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
-
       if (!permission.granted) {
         return res.status(403).send('Você não tem permissão!');
       }
@@ -506,7 +505,7 @@ module.exports = {
       }
       /* Se o OA tiver um arquivo, retorna o download do mesmo e salva o registro do download */
       if (lo.file) {
-        return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, (err, download) => {
+        return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, (err) => {
           if (err) {
             res.send(err);
           }
@@ -520,10 +519,15 @@ module.exports = {
         return new Downloads({
           user_id: req.user._id,
           learning_object_id: req.params.id,
-        }).save((err, download_id) => res.redirect(lo.file_url));
-        /* Sem URL e sem Arquivo apenas retorna com erro */
+        }).save((saveDownloadErr) => {
+          if (saveDownloadErr) {
+            return res.send(saveDownloadErr);
+          }
+          return res.redirect(lo.file_url);
+        });
       }
-      req.flash('error_messages', 'O Objeto de aprendizagem não posui arquivos');
+      /* Sem URL e sem Arquivo apenas retorna com erro */
+      req.flash('error_messages', 'O Objeto de aprendizagem não possui arquivos');
       return res.redirect('back');
     });
   },
