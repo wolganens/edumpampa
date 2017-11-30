@@ -129,7 +129,7 @@ module.exports = {
     async.waterfall([
       (done) => {
         const userEmail = req.body.email;
-        return User.findOne({ userEmail }, (err, user) => {
+        return User.findOne({ email: userEmail }, (err, user) => {
           if (!user) {
             req.flash('error_messages', 'Não há nenhum cadastro com este email!');
             return res.redirect('/account/forgot-pw');
