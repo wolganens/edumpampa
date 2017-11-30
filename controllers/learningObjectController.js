@@ -204,7 +204,7 @@ module.exports = {
   postRemoveFile(req, res) {
     const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
     if (req.body.object_id) {
-      const permission = req.session.lo.owner.toString() === req.user._id ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+      const permission = req.session.lo.owner.toString() === req.user._id.toString() ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
       if (!permission.granted) {
         return res.status(403).send('Você não tem permissão!');
       }
