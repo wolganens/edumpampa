@@ -11,6 +11,7 @@ const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
 const Contents = require('../models/contents');
 const Resources = require('../models/resources');
+const { sortDocsInArray } = require('../helpers/utils.js');
 
 function getReqParamAsArray(reqparam) {
   if (reqparam) {
@@ -40,22 +41,25 @@ module.exports = {
     if (req.query.name) {
       query.where('name').equals(new RegExp(req.query.name, 'i'));
     }
+    const { sort } = req.query;
+    if (sort) {
+      if (sort === 'newer') {
+        query.sort({ createdAt: -1 });
+      } else if (sort === 'older') {
+        query.sort({ createdAt: 1 });
+      }
+    }
     query.exec((err, result) => {
+      let data = result;
       if (err) {
         res.send(err);
       }
-      result.sort((a, b) => {
-        const nameA = a.name.toUpperCase();
-        const nameB = b.name.toUpperCase();
-
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
+      if (!sort || sort === 'name') {
+        data = sortDocsInArray(data, 'name');
+      }
       req.flash('inputs', req.query);
-      res.render('user_manage', {
-        data: result, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
+      return res.render('user_manage', {
+        sort, data, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
       });
     });
   },
@@ -106,22 +110,25 @@ module.exports = {
     if (req.query.title) {
       query.where('title').equals(new RegExp(req.query.title, 'i'));
     }
+    const { sort } = req.query;
+    if (sort) {
+      if (sort === 'newer') {
+        query.sort({ createdAt: -1 });
+      } else if (sort === 'older') {
+        query.sort({ createdAt: 1 });
+      }
+    }
     query.exec((err, result) => {
+      let data = result;
       if (err) {
         res.send(err);
       }
-      result.sort((a, b) => {
-        const nameA = a.title.toUpperCase();
-        const nameB = b.title.toUpperCase();
-
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      });
+      if (!sort || sort === 'name') {
+        data = sortDocsInArray(data, 'title');
+      }
       req.flash('inputs', req.query);
-      res.render('lo_manage', {
-        data: result, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
+      return res.render('lo_manage', {
+        sort, data, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
       });
     });
   },
