@@ -5,6 +5,14 @@ block content
 		| Gerenciar Objetos de Aprendizagem
 	form(class="form-inline", action="", method="GET")
 		.form-group
+			label(for="sort")
+				| Ordenar: 
+			select.form-control(name="sort", id="sort")
+				option(value="") Selecionar ordem
+				option(value="name", selected=sort == "name") Nome
+				option(value="newer", selected=sort == "newer") Mais novos
+				option(value="older", selected=sort == "older") Mais antigos
+		.form-group
 			label(for="situation")
 				| Situação:
 			select.form-control(name="situation", id="situation")
