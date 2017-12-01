@@ -11,6 +11,7 @@ const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
 const Contents = require('../models/contents');
 const Resources = require('../models/resources');
+const { sortDocsInArray } = require('../helpers/utils.js');
 
 function getReqParamAsArray(reqparam) {
   if (reqparam) {
@@ -49,28 +50,16 @@ module.exports = {
       }
     }
     query.exec((err, result) => {
+      let data = result;
       if (err) {
         res.send(err);
       }
       if (!sort || sort === 'name') {
-        result.sort((x, y) => {
-          let a = x;
-          let b = y;
-          if (a.name.toLowerCase() !== b.name.toLowerCase()) {
-            a = a.name.toLowerCase();
-            b = b.name.toLowerCase();
-          }
-          if (a > b) {
-            return 1;
-          } else if (a < b) {
-            return -1;
-          }
-          return 0;
-        });
+        data = sortDocsInArray(data, 'name');
       }
       req.flash('inputs', req.query);
       return res.render('user_manage', {
-        sort, data: result, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
+        sort, data, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
       });
     });
   },
@@ -130,28 +119,16 @@ module.exports = {
       }
     }
     query.exec((err, result) => {
+      let data = result;
       if (err) {
         res.send(err);
       }
       if (!sort || sort === 'name') {
-        result.sort((x, y) => {
-          let a = x;
-          let b = y;
-          if (a.title.toLowerCase() !== b.title.toLowerCase()) {
-            a = a.title.toLowerCase();
-            b = b.title.toLowerCase();
-          }
-          if (a > b) {
-            return 1;
-          } else if (a < b) {
-            return -1;
-          }
-          return 0;
-        });
+        data = sortDocsInArray(data, 'title');
       }
       req.flash('inputs', req.query);
       return res.render('lo_manage', {
-        sort, data: result, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
+        sort, data, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
       });
     });
   },
