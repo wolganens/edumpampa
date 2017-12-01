@@ -358,16 +358,16 @@ module.exports = {
           Popula os arrays de consulta com os checkbox marcados pelo usuário
         */
         let qAccResources = [];
-        if (req.query['accessibility_resources[]']) {
-          qAccResources = getReqParamAsArray(req.query['accessibility_resources[]']);
+        if (req.query.accessibility_resources) {
+          qAccResources = getReqParamAsArray(req.query.accessibility_resources);
         }
         let qAxes = [];
         if (req.query.axes) {
           qAxes = getReqParamAsArray(req.query.axes);
         }
         let qTeachingLevels = [];
-        if (req.query['teaching_levels[]']) {
-          qTeachingLevels = getReqParamAsArray(req.query['teaching_levels[]']);
+        if (req.query.teaching_levels) {
+          qTeachingLevels = getReqParamAsArray(req.query.teaching_levels);
         }
         if (qAccResources.length > 0) {
           and.$and.push({
@@ -384,6 +384,7 @@ module.exports = {
             teaching_levels: { $all: qTeachingLevels },
           });
         }
+        console.log(and);
         req.session.search = and;
         req.session.checkedString = checkedString;
       } else {
