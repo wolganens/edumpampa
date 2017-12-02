@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	div
+		ul.nav.nav-tabs(role="tablist")
+			li.active(role="presentation")
+				a(href="/admin/reports", role="tab") Usuários
+			li(role="presentation")
+				a(href="/admin/reports/learning-objects", role="tab") OA's
+			li(role="presentation")
+				a(href="/admin/reports/user-learning-objects", role="tab") OA's por usuário
+		.tab-content
+			block tab-content

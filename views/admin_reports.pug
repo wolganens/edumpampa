@@ -1,19 +1,10 @@
-extends layout
+extends admin_tabs
 
-block content
-	div
-		ul.nav.nav-tabs(role="tablist")
-			li.active(role="presentation")
-				a(href="/admin/reports", role="tab") Usuários
-			li(role="presentation")
-				a(href="/admin/reports/learning-objects", role="tab") OA's
-			li(role="presentation")
-				a(href="/admin/reports/user-learning-objects", role="tab") OA's por usuário
-		.tab-content
-			#users.tab-pane.active(role="tabpanel")
-				form(action="/admin/reports/users", method="get")
-					include user_features_panel
-					button(type="submit").btn.btn-primary
-						| Gerar relatório
-			#profile.tab-pane(role="tabpanel") ...
-			#messages.tab-pane(role="tabpanel") ...			
+block tab-content
+	#users.tab-pane.active(role="tabpanel")
+		form(action="/admin/reports/users", method="get")
+			include user_features_panel
+			button(type="submit").btn.btn-primary
+				| Gerar relatório
+	#profile.tab-pane(role="tabpanel") ...
+	#messages.tab-pane(role="tabpanel") ...
