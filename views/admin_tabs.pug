@@ -1,13 +1,14 @@
 extends layout
 
+mixin item(name, url)
+	li(class=activetab === name ? "active" : "", role="presentation")
+		a(href="/admin/reports"+url, role="tab")= name
+
 block content
 	div
 		ul.nav.nav-tabs(role="tablist")
-			li.active(role="presentation")
-				a(href="/admin/reports", role="tab") Usuários
-			li(role="presentation")
-				a(href="/admin/reports/learning-objects", role="tab") OA's
-			li(role="presentation")
-				a(href="/admin/reports/user-learning-objects", role="tab") OA's por usuário
+			+item("Usuários", "")
+			+item("OA's", "/learning-objects")
+			+item("OA's por usuário", "/user-learning-objects")
 		.tab-content
 			block tab-content
