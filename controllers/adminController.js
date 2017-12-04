@@ -147,7 +147,11 @@ module.exports = {
         Qualification.find(callback);
       },
     }, (err, results) => {
-      res.render('admin_reports', { data: results, title: 'Relatórios - EduMPampa' });
+      res.render('admin_reports', {
+        data: results,
+        title: 'Relatórios - EduMPampa',
+        activetab: 'Usuários',
+      });
     });
   },
   /*
@@ -181,10 +185,12 @@ module.exports = {
         if (err) {
           return res.send(err);
         }
-        return res.render(
-          'admin_reports_users_results',
-          { count, users, title: 'Resultado do Relatório - EduMPampa' },
-        );
+        return res.render('admin_reports_users_results', {
+          count,
+          users,
+          title: 'Resultado do Relatório - EduMPampa',
+          activetab: 'Usuários',
+        });
       });
     });
   },
@@ -235,7 +241,11 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
-      return res.render('admin_reports_oa', { title: 'Relatórios OA - EduMPampa', data: results });
+      return res.render('admin_reports_oa', {
+        title: 'Relatórios OA - EduMPampa',
+        data: results,
+        activetab: 'OA\'s',
+      });
     });
   },
   getLoReportsResults(req, res) {
@@ -307,6 +317,9 @@ module.exports = {
       }
       return res.send(result);
     });
+    // Quando for renderizar a View, inserir também no objeto
+    // para ativar a tab:
+    // { activetab: 'OA\'s por usuário' }
   },
   postAprroveUserOa(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
