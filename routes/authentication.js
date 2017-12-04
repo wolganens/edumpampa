@@ -7,7 +7,7 @@ const authCtrl = require('../controllers/authentication');
 
 const router = express.Router();
 
-router.post('/signin', authCtrl.signin);
+/*router.post('/signin', authCtrl.signin);
 router.get(
   '/signin-google',
   passport.authenticate('google', {
@@ -22,7 +22,7 @@ router.get(
   (req, res) => {
     res.redirect('/');
   },
-);
+);*/
 router.get('/signout', authCtrl.signout);
 
 module.exports = router;
