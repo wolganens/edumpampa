@@ -135,7 +135,7 @@ jQuery(document).ready(function($) {
     		    	    		
     		var input = document.getElementsByName(inputName)[0];
     		if (input) {
-    			input.insertAdjacentHTML('afterend', '<div class="alert alert-danger">'+jsonErrors.errors[inputName].message+'</div>');
+    			input.insertAdjacentHTML('afterend', '<div role="alert" class="alert alert-danger">'+jsonErrors.errors[inputName].message+'</div>');
     		}
     		console.log(input)
     	}
