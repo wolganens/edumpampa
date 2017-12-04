@@ -7,8 +7,8 @@ const authCtrl = require('../controllers/authentication');
 
 const router = express.Router();
 
-/*router.post('/signin', authCtrl.signin);
-router.get(
+router.post('/signin', authCtrl.signin);
+/*router.get(
   '/signin-google',
   passport.authenticate('google', {
     scope: [
