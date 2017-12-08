@@ -77,15 +77,7 @@ app.use((req, res, next) => {
 app.use('/', index);
 app.use('/account', accounts);
 app.use('/auth', auth);
-
-app.use('/admin', (req, res, next) => {
-  if (!req.user || req.user.role !== 'ADMIN') {
-    req.flash('error_messages', 'Acesso exclusivo para administradores');
-    return res.redirect('back');
-  }
-  return next();
-}, admin);
-
+app.use('/admin', admin);
 app.use('/learning-object', lo);
 
 // catch 404 and forward to error handler
