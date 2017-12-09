@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
 	h3
@@ -26,10 +26,10 @@ block content
 					label(for="year")
 						| Ano de autoria *
 					input(type="text", id="year", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
-		include lo_panels
-		include lo_cont_res_panels
-		include licenses_form
-		include file_form
+		include ../components/lo_panels
+		include ../components/lo_cont_res_panels
+		include ../components/licenses_form
+		include ../components/file_form
 		.form-group
 			button(type="submit", class="btn-lg btn btn-primary pull-right")
 				| Cadastrar

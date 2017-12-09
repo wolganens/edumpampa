@@ -1,9 +1,9 @@
-extends admin_tabs
+extends tabs
 
 block tab-content
 	#users.tab-pane.active(role="tabpanel")
 		form(action="/admin/reports/users", method="get")
-			include user_features_panel
+			include ../../components/user_features_panel
 			button(type="submit").btn.btn-primary
 				| Gerar relatório
 	#profile.tab-pane(role="tabpanel") ...

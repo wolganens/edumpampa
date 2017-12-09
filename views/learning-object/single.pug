@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
 	form(action="/learning-object/create", method="post", encType="multipart/form-data")
@@ -23,10 +23,10 @@ block content
 					label
 					| Ano de autoria *
 					input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=data.lo.year)
-		include lo_panels
-		include lo_cont_res_panels
-		include licenses_form
-		include file_form
+		include ../components/lo_panels
+		include ../components/lo_cont_res_panels
+		include ../components/licenses_form
+		include ../components/file_form
 		.form-group
 			button(type="submit", class="btn-lg btn btn-primary pull-right")
 				| Cadastrar
