@@ -25,7 +25,7 @@ module.exports = {
       Renderiza a página de formulário de contato
   */
   getContact(req, res) {
-    return res.render('index_contact', { title: 'Entre em contato - EduMPampa' });
+    return res.render('contact', { title: 'Entre em contato - EduMPampa' });
   },
   /*
       Envia a mensagem de contato para o email do administrador

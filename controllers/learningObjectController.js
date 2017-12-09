@@ -48,7 +48,7 @@ module.exports = {
       licenses(callback) {
         Licenses.find(callback);
       },
-    }, (err, results) => res.render('lo_create', { error: err, data: results, title: 'Cadastro de OA - EduMPampa' }));
+    }, (err, results) => res.render('learning-object/create', { error: err, data: results, title: 'Cadastro de OA - EduMPampa' }));
   },
   postCreate(req, res) {
     let permission;
@@ -169,7 +169,7 @@ module.exports = {
         return res.redirect(`/learning-object/details/${results.lo._id}`);
       }
       req.session.lo = results.lo;
-      return res.render('lo_update', { error: err, data: results });
+      return res.render('learning-object/single', { error: err, data: results });
     });
   },
   getLearningObjectDetails(req, res) {
@@ -182,7 +182,7 @@ module.exports = {
       .populate('license')
       .exec((err, result) => {
         results.lo = result;
-        return res.render('lo_details', { error: err, data: results, title: 'Detalhes do Objeto de Aprendizagem - EduMPampa' });
+        return res.render('learning-object/details', { error: err, data: results, title: 'Detalhes do Objeto de Aprendizagem - EduMPampa' });
       });
   },
   postUploadFile(req, res) {
@@ -313,7 +313,7 @@ module.exports = {
           /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
           const data = results;
           data.learningObject = lo;
-          return res.render('lo_search_results', {
+          return res.render('learning-object/search', {
             data,
             selectedFilters,
             searchText,
@@ -425,7 +425,7 @@ module.exports = {
           /* Adiciona o objeto de aprendizagem nos resultados e renderiza a view */
           const data = results;
           data.learningObject = lo;
-          return res.render('lo_search_results', {
+          return res.render('learning-object/search', {
             data,
             selectedFilters,
             checkedString: checkedString || '"Nenhuma seleção"',
@@ -516,7 +516,7 @@ module.exports = {
         if (err) {
           return res.send(err);
         }
-        return res.render('lo_retrieve', { data: lo, title: 'Meus objetos de aprendizagem' });
+        return res.render('learning-object/retrieve', { data: lo, title: 'Meus objetos de aprendizagem' });
       },
     );
   },

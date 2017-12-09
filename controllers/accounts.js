@@ -14,7 +14,7 @@ const email = require('../config/email');
 
 module.exports = {
   getSignIn(req, res) {
-    return res.render('signin', { title: 'Página de login de usuário - EduMPampa' });
+    return res.render('account/signin', { title: 'Página de login de usuário - EduMPampa' });
   },
   getSignUp(req, res) {
     async.parallel({
@@ -34,7 +34,7 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
-      return res.render('signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
+      return res.render('account/signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
     });
   },
   postSignUp(req, res) {
@@ -123,7 +123,7 @@ module.exports = {
     });
   },
   getForgotPw(req, res) {
-    return res.render('user_forgot_pw', { title: 'Recuperar senha de acesso - EduMPampa' });
+    return res.render('account/forgot-pw', { title: 'Recuperar senha de acesso - EduMPampa' });
   },
   postForgotPw(req, res, next) {
     async.waterfall([
@@ -161,7 +161,7 @@ module.exports = {
         const mailOptions = {
           to: user.email,
           subject: 'Senha de acesso!',
-          html: pug.renderFile(path.join(__dirname, '..', 'views', 'email_forgot_pw.pug'), {
+          html: pug.renderFile(path.join(__dirname, '..', 'views', 'account/forgot-pw-after.pug'), {
             name: user.name,
             password,
           }),
@@ -200,11 +200,11 @@ module.exports = {
       },
     }, (err, results) => {
       console.log(results.user);
-      return res.render('signup', { error: err, data: results, title: 'Minha conta - EduMPampa' });
+      return res.render('account/signup', { error: err, data: results, title: 'Minha conta - EduMPampa' });
     });
   },
   getChangePw(req, res) {
-    return res.render('user_change_pw');
+    return res.render('account/change-pw');
   },
   postChangePw(req, res) {
     return User.findById(req.user._id, (err, user) => {

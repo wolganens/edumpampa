@@ -58,7 +58,7 @@ module.exports = {
         data = sortDocsInArray(data, 'name');
       }
       req.flash('inputs', req.query);
-      return res.render('user_manage', {
+      return res.render('admin/user/manage', {
         sort, data, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
       });
     });
@@ -127,7 +127,7 @@ module.exports = {
         data = sortDocsInArray(data, 'title');
       }
       req.flash('inputs', req.query);
-      return res.render('lo_manage', {
+      return res.render('admin/learning-object/manage', {
         sort, data, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
       });
     });
@@ -147,7 +147,7 @@ module.exports = {
         Qualification.find(callback);
       },
     }, (err, results) => {
-      res.render('admin_reports', {
+      res.render('admin/reports/index', {
         data: results,
         title: 'Relatórios - EduMPampa',
         activetab: 'Usuários',
@@ -185,7 +185,7 @@ module.exports = {
         if (err) {
           return res.send(err);
         }
-        return res.render('admin_reports_users_results', {
+        return res.render('admin/reports/users', {
           count,
           users,
           title: 'Resultado do Relatório - EduMPampa',
@@ -241,7 +241,7 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
-      return res.render('admin_reports_oa', {
+      return res.render('admin/reports/learning-objects', {
         title: 'Relatórios OA - EduMPampa',
         data: results,
         activetab: 'OA\'s',
