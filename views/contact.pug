@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	h3.page-header      
+	h3.page-header
 		| Entre em contato através do formulário abaixo
 	form(action="/contact", method="POST")
 		.form-group
@@ -13,7 +13,7 @@ block content
 				input(class="form-control", name="name", value=inputs && inputs.name, required, placeholder="Digite seu nome")
 		.form-group
 			label(for="subject")
-				| Assunto				
+				| Assunto
 			select(class="form-control", name="subject")
 				option(value="")
 					| Selectione um assunto

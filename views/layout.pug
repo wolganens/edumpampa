@@ -33,8 +33,8 @@ html(lang='en')
 					label.sr-only.hidden(for="irbusca")
 						| Busca pelo título
 					input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" title="Busca pelo título", placeholder="Buscar objetos pelo título", id="irbusca")
-				button.btn.btn-primary(type="submit") 
-					i(class="fa fa-search" aria-hidden="true") 
+				button.btn.btn-primary(type="submit")
+					i(class="fa fa-search" aria-hidden="true")
 					| Buscar
 			.clearfix
 			nav.navbar.navbar-default#irmenu
@@ -73,7 +73,7 @@ html(lang='en')
 							li(class=currentPath == '/contact' ? 'active' : null)
 								a(href="/contact", title="Enviar uma mensagem de contato")
 									| Contato
-							if currentUser															
+							if currentUser
 								li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
 									a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
 										| !{currentUser.name}
@@ -84,7 +84,7 @@ html(lang='en')
 										li
 											a(href="/account/change-pw", title="Alterar senha") Alterar minha senha
 										li
-											a(href="/auth/signout", title="Sair do EduMPampa") Sair	
+											a(href="/auth/signout", title="Sair do EduMPampa") Sair
 							else
 								li(class=currentPath == '/account/signin' ? 'active' : null)
 									a(href="/account/signin") Login
