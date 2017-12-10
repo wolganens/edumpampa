@@ -4,11 +4,11 @@
             | Formação
     .panel-body
         fieldset
-            each qualification in data.qualifications                    
+            each qualification in data.qualifications
                 .checkbox.block
                     label
                         input(type="radio", aria-labelledby="quali-label", name="qualification_id", value=qualification._id, checked=(inputs && inputs.qualification_id == qualification._id.toString()) || ((data.user && data.user.qualification_id) && data.user.qualification_id.toString() == qualification._id.toString()))
-                        span  
+                        span
                             | !{qualification.name}
         .form-group
             label(for="qualification_text")
@@ -24,7 +24,7 @@
                 .checkbox.block
                     label
                         input(type="radio", name="occupation_area_id", aria-labelledby="occup-area-label", value=occupation_area._id, checked=(inputs && inputs.occupation_area_id == occupation_area._id.toString()) || ((data.user && data.user.occupation_area_id) && data.user.occupation_area_id.toString() == occupation_area._id.toString()))
-                        span 
+                        span
                             | !{occupation_area.name}
         .form-group
             label(for="occupation_area_text")
@@ -40,7 +40,7 @@
                 .checkbox.block
                     label
                         input(type="radio", aria-labelledby="instit-link-label", name="institutional_link_id", value=institutional_link._id, checked=(inputs && inputs.institutional_link_id == institutional_link._id.toString()) || ((data.user && data.user.institutional_link_id) && data.user.institutional_link_id.toString() == institutional_link._id.toString()))
-                        span 
+                        span
                             | !{institutional_link.name}
         .form-group
             label(for="institutional_link_text")

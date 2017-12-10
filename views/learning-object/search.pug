@@ -30,27 +30,27 @@ block content
 						| Filtrar
 		.col-md-9
 			h3
-				| Resultados da busca 
+				| Resultados da busca
 				span.badge.alert-info
 							| !{count}
 			if checked_string
 				p
-					| Você selecionou: 
-					strong 
+					| Você selecionou:
+					strong
 						| !{checked_string}
 
 			if search_text
 				p
-					| Você pesquisou por: 
-					strong 
-						| "!{search_text}"						
+					| Você pesquisou por:
+					strong
+						| "!{search_text}"
 			if data.learningObject.length > 0
 				each lo in data.learningObject
 					article
 						a(href="/learning-object/single/" + lo._id.toString())
 							| !{lo.title}
 						p
-							| Publicado em 
+							| Publicado em
 							time
 								if lo.createdAt.getDate() < 10
 									| 0!{lo.createdAt.getDate()}/

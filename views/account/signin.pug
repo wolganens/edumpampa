@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     #centered-content
-        h3 
+        h3
             | Login
         form(action="/auth/signin",method="post")
             .form-group
@@ -13,9 +13,9 @@ block content
                 label(for="password")
                     | Senha
                 input(type="password", id="password", name="password", class="form-control", placeholder="Digite sua senha")
-            .form-group                
+            .form-group
                 button(type="submit", value="Acessar",class="btn btn-primary btn-block") Acessar
         //- a(href="/auth/signin-google" class="loginBtn loginBtn--google")
-        //-     | Entrar com minha conta Google 
+        //-     | Entrar com minha conta Google
         a(href="/account/forgot-pw", title="Clique para recuperar sua senha")
             | Esqueci minha senha

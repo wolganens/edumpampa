@@ -5,7 +5,7 @@ block content
         if data.user
             | Minha conta
         else
-            | Novo Usuário    
+            | Novo Usuário
     form(action="/account/signup",method="post")
         input(type="hidden", name="_id", value=(inputs && inputs._id) || (data.user ? data.user._id : null))
         .panel.panel-default
@@ -43,7 +43,7 @@ block content
                         .checkbox.block
                             label
                                 input(type="checkbox",aria-labelledby="instit-post-label", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked= (inputs && inputs['institutional_post_id[]'] && inputs['institutional_post_id[]'].indexOf(institutional_post._id.toString()) != -1 )|| ((data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1))
-                                span 
+                                span
                                     | !{institutional_post.name}
                 .form-group
                     label(for="institutional_post_text")
@@ -52,7 +52,7 @@ block content
         .panel.panel-default
             .panel-heading
                 | Informações de Usuário
-            .panel-body                
+            .panel-body
                 .form-group
                     label(for="email")
                         | Email *
@@ -67,22 +67,22 @@ block content
                     .form-group
                         label(for="password_confirm")
                             | Confirmar Senha *
-                        input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")                
+                        input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")
         .form-group.pull-right
             .btn-group
                 if data.user
-                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary") 
-                        i(class="fa fa-floppy-o" aria-hidden="true") 
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")
+                        i(class="fa fa-floppy-o" aria-hidden="true")
                         | Atualizar
                 else
-                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")  
-                        i(class="fa fa-floppy-o", aria-hidden="true") 
+                    button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")
+                        i(class="fa fa-floppy-o", aria-hidden="true")
                         | Cadastrar
-                button(type="reset", value="Limpar",class="btn btn-lg btn-primary") 
+                button(type="reset", value="Limpar",class="btn btn-lg btn-primary")
                     i(class="fa fa-undo", aria-hidden="true")
                     | Limpar
                 a(href="/" , class="btn btn-lg btn-primary")
-                    i(class="fa fa-arrow-left", aria-hidden="true") 
+                    i(class="fa fa-arrow-left", aria-hidden="true")
                     | Voltar
         .clearfix
-        
+

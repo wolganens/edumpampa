@@ -2,11 +2,11 @@ extends ../../layout
 
 block content
 	h3
-		| Gerenciar Usuários	
+		| Gerenciar Usuários
 	form(class="form-inline", action="", method="GET")
 		.form-group
 			label(for="sort")
-				| Ordenar: 
+				| Ordenar:
 			select.form-control(name="sort", id="sort")
 				option(value="") Selecionar ordem
 				option(value="name", selected=sort == "name") Nome
@@ -14,7 +14,7 @@ block content
 				option(value="older", selected=sort == "older") Mais antigos
 		.form-group
 			label(for="situation")
-				| Situação: 
+				| Situação:
 			select.form-control(name="situation", id="situation")
 				option(value="") Selecionar situação
 				option(value="aut", selected=situation == "aut") Autorizadoo
@@ -28,7 +28,7 @@ block content
 	.clearfix
 	.form-group
 		label
-			| Ações em massa 
+			| Ações em massa
 		.btn-group
 			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
 				| Habilitar OA's
@@ -65,13 +65,13 @@ block content
 						.btn-group
 							if user.role == 'COMMON'
 								a.btn.btn-success(href="/admin/user/authorize/" + user._id)
-									i(class="fa fa-thumbs-o-up" aria-hidden="true") 
+									i(class="fa fa-thumbs-o-up" aria-hidden="true")
 									| Autorizar
 							else if user.role == 'AUTHORIZED'
 								a.btn.btn-danger(href="/admin/user/unauthorize/" + user._id)
-									i(class="fa fa-thumbs-o-down" aria-hidden="true") 
-									| Desautorizar							
+									i(class="fa fa-thumbs-o-down" aria-hidden="true")
+									| Desautorizar
 							a.btn.btn-default.remove(href="/admin/user/remove/" + user._id)
-								i(class="fa fa-trash-o" aria-hidden="true") 
+								i(class="fa fa-trash-o" aria-hidden="true")
 								| Remover
-							
+

@@ -1,6 +1,6 @@
 .row
   input(type="hidden", name="checked_string", value="", id="checked-string")
-  .col-md-5        
+  .col-md-5
     .panel.panel-default
       .panel-heading
         .checkbox
@@ -9,8 +9,8 @@
             span#teach-level-label
               |  Níveis de Ensino
       .panel-body
-        fieldset  
-          each tlevel in data.teaching_levels          
+        fieldset
+          each tlevel in data.teaching_levels
             .checkbox.block
               label
                 input(type="checkbox", name="teaching_levels[]", aria-labelledby="teach-level-label", class="checked-string", value=tlevel._id, checked=(inputs && inputs['teaching_levels[]'] && inputs['teaching_levels[]'].indexOf(tlevel._id.toString()) != -1) ||(data.lo && data.lo.teaching_levels && data.lo.teaching_levels.indexOf(tlevel._id) != -1))
@@ -26,7 +26,7 @@
                 |  Eixos
         .panel-body
           fieldset
-            each axe in data.axes              
+            each axe in data.axes
               .checkbox.block
                 label
                   input(type="checkbox", name="axes[]", aria-labelledby="axes-label", class="checked-string", value=axe._id, checked=(inputs && inputs['axes[]'] && inputs['axes[]'].indexOf(axe._id.toString()) != -1) || (data.lo && data.lo.axes && data.lo.axes.indexOf(axe._id) != -1))
@@ -43,7 +43,7 @@
         .panel-body
           fieldset
             each accessibility_resource in data.accessibility_resources
-              .checkbox.block             
+              .checkbox.block
                 label
                   input(type="checkbox", aria-labelledby="access-res-label", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=(inputs && inputs['accessibility_resources[]'] && inputs['accessibility_resources[]'].indexOf(accessibility_resource._id.toString()) != -1 ) || (data.lo && data.lo.accessibility_resources && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1))
                   span

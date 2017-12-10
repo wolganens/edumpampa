@@ -1,11 +1,11 @@
 extends ../layout
 
-block content	
+block content
 	h3
 		| !{data.lo.title}
 	if data.lo.file_url
 		p
-			| URL do OA: 
+			| URL do OA:
 			if currentUser
 				a(href=data.lo.file_url)
 					| !{data.lo.file_url}
@@ -54,21 +54,21 @@ block content
 		| !{data.lo.authors}
 	if data.lo.teaching_levels
 		p
-			strong 
+			strong
 				| Níveis de ensino
 		each tlevel in data.lo.teaching_levels
 			p
 				| !{tlevel.name}
 	if data.lo.axes
 		p
-			strong 
+			strong
 				| Eixos
 		each axe in data.lo.axes
 			p
 				| !{axe.name}
 	if data.lo.accessibility_resources
 		p
-			strong 
+			strong
 				| Recurso de Acessibilidade
 		each ares in data.lo.accessibility_resources
 			p
@@ -83,8 +83,8 @@ block content
 			| Licença
 	p
 		| !{data.lo.license.name}
-	
+
 	img(src=data.lo.license.image)
-	
+
 	p
 		| !{data.lo.license_description}

@@ -1,5 +1,5 @@
 .row
-  .col-md-6       
+  .col-md-6
     .panel.panel-default
       .panel-heading
         .checkbox
@@ -28,4 +28,4 @@
               div
                 label
                   input(type="checkbox", name="resources[]", aria-labelledby="resources-label", value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
-                  | !{resource.name}       
+                  | !{resource.name}

@@ -6,7 +6,7 @@ block content
 	form(class="form-inline", action="", method="GET")
 		.form-group
 			label(for="sort")
-				| Ordenar: 
+				| Ordenar:
 			select.form-control(name="sort", id="sort")
 				option(value="") Selecionar ordem
 				option(value="name", selected=sort == "name") Título
@@ -37,20 +37,20 @@ block content
 			each lo in data
 				tr(id=lo._id)
 					td
-						| !{lo.title}				
+						| !{lo.title}
 					td
 						| !{lo.htmlSituation}
 					td
 						.btn-group
 							if !lo.approved
 								a.btn.btn-success(href="/learning-object/approve/"+lo._id)
-									i(class="fa fa-thumbs-o-up" aria-hidden="true") 
+									i(class="fa fa-thumbs-o-up" aria-hidden="true")
 									| Habilitar
 							else
 								a.btn.btn-danger(href="/learning-object/approve/"+lo._id)
-									i(class="fa fa-thumbs-o-down" aria-hidden="true") 
+									i(class="fa fa-thumbs-o-down" aria-hidden="true")
 									| Desabilitar
 							a.btn.btn-default.remove(href="/learning-object/remove/" + lo._id)
-								i(class="fa fa-trash-o" aria-hidden="true") 
+								i(class="fa fa-trash-o" aria-hidden="true")
 								| Remover
 
