@@ -18,33 +18,33 @@
                   | !{tlevel.name}
   .col-md-3
     .panel.panel-default
-        .panel-heading
-          .checkbox
-            label
-              input(type="checkbox", class="panel-checkall", data-target="axes[]")
-              span#axes-label
-                |  Eixos
-        .panel-body
-          fieldset
-            each axe in data.axes
-              .checkbox.block
-                label
-                  input(type="checkbox", name="axes[]", aria-labelledby="axes-label", class="checked-string", value=axe._id, checked=(inputs && inputs['axes[]'] && inputs['axes[]'].indexOf(axe._id.toString()) != -1) || (data.lo && data.lo.axes && data.lo.axes.indexOf(axe._id) != -1))
-                  span
-                    | !{axe.name}
+      .panel-heading
+        .checkbox
+          label
+            input(type="checkbox", class="panel-checkall", data-target="axes[]")
+            span#axes-label
+              |  Eixos
+      .panel-body
+        fieldset
+          each axe in data.axes
+            .checkbox.block
+              label
+                input(type="checkbox", name="axes[]", aria-labelledby="axes-label", class="checked-string", value=axe._id, checked=(inputs && inputs['axes[]'] && inputs['axes[]'].indexOf(axe._id.toString()) != -1) || (data.lo && data.lo.axes && data.lo.axes.indexOf(axe._id) != -1))
+                span
+                  | !{axe.name}
   .col-md-4
     .panel.panel-default
-        .panel-heading
-          .checkbox
-            label
-              input(type="checkbox", class="panel-checkall", data-target="accessibility_resources[]")
-              span#access-res-label
-                |  Recursos de Acessibilidade
-        .panel-body
-          fieldset
-            each accessibility_resource in data.accessibility_resources
-              .checkbox.block
-                label
-                  input(type="checkbox", aria-labelledby="access-res-label", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=(inputs && inputs['accessibility_resources[]'] && inputs['accessibility_resources[]'].indexOf(accessibility_resource._id.toString()) != -1 ) || (data.lo && data.lo.accessibility_resources && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1))
-                  span
-                    | !{accessibility_resource.name}
+      .panel-heading
+        .checkbox
+          label
+            input(type="checkbox", class="panel-checkall", data-target="accessibility_resources[]")
+            span#access-res-label
+              |  Recursos de Acessibilidade
+      .panel-body
+        fieldset
+          each accessibility_resource in data.accessibility_resources
+            .checkbox.block
+              label
+                input(type="checkbox", aria-labelledby="access-res-label", name="accessibility_resources[]", class="checked-string", value=accessibility_resource._id, checked=(inputs && inputs['accessibility_resources[]'] && inputs['accessibility_resources[]'].indexOf(accessibility_resource._id.toString()) != -1 ) || (data.lo && data.lo.accessibility_resources && data.lo.accessibility_resources.indexOf(accessibility_resource._id) != -1))
+                span
+                  | !{accessibility_resource.name}

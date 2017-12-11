@@ -1,76 +1,76 @@
 extends ../layout
 
 block content
-	.row
-		.col-md-3
-			h3
-				| Filtre seus resultados
-			form(action="", method="get")
-				.form-group
-					label(for="resource")
-						| Recurso
-					select(name="resource", class="form-control")
-						option(selected=true, value="")
-							| Selecione um recurso
-						each resource in data.resources
-							option(value=resource._id, selected=selectedFilters ? selectedFilters.resource == resource._id : false)
-								| !{resource.name}
-				.form-group
-					label(for="content")
-						| Conteúdo
-					select(name="content", class="form-control")
-						option(selected=true, value="")
-							| Selecione um conteúdo
-						each content in data.contents
-							option(value=content._id, selected=selectedFilters ? selectedFilters.content == content._id : false)
-								| !{content.name}
-				.form-group
-					button(type="submit", class="btn btn-primary btn-lg")
-						i(class="fa fa-filter" aria-hidden="true")
-						| Filtrar
-		.col-md-9
-			h3
-				| Resultados da busca
-				span.badge.alert-info
-							| !{count}
-			if checked_string
-				p
-					| Você selecionou:
-					strong
-						| !{checked_string}
+  .row
+    .col-md-3
+      h3
+        | Filtre seus resultados
+      form(action="", method="get")
+        .form-group
+          label(for="resource")
+            | Recurso
+          select(name="resource", class="form-control")
+            option(selected=true, value="")
+              | Selecione um recurso
+            each resource in data.resources
+              option(value=resource._id, selected=selectedFilters ? selectedFilters.resource == resource._id : false)
+                | !{resource.name}
+        .form-group
+          label(for="content")
+            | Conteúdo
+          select(name="content", class="form-control")
+            option(selected=true, value="")
+              | Selecione um conteúdo
+            each content in data.contents
+              option(value=content._id, selected=selectedFilters ? selectedFilters.content == content._id : false)
+                | !{content.name}
+        .form-group
+          button(type="submit", class="btn btn-primary btn-lg")
+            i(class="fa fa-filter" aria-hidden="true")
+            | Filtrar
+    .col-md-9
+      h3
+        | Resultados da busca
+        span.badge.alert-info
+              | !{count}
+      if checked_string
+        p
+          | você selecionou:
+          strong
+            | !{checked_string}
 
-			if search_text
-				p
-					| Você pesquisou por:
-					strong
-						| "!{search_text}"
-			if data.learningObject.length > 0
-				each lo in data.learningObject
-					article
-						a(href="/learning-object/single/" + lo._id.toString())
-							| !{lo.title}
-						p
-							| Publicado em
-							time
-								if lo.createdAt.getDate() < 10
-									| 0!{lo.createdAt.getDate()}/
-								else
-									| !{lo.createdAt.getDate()}/
-								if lo.createdAt.getMonth() < 10
-									| 0!{lo.createdAt.getMonth()}/
-								else
-									| !{lo.createdAt.getMonth()}/
-								| !{lo.createdAt.getFullYear()}
-							| - !{lo.description}
-			else
-				.alert.alert-info(role="alert")
-					| Nenhum objeto encontrado
-			div
-				| !{url}
-			if pages > 1
-				nav(aria-label="Page navigation")
-					ul(class="pagination")
-						- for(var i = 1; i <= pages; i++)
-							li(class=currentPage == i ? "active" : "")
-								a(href=queryUrl.replace(/\&page=\d+/g, "") + "&page=" + i)
-									| !{i}
+      if search_text
+        p
+          | Você pesquisou por:
+          strong
+            | "!{search_text}"
+      if data.learningObject.length > 0
+        each lo in data.learningObject
+          article
+            a(href="/learning-object/single/" + lo._id.toString())
+              | !{lo.title}
+            p
+              | Publicado em
+              time
+                if lo.createdAt.getDate() < 10
+                  | 0!{lo.createdAt.getDate()}/
+                else
+                  | !{lo.createdAt.getDate()}/
+                if lo.createdAt.getMonth() < 10
+                  | 0!{lo.createdAt.getMonth()}/
+                else
+                  | !{lo.createdAt.getMonth()}/
+                | !{lo.createdAt.getFullYear()}
+              | - !{lo.description}
+      else
+        .alert.alert-info(role="alert")
+          | Nenhum objeto encontrado
+      div
+        | !{url}
+      if pages > 1
+        nav(aria-label="Page navigation")
+          ul(class="pagination")
+            - for(var i = 1; i <= pages; i++)
+              li(class=currentPage == i ? "active" : "")
+                a(href=queryUrl.replace(/\&page=\d+/g, "") + "&page=" + i)
+                  | !{i}

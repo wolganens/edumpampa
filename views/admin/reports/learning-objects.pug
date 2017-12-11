@@ -1,11 +1,11 @@
 extends tabs
 
 block tab-content
-	#users.tab-pane.active(role="tabpanel")
-		form(action="/admin/reports/learning-objects-results", method="get")
-			include ../../components/lo_panels
-			include ../../components/lo_cont_res_panels
-			button(type="submit").btn.btn-primary
-				| Gerar relatório
-	#profile.tab-pane(role="tabpanel") ...
-	#messages.tab-pane(role="tabpanel") ...
+  #users.tab-pane.active(role="tabpanel")
+    form(action="/admin/reports/learning-objects-results", method="get")
+      include ../../components/lo_panels
+      include ../../components/lo_cont_res_panels
+      button(type="submit").btn.btn-primary
+        | Gerar relatório
+  #profile.tab-pane(role="tabpanel") ...
+  #messages.tab-pane(role="tabpanel") ...

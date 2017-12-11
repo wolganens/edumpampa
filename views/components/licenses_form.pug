@@ -1,28 +1,28 @@
 .panel.panel-default
-	.panel-heading
-		| Licenças
-	.panel-body
-		.form-group
-			label(for="license")
-				| Licença
-			select(name="license", id="license", required, class="form-control")
-				option(value="")
-					| Selecione uma licença
-				each license in data.licenses
-					option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()) || (license.name == 'Atribuição-CompartilhaIgual CC BY-SA'))
-						| !{license.name}
-		.form-group
-			label(for="license_owner")
-				| Detentor dos Direitos Autorais *
-			input(type="text", id="license_owner", placeholder="Informe o nome do detentor dos direitos autorais objeto", required="required" name="license_owner", class="form-control", value=(inputs && inputs.license_owner) || (data.lo && data.lo.license_owner))
-		.form-group
-			label(for="license_description")
-				| Descrição da licença *
-			textarea(type="text", id="license_description", placeholder="Descrição da licença de uso", required="required" name="license_description", class="form-control")
-				| !{(inputs && inputs.license_description) || (data.lo && data.lo.license_description)}
-		#license-details
-			img#license-img
-			a#license-deed(target="_blank", title="Ver descrição completa da licensa")
-				| Ver descrição completa
-			a#license-legal(target="_blank", title="Ver descrição legal da licensa")
-				| Ver descrição legal
+  .panel-heading
+    | Licenças
+  .panel-body
+    .form-group
+      label(for="license")
+        | Licença
+      select(name="license", id="license", required, class="form-control")
+        option(value="")
+          | Selecione uma licença
+        each license in data.licenses
+          option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()) || (license.name == 'Atribuição-CompartilhaIgual CC BY-SA'))
+            | !{license.name}
+    .form-group
+      label(for="license_owner")
+        | Detentor dos Direitos Autorais *
+      input(type="text", id="license_owner", placeholder="Informe o nome do detentor dos direitos autorais objeto", required="required" name="license_owner", class="form-control", value=(inputs && inputs.license_owner) || (data.lo && data.lo.license_owner))
+    .form-group
+      label(for="license_description")
+        | Descrição da licença *
+      textarea(type="text", id="license_description", placeholder="Descrição da licença de uso", required="required" name="license_description", class="form-control")
+        | !{(inputs && inputs.license_description) || (data.lo && data.lo.license_description)}
+    #license-details
+      img#license-img
+      a#license-deed(target="_blank", title="Ver descrição completa da licensa")
+        | Ver descrição completa
+      a#license-legal(target="_blank", title="Ver descrição legal da licensa")
+        | Ver descrição legal

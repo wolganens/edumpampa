@@ -16,16 +16,16 @@
                 | !{content.name}
   .col-md-6
     .panel.panel-default
-        .panel-heading
-          .checkbox
-            label
-              input(type="checkbox", class="panel-checkall", data-target="resources[]")
-              span#resources-label
-                |  Recursos
-        .panel-body
-          .checkbox
-            each resource in data.resources
-              div
-                label
-                  input(type="checkbox", name="resources[]", aria-labelledby="resources-label", value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
-                  | !{resource.name}
+      .panel-heading
+        .checkbox
+          label
+            input(type="checkbox", class="panel-checkall", data-target="resources[]")
+            span#resources-label
+              |  Recursos
+      .panel-body
+        .checkbox
+          each resource in data.resources
+            div
+              label
+                input(type="checkbox", name="resources[]", aria-labelledby="resources-label", value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
+                | !{resource.name}
