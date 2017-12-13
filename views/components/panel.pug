@@ -1,0 +1,23 @@
+mixin panel(title, inputName, id, options, values)
+  .panel.panel-default
+    .panel-heading
+      .checkbox
+        label
+          input(type='checkbox', class='panel-checkall', data-target=`${inputName}[]`)
+          span(id=`${id}-label`)
+            | #{title}
+    .panel-body
+      fieldset
+        each option in options
+          .checkbox.block
+            label
+              input(
+                type='checkbox',
+                name=`${inputName}[]`,
+                aria-labelledby=(`${id}-label`),
+                class='checked-string',
+                value=option._id,
+                checked=(values && values.indexOf(option._id.toString()) !== -1)
+              )
+              span
+                | !{option.name}
