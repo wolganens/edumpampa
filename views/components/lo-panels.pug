@@ -1,46 +1,34 @@
-mixin loPanels(panels)
-  -
-    const [ panel1, panel2, panel3 ] = panels.checkboxes;
-    if (panels.type === 'lo') {
-      panel1.width = 5;
-      panel1.title = 'Níveis de Ensino';
-      panel1.inputName = 'teaching_levels';
-      panel1.id = 'teach-level';
+mixin panel(title, inputName, id, options, values)
+  .panel.panel-default
+    .panel-heading
+      .checkbox
+        label
+          input(type='checkbox', class='panel-checkall', data-target=`${inputName}[]`)
+          span(id=`${id}-label`)
+            | #{title}
+    .panel-body
+      fieldset
+        each option in options
+          .checkbox.block
+            label
+              input(
+                type='checkbox',
+                name=`${inputName}[]`,
+                aria-labelledby=(`${id}-label`),
+                class='checked-string',
+                value=option._id,
+                checked=(values && values.indexOf(option._id.toString()) !== -1)
+              )
+              span
+                | !{option.name}
 
-      panel2.width = 3;
-      panel2.title = 'Eixos';
-      panel2.inputName = 'axes';
-      panel2.id = 'axes';
 
-      panel3.width = 4;
-      panel3.title = 'Recursos de Acessibilidade';
-      panel3.inputName = 'accessibility_resources';
-      panel3.id = 'access-res';
-    }
+mixin loPanels([ panel1, panel2, panel3 ])
   .row
     input(type='hidden', name='checked_string', value='', id='checked-string')
-    each panel in panels.checkboxes
-      - const { width, title, inputName, id, options, values } = panel;
-      div(class=`col-md-${width}`)
-        .panel.panel-default
-          .panel-heading
-            .checkbox
-              label
-                input(type='checkbox', class='panel-checkall', data-target=`${inputName}[]`)
-                span(id=`${id}-label`)
-                  | #{title}
-          .panel-body
-            fieldset
-              each option in options
-                .checkbox.block
-                  label
-                    input(
-                      type='checkbox',
-                      name=`${inputName}[]`,
-                      aria-labelledby=(`${id}-label`),
-                      class='checked-string',
-                      value=option._id,
-                      checked=(values && values.indexOf(option._id.toString()) !== -1)
-                    )
-                    span
-                      | !{option.name}
+    .col-md-5
+      +panel('Níveis de Ensino', 'teaching_levels', 'teach-level', panel1.options, panel1.values)
+    .col-md-3
+      +panel('Eixos', 'axes', 'axes', panel2.options, panel2.values)
+    .col-md-4
+      +panel('Recursos de Acessibilidade', 'accessibility_resources', 'access-res', panel3.options, panel3.values)
