@@ -27,6 +27,23 @@ block content
             | Ano de autoria *
           input(type="text", id="year", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
     include ../components/lo-panels
+    +loPanels({
+      type: 'lo',
+      checkboxes: [
+        {
+          options: data.teaching_levels,
+          values: inputs ? inputs['teaching_levels[]'] : undefined,
+        },
+        {
+          options: data.axes,
+          values: inputs ? inputs['axes[]'] : undefined,
+        },
+        {
+          options: data.accessibility_resources,
+          values: inputs ? inputs['accessibility_resources[]'] : undefined,
+        },
+      ],
+    })
     include ../components/lo-cont-res-panels
     include ../components/licenses-form
     include ../components/file-form
