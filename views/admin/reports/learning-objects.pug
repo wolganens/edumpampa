@@ -10,6 +10,10 @@ block tab-content
         { options: data.accessibility_resources },
       ])
       include ../../components/lo-cont-res-panels
+      +crPanels([
+        { options: data.contents },
+        { options: data.resources },
+      ])
       button(type="submit").btn.btn-primary
         | Gerar relatório
   #profile.tab-pane(role="tabpanel") ...

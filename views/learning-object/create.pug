@@ -42,6 +42,16 @@ block content
       },
     ])
     include ../components/lo-cont-res-panels
+    +crPanels([
+      {
+        options: data.contents,
+        values: inputs ? inputs['contents[]'] : undefined,
+      },
+      {
+        options: data.resources,
+        values: inputs ? inputs['resources[]'] : undefined,
+      },
+    ])
     include ../components/licenses-form
     include ../components/file-form
     .form-group

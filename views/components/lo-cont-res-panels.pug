@@ -1,31 +1,8 @@
-.row
-  .col-md-6
-    .panel.panel-default
-      .panel-heading
-        .checkbox
-          label
-            input(type="checkbox", class="panel-checkall", data-target="contents[]")
-            span#contents-label
-              |  Conteúdos
-      .panel-body
-        .checkbox
-          each content in data.contents
-            div
-              label
-                input(type="checkbox", name="contents[]", aria-labelledby="contents-label", value = content._id, checked=(inputs && inputs['contents[]'].indexOf(content._id.toString()) != -1) || (data.lo && data.lo.content && data.lo.content.indexOf(content._id) != -1))
-                | !{content.name}
-  .col-md-6
-    .panel.panel-default
-      .panel-heading
-        .checkbox
-          label
-            input(type="checkbox", class="panel-checkall", data-target="resources[]")
-            span#resources-label
-              |  Recursos
-      .panel-body
-        .checkbox
-          each resource in data.resources
-            div
-              label
-                input(type="checkbox", name="resources[]", aria-labelledby="resources-label", value = resource._id, checked=(inputs && inputs['resources[]'].indexOf(resource._id.toString()) != -1)||(data.lo && data.lo.resources && data.lo.resources.indexOf(resource._id) != -1))
-                | !{resource.name}
+include panel
+
+mixin crPanels([ panel1, panel2 ])
+  .row
+    .col-md-6
+      +panel('Conteúdos', 'contents', 'contents', panel1.options, panel1.values)
+    .col-md-6
+      +panel('Recursos', 'resources', 'resources', panel2.options, panel2.values)

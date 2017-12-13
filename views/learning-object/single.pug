@@ -39,6 +39,16 @@ block content
       },
     ])
     include ../components/lo-cont-res-panels
+    +crPanels([
+      {
+        options: data.contents,
+        values: data.lo ? data.lo.contents : undefined,
+      },
+      {
+        options: data.resources,
+        values: data.lo ? data.lo.resources : undefined,
+      },
+    ])
     include ../components/licenses-form
     include ../components/file-form
     .form-group
