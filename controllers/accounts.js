@@ -3,7 +3,6 @@ const async = require('async');
 const pug = require('pug');
 const path = require('path');
 const generator = require('generate-password');
-
 const User = require('../models/user');
 const InstitutionalLink = require('../models/institutional_link');
 const InstitutionalPost = require('../models/institutional_post');
@@ -58,7 +57,6 @@ module.exports = {
       'institutional_post_text',
     );
     const [day, month, year] = userData.birthday.split('/');
-
     userData.birthday = new Date(year, month - 1, day);
     userData.institutional_post_id = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
     userData.qualification_id = userData.qualification_id ? userData.qualification_id : null;
@@ -69,7 +67,6 @@ module.exports = {
     if (req.body._id) {
       userData._id = req.body._id;
     }
-
     if (userData._id) {
       return User.findByIdAndUpdate(userData._id, userData, (err) => {
         if (err) {
@@ -145,13 +142,12 @@ module.exports = {
           symbols: true,
           strict: true,
         });
-        return passwordHelper.hash(password, (err, hashedPassword, salt, callback) => {
+        return passwordHelper.hash(password, (err, hashedPassword, nSalt) => {
           authUser.password = hashedPassword;
-          authUser.passwordSalt = salt;
-
+          authUser.passwordSalt = nSalt;
           return authUser.save((saveErr) => {
             if (saveErr) {
-              return callback(saveErr, null);
+              return console.log(saveErr);
             }
             return done(saveErr, authUser, password);
           });
