@@ -26,16 +26,18 @@ block content
 		.form-group
 			button(type="submit", class="btn btn-primary") Aplicar
 	.clearfix
-	.form-group
-		label
-			| Ações em massa 
-		.btn-group
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
-				| Habilitar OA's
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="disapprove-all")
-				| Desabilitar OA's
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="remove-all")
-				| Remover OA's
+	<br/>
+	.col-xs-12
+		.form-group
+			label.inline-label
+				| Ações em massa : 
+			.btn-group
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
+					|  Habilitar OA's
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="disapprove-all")
+					|  Desabilitar OA's
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="remove-all")
+					|  Remover OA's
 	table.table
 		thead
 			th
