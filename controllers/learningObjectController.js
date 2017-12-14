@@ -128,7 +128,7 @@ module.exports = {
         }
         delete req.session.lo;
         req.flash('success_messages', successMsg);
-        return res.redirect(`/learning-object/single/${learningObject._id}`);
+        return res.redirect(`/learning-object/retrieve/#${learningObject._id}`);
       });
     });
   },
@@ -511,7 +511,12 @@ module.exports = {
       },
       {
         title: 1,
-        approved: 1,
+        approved: 1,        
+      },
+      {
+        sort: {
+          createdAt: -1,
+        },
       }, (err, lo) => {
         if (err) {
           return res.send(err);
