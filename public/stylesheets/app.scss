@@ -139,3 +139,11 @@ body.contrast {
 tr:target {
 	border: 2px dotted green;
 }
+.form-inline {
+	.form-group {
+		margin-left: 15px;
+	}
+	label {
+		margin-right: 5px;
+	}
+}
