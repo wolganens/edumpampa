@@ -14,14 +14,14 @@ block content
 				option(value="older", selected=sort == "older") Mais antigos
 		.form-group
 			label(for="situation")
-				| Situação:
+				| Situação: 
 			select.form-control(name="situation", id="situation")
 				option(value="") Selecionar situação
 				option(value="hab", selected=situation == "hab") Habilitados
 				option(value="des", selected=situation == "des") Desabilitados
 		.form-group
 			label(for="title")
-				| Título
+				| Título: 
 			input(placeholder="Filtrar por título", name="title", id="title", class="form-control", value=oatitle)
 		.form-group
 			button(type="submit", class="btn btn-primary") Aplicar

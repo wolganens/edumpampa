@@ -21,21 +21,23 @@ block content
 				option(value="des", selected=situation == "des") Desautorizados
 		.form-group
 			label(for="name")
-				| Nome
+				| Nome: 
 			input(placeholder="Filtrar por nome", name="name", id="name", class="form-control", value=name)
 		.form-group
 			button(type="submit", class="btn btn-primary") Aplicar
 	.clearfix
-	.form-group
-		label
-			| Ações em massa 
-		.btn-group
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
-				| Habilitar OA's
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="disapprove-all")
-				| Desabilitar OA's
-			button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="remove-all")
-				| Remover OA's
+	<br/>
+	.col-xs-12
+		.form-group
+			label.inline-label
+				| Ações em massa : 
+			.btn-group
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
+					|  Habilitar OA's
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="disapprove-all")
+					|  Desabilitar OA's
+				button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="remove-all")
+					|  Remover OA's
 	table.table
 		thead
 			th
