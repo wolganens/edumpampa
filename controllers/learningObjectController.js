@@ -13,14 +13,14 @@ const ac = require('../config/roles');
 const email = require('../config/email');
 const config = require('../config/index');
 
-function getReqParamAsArray(reqparam) {
-  if (reqparam) {
-    if (Array.isArray(reqparam)) {
-      return reqparam;
-    }
-    return [reqparam];
+function listify(val) {
+  if (!val) {
+    return [];
   }
-  return null;
+  if (Array.isArray(val)) {
+    return val;
+  }
+  return [val];
 }
 module.exports = {
   getCreate(req, res) {
@@ -78,11 +78,11 @@ module.exports = {
       license_owner: body.license_owner,
       authors: body.authors,
       year: body.year,
-      teaching_levels: getReqParamAsArray(body['teaching_levels[]']),
-      axes: getReqParamAsArray(body['axes[]']),
-      accessibility_resources: getReqParamAsArray(body['accessibility_resources[]']),
-      content: getReqParamAsArray(body['contents[]']),
-      resources: getReqParamAsArray(body['resources[]']),
+      teaching_levels: listify(body['teaching_levels[]']),
+      axes: listify(body['axes[]']),
+      accessibility_resources: listify(body['accessibility_resources[]']),
+      content: listify(body['contents[]']),
+      resources: listify(body['resources[]']),
       license: body.license,
       license_description: body.license_description,
       file: body.file_name ? JSON.parse(body.file_name) : null,
@@ -94,11 +94,11 @@ module.exports = {
     learningObject = new LearningObject(learningObject);
     return learningObject.save((err) => {
       if (err) {
-        body['teaching_levels[]'] = getReqParamAsArray(body['teaching_levels[]'] || []);
-        body['axes[]'] = getReqParamAsArray(body['axes[]'] || []);
-        body['accessibility_resources[]'] = getReqParamAsArray(body['accessibility_resources[]'] || []);
-        body['contents[]'] = getReqParamAsArray(body['contents[]'] || []);
-        body['resources[]'] = getReqParamAsArray(body['resources[]'] || []);
+        body['teaching_levels[]'] = learningObject.teaching_levels;
+        body['axes[]'] = learningObject.axes;
+        body['accessibility_resources[]'] = learningObject.accessibility_resources;
+        body['contents[]'] = learningObject.contents;
+        body['resources[]'] = learningObject.resources;
         req.flash('inputs', body);
         req.flash('inputErrors', JSON.stringify(err));
         if (body.object_id) {
@@ -359,15 +359,15 @@ module.exports = {
         */
         let qAccResources = [];
         if (req.query.accessibility_resources) {
-          qAccResources = getReqParamAsArray(req.query.accessibility_resources);
+          qAccResources = listify(req.query.accessibility_resources);
         }
         let qAxes = [];
         if (req.query.axes) {
-          qAxes = getReqParamAsArray(req.query.axes);
+          qAxes = listify(req.query.axes);
         }
         let qTeachingLevels = [];
         if (req.query.teaching_levels) {
-          qTeachingLevels = getReqParamAsArray(req.query.teaching_levels);
+          qTeachingLevels = listify(req.query.teaching_levels);
         }
         if (qAccResources.length > 0) {
           and.$and.push({
