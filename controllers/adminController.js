@@ -321,6 +321,10 @@ module.exports = {
     // para ativar a tab:
     // { activetab: 'OA\'s por usuário' }
   },
+  getUserLoReports(req, res) {
+    req.flash('success_messages', "Página em construção!");
+    return res.redirect('back');
+  },
   postAprroveUserOa(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
