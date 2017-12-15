@@ -24,31 +24,11 @@ block content
           | Ano de autoria *
           input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=data.lo.year)
     include ../components/lo-panels
-    +loPanels([
-      {
-        options: data.teaching_levels,
-        values: data.lo ? data.lo.teaching_levels : undefined,
-      },
-      {
-        options: data.axes,
-        values: data.lo ? data.lo.axes : undefined,
-      },
-      {
-        options: data.accessibility_resources,
-        values: data.lo ? data.lo.accessibility_resources : undefined,
-      },
-    ])
+    +loPanels(data)
+
     include ../components/lo-cont-res-panels
-    +crPanels([
-      {
-        options: data.contents,
-        values: data.lo ? data.lo.contents : undefined,
-      },
-      {
-        options: data.resources,
-        values: data.lo ? data.lo.resources : undefined,
-      },
-    ])
+    +crPanels(data)
+
     include ../components/licenses-form
     include ../components/file-form
     .form-group

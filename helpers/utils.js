@@ -27,4 +27,42 @@ module.exports = {
       return 0;
     });
   },
+  mergeCheckboxData({ options, values }, dataSource = {}) {
+    /* This will take the list of checkbox names as "options",
+     * the list of checked checkboxes as "values" and it will
+     * group together this values into "dataSource".
+     *
+     * For example:
+     *
+     * options = { teaching_levels: ["name1", "name2"], ... };
+     * values = { teaching_levels: ["value1, "value2"], ... };
+     * data = {
+     *   teaching_levels: {
+     *     options: ["name1", "name2"],
+     *     values: ["value1", "value2"],
+     *   },
+     *   ...
+     *   something_else: "this was already here",
+     * };
+     */
+
+    // You can give an existing object.
+    const data = dataSource;
+
+    [
+      'teaching_levels',
+      'axes',
+      'accessibility_resources',
+      'contents',
+      'resources',
+    ].forEach((prop) => {
+      data[prop] = {
+        options: options[prop],
+        values: values[prop],
+      };
+    });
+
+    return data;
+  },
 };
+

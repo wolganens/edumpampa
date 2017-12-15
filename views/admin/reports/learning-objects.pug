@@ -4,16 +4,11 @@ block tab-content
   #users.tab-pane.active(role="tabpanel")
     form(action="/admin/reports/learning-objects-results", method="get")
       include ../../components/lo-panels
-      +loPanels([
-        { options: data.teaching_levels },
-        { options: data.axes },
-        { options: data.accessibility_resources },
-      ])
+      +loPanels(data)
+
       include ../../components/lo-cont-res-panels
-      +crPanels([
-        { options: data.contents },
-        { options: data.resources },
-      ])
+      +crPanels(data)
+
       button(type="submit").btn.btn-primary
         | Gerar relatório
   #profile.tab-pane(role="tabpanel") ...

@@ -1,8 +1,8 @@
 include panel
 
-mixin crPanels([ panel1, panel2 ])
+mixin crPanels({ contents, resources })
   .row
     .col-md-6
-      +panel('Conteúdos', 'contents', 'contents', panel1.options, panel1.values)
+      +panel('Conteúdos', 'contents', 'contents', contents.options, contents.values)
     .col-md-6
-      +panel('Recursos', 'resources', 'resources', panel2.options, panel2.values)
+      +panel('Recursos', 'resources', 'resources', resources.options, resources.values)

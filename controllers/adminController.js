@@ -11,7 +11,7 @@ const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
 const Contents = require('../models/contents');
 const Resources = require('../models/resources');
-const { sortDocsInArray } = require('../helpers/utils.js');
+const { sortDocsInArray, mergeCheckboxData } = require('../helpers/utils.js');
 
 function getReqParamAsArray(reqparam) {
   if (reqparam) {
@@ -243,7 +243,10 @@ module.exports = {
       }
       return res.render('admin/reports/learning-objects', {
         title: 'Relatórios OA - EduMPampa',
-        data: results,
+        data: mergeCheckboxData({
+          options: results,
+          values: {},
+        }, results),
         activetab: 'OA\'s',
       });
     });

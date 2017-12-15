@@ -1,6 +1,7 @@
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
+const querystring = require('querystring');
 const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
@@ -12,6 +13,7 @@ const Licenses = require('../models/licenses');
 const ac = require('../config/roles');
 const email = require('../config/email');
 const config = require('../config/index');
+const { mergeCheckboxData } = require('../helpers/utils');
 
 function listify(val) {
   if (!val) {
@@ -48,7 +50,16 @@ module.exports = {
       licenses(callback) {
         Licenses.find(callback);
       },
-    }, (err, results) => res.render('learning-object/create', { error: err, data: results, title: 'Cadastro de OA - EduMPampa' }));
+    }, (err, results) => {
+      res.render('learning-object/create', {
+        error: err,
+        data: mergeCheckboxData({
+          options: results,
+          values: req.query,
+        }, results),
+        title: 'Cadastro de OA - EduMPampa',
+      });
+    });
   },
   postCreate(req, res) {
     let permission;
@@ -92,17 +103,18 @@ module.exports = {
     learningObject = new LearningObject(learningObject);
     return learningObject.save((err) => {
       if (err) {
-        body['teaching_levels[]'] = learningObject.teaching_levels;
-        body['axes[]'] = learningObject.axes;
-        body['accessibility_resources[]'] = learningObject.accessibility_resources;
-        body['contents[]'] = learningObject.contents;
-        body['resources[]'] = learningObject.resources;
-        req.flash('inputs', body);
+        const query = querystring.stringify({
+          teaching_levels: learningObject.teaching_levels.join(' '),
+          axes: learningObject.axes.join(' '),
+          accessibility_resources: learningObject.accessibility_resources.join(' '),
+          contents: learningObject.contents.join(' '),
+          resources: learningObject.resources.join(' '),
+        });
         req.flash('inputErrors', JSON.stringify(err));
         if (body.object_id) {
-          return res.redirect(`/learning-object/single/${learningObject._id}`);
+          return res.redirect(`/learning-object/single/${learningObject._id}?${query}`);
         }
-        return res.redirect('/learning-object/create');
+        return res.redirect(`/learning-object/create?${query}`);
       }
       let successMsg = '';
       if (body.object_id) {
@@ -167,7 +179,13 @@ module.exports = {
         return res.redirect(`/learning-object/details/${results.lo._id}`);
       }
       req.session.lo = results.lo;
-      return res.render('learning-object/single', { error: err, data: results });
+      return res.render('learning-object/single', {
+        error: err,
+        data: mergeCheckboxData({
+          options: results,
+          values: Object.keys(req.query).length === 0 ? results.lo : req.query,
+        }, results),
+      });
     });
   },
   getLearningObjectDetails(req, res) {
