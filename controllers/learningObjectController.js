@@ -87,10 +87,8 @@ module.exports = {
       license_description: body.license_description,
       file: body.file_name ? JSON.parse(body.file_name) : null,
       file_url: body.file_url ? body.file_url : null,
+      approved: req.user.role === 'ADMIN',
     };
-    if (req.user.role === 'ADMIN') {
-      learningObject.approved = true;
-    }
     learningObject = new LearningObject(learningObject);
     return learningObject.save((err) => {
       if (err) {
