@@ -57,6 +57,11 @@ module.exports = {
       inputErrors.errors.message.message = 'Insira uma mensagem!';
       hasErrors = true;
     }
+    if (!req.body.email) {
+      inputErrors.errors.email = {};
+      inputErrors.errors.email.message = 'Insira seu email de contato!';
+      hasErrors = true;
+    }
     if (hasErrors) {
       req.flash('inputErrors', JSON.stringify(inputErrors));
       req.flash('inputs', req.body);
@@ -66,7 +71,7 @@ module.exports = {
     const mailOptions = {
       to: 'edumpampa@gmail.com',
       subject: req.body.subject,
-      html: req.body.message,
+      html: req.body.message + `<p>Email de contato: ${req.body.email}</p>`,
     };
     return email.sendMail(mailOptions, (error) => {
       if (error) {

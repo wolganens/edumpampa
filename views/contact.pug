@@ -24,6 +24,10 @@ block content
 				option(value="Outro" selected=inputs && (inputs.subject == "Outro"))
 					| Outro
 		.form-group
+			label(for="email")
+				| Email
+			input(class="form-control", name="email", value=inputs && inputs.email, required, placeholder="Digite seu email para contato")
+		.form-group
 			lanel(for="message")
 				| Mensagem
 			textarea(class="form-control", name="message", required, placeholder="Insira sua mensagem de contato")
