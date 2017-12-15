@@ -58,7 +58,7 @@ module.exports = {
     ].forEach((prop) => {
       data[prop] = {
         options: options[prop],
-        values: values[prop],
+        values: typeof values[prop] === 'string' ? values[prop].split(' ') : values[prop],
       };
     });
 
