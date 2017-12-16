@@ -243,10 +243,7 @@ module.exports = {
       }
       return res.render('admin/reports/learning-objects', {
         title: 'Relatórios OA - EduMPampa',
-        data: mergeCheckboxData({
-          options: results,
-          values: {},
-        }, results),
+        data: mergeCheckboxData({ options: results }, results),
         activetab: 'OA\'s',
       });
     });

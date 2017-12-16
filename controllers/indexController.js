@@ -22,10 +22,7 @@ module.exports = {
       res.render('index', {
         title: 'Repositório de Objetos de Aprendizagem',
         error: err,
-        data: mergeCheckboxData({
-          options: results,
-          values: {},
-        }, results),
+        data: mergeCheckboxData({ options: results }, results),
       });
     });
   },

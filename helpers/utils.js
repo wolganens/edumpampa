@@ -27,7 +27,7 @@ module.exports = {
       return 0;
     });
   },
-  mergeCheckboxData({ options, values }, dataSource = {}) {
+  mergeCheckboxData({ options, values = {} }, dataSource = {}) {
     /* This will take the list of checkbox names as "options",
      * the list of checked checkboxes as "values" and it will
      * group together this values into "dataSource".
