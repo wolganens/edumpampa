@@ -4,6 +4,7 @@ block tab-content
   #users.tab-pane.active(role="tabpanel")
     form(action="/admin/reports/users", method="get")
       include ../../components/user-features-panel
+      +ufPanels(data)
       button(type="submit").btn.btn-primary
         | Gerar relatório
   #profile.tab-pane(role="tabpanel") ...

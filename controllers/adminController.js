@@ -148,7 +148,7 @@ module.exports = {
       },
     }, (err, results) => {
       res.render('admin/reports/index', {
-        data: results,
+        data: mergeCheckboxData({ options: results }, results),
         title: 'Relatórios - EduMPampa',
         activetab: 'Usuários',
       });

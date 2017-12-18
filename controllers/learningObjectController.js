@@ -104,11 +104,11 @@ module.exports = {
     return learningObject.save((err) => {
       if (err) {
         const query = querystring.stringify({
-          teaching_levels: listify(body['teaching_levels[]']).join(' '),
-          axes: listify(body['axes[]']).join(' '),
-          accessibility_resources: listify(body['accessibility_resources[]']).join(' '),
-          contents: listify(body['contents[]']).join(' '),
-          resources: listify(body['resources[]']).join(' '),
+          teaching_levels: body['teaching_levels[]'],
+          axes: body['axes[]'],
+          accessibility_resources: body['accessibility_resources[]'],
+          contents: body['contents[]'],
+          resources: body['resources[]'],
         });
         req.flash('inputErrors', JSON.stringify(err));
         if (body.object_id) {

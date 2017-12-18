@@ -21,6 +21,7 @@ block content
             | Data de Nascimento *
           input(type="text", value=(inputs && inputs.birthday) || (data.user ? data.user.getFormatedBirthday: null), name="birthday",id="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
     include ../components/user-features-panel
+    +ufPanels(data)
     .panel.panel-default
       .panel-heading
         | Identificação da Instituição *
