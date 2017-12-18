@@ -28,8 +28,7 @@ module.exports = {
   getCreate(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');      
     }
     async.parallel({
       accessibility_resources(callback) {
