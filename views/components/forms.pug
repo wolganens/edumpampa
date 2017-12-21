@@ -1,0 +1,8 @@
+mixin formGroup(label, name, value)
+	.form-group
+		label(for=name)=label
+		block
+
+mixin inputText(label, name, value, placeholder)
+	+formGroup(label, name, value)
+		input.form-control(type='text', name=name, id=name, value=value, placeholder=placeholder)
