@@ -1,5 +1,4 @@
 extends ../layout
-include ../components/forms
 
 block content
   #centered-content
@@ -9,5 +8,4 @@ block content
       | Para gerar um senha temporária, insira seu email de acesso e clique em enviar.
     form(action="/account/forgot-pw",method="post")
       +inputText('Email de acesso', 'email', null, 'Digite seu email de acesso')
-      .form-group
-        button(type="submit", value="Acessar",class="btn btn-primary btn-block") Enviar
+      +submit('Enviar')(class='btn-block')      
