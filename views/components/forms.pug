@@ -1,11 +1,7 @@
-mixin formGroup(label, name, value)
-	.form-group
-		label(for=name)=label
-		block
-
 mixin inputText(label, name, value, placeholder)
-	+formGroup(label, name, value)
-		input.form-control(class=attributes.class, type='text', name=name, id=name, value=value, placeholder=placeholder)
+  .form-group
+    label(for=name)= label
+    input.form-control(type='text', name=name, id=name, value=value, placeholder=placeholder)
 
-mixin submit(text)
-	button(type='submit', class=`btn btn-primary ${attributes.class}`)=text
+mixin submit(text, className)
+  button(type='submit', class=`btn btn-primary ${className}`)= text
