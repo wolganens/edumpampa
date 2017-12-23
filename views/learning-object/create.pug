@@ -2,10 +2,8 @@ extends ../layout
 include ../components/forms
 block content
   h3
-    | Cadastrar Objeto de Aprendizagem
-    | !{JSON.stringify(post)}
+    | Cadastrar Objeto de Aprendizagem    
   form(action="/learning-object/create", method="post", encType="multipart/form-data")    
-    | !{JSON.stringify(errors)}
     .panel.panel-default
       .panel-heading
         | Dados Gerais
