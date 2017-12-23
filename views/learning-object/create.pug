@@ -1,39 +1,27 @@
 extends ../layout
-
+include ../components/forms
 block content
   h3
     | Cadastrar Objeto de Aprendizagem
-  form(action="/learning-object/create", method="post", encType="multipart/form-data")
+    | !{JSON.stringify(post)}
+  form(action="/learning-object/create", method="post", encType="multipart/form-data")    
+    | !{JSON.stringify(errors)}
     .panel.panel-default
       .panel-heading
         | Dados Gerais
       .panel-body
-        .form-group
-          label(for="title")
-            | Título *
-          input(type="text", id="title", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=inputs ? inputs.title : null)
-        .form-group
-          label(for="description")
-            | Descrição *
-          textarea(type="text", id="description", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control")
-            if inputs
-              | !{inputs.description}
-        .form-group
-          label(for="authors")
-            | Autores *
-          input(type="text", id="authors", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=inputs ? inputs.authors : null)
-        .form-group
-          label(for="year")
-            | Ano de autoria *
-          input(type="text", id="year", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
-    include ../components/lo-panels
-    +loPanels(data)
+        +input('Título *', 'title', post && post.title, 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', post && post.description, 'Informe a descrição do objeto')(required=true)
+        +input('Autores *', 'authors', post && post.authors, 'Informe o nome dos autores do objeto')(required=true)        
+        +input('Ano de autoria', 'year', post && post.year, 'Informe o ano de autoria do objeto')(required)        
+    include ../components/lo-panels    
+    +loPanels(data, post)
 
     include ../components/lo-cont-res-panels
-    +crPanels(data)
+    +crPanels(data, post)
 
     include ../components/licenses-form
-    include ../components/file-form
+    //- include ../components/file-form
     .form-group
       button(type="submit", class="btn-lg btn btn-primary pull-right")
         | Cadastrar

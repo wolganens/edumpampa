@@ -3,7 +3,7 @@
 module.exports = {
   port: 5000,
   hostname: '127.0.0.1',
-  baseUrl: 'http://localhost:5000',
+  baseUrl: 'http://localhost:3000',
   mongodb: {
     uri: 'mongodb://127.0.0.1:27017/edumpampa',
   },

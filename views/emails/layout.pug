@@ -2,13 +2,15 @@ table(style="width: 600px;margin: 0 auto;font-family: Arial, Helvetica, sans-ser
   tbody
     tr
       td(style="padding: 15px;background-color: green;color: white;font-size: 25px;")
-        | EduMPampa - Redefinir Senha
+        block title
     tr
       td(style="padding: 15px;font-size: 18px;")
+        block body
         p
           | Olá !{name}! Você solicitou o envio de uma nova senha de acesso ao EduMPampa, sua nova senha de acesso é:
         p
           strong !{password}
+          
         img(src="https://edumpampa.herokuapp.com/images/logo.png", style="width: 231px;margin: 0 auto;display: block;")
         p(style="text-align: center;font-size: 14px;background-color: green;display: block;padding: 10px;color: white;")
           | Atenciosamente: Equipe EduMPampa -

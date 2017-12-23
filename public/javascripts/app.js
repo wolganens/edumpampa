@@ -126,7 +126,7 @@ jQuery(document).ready(function($) {
     	$("#irbusca").focus()
     	document.getElementById("irbusca").focus();
     })
-    var inputErrors = document.getElementById('input-errors');
+    /*var inputErrors = document.getElementById('input-errors');
     if(inputErrors) {
     	var jsonErrors = JSON.parse(inputErrors.textContent);    	
     	console.log(jsonErrors);
@@ -139,7 +139,7 @@ jQuery(document).ready(function($) {
     		}
     		console.log(input)
     	}
-    }
+    }*/
     var messages = document.getElementById('messages');
     if (messages) {    	
     	messages.focus();

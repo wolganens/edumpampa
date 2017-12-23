@@ -1,7 +1,7 @@
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
-const querystring = require('querystring');
+// const querystring = require('querystring');
 const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
@@ -12,25 +12,17 @@ const Resources = require('../models/resources');
 const Licenses = require('../models/licenses');
 const ac = require('../config/roles');
 const email = require('../config/email');
+const pug = require('pug');
 const config = require('../config/index');
 const { mergeCheckboxData } = require('../helpers/utils');
 
-function listify(val) {
-  if (!val) {
-    return [];
-  }
-  if (Array.isArray(val)) {
-    return val;
-  }
-  return [val];
-}
 module.exports = {
   getCreate(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
+      return res.status(403).send('Você não tem permissão!');
     }
-    async.parallel({
+    return async.parallel({
       accessibility_resources(callback) {
         AccessibilityResources.find(callback);
       },
@@ -52,91 +44,56 @@ module.exports = {
     }, (err, results) => {
       res.render('learning-object/create', {
         error: err,
-        data: mergeCheckboxData({
-          options: results,
-          values: req.query,
-        }, results),
+        data: results,
         title: 'Cadastro de OA - EduMPampa',
       });
     });
   },
   postCreate(req, res) {
-    let permission;
-    /* Se um objeto estiver sendo criado (não atualizado) */
-    if (!req.session.lo) {
-      /* Verifica se o papel do usuário permite que o mesmo crie seu OA */
-      permission = ac.can(req.user.role).createOwn('learningObject');
-    } else {
-      /* Caso um OA esteja sendo atualizado, verifica se é o dono do mesmo que está atualizando */
-      const userOwnsOa = req.session.lo.owner.toString() === req.user._id.toString();
-      if (userOwnsOa) {
-        permission = userOwnsOa && ac.can(req.user.role).updateOwn('learningObject');
-      } else {
-        /* Se não for o dono do OA que está atualizando, verifica se o usuário tem permissão
-        para atualizar qualquer OA */
-        permission = ac.can(req.user.role).updateAny('learningObject');
-      }
-    }
+    const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
-    const { body } = req;
-    let learningObject = {
-      owner: req.user._id,
-      title: body.title,
-      description: body.description,
-      license_owner: body.license_owner,
-      authors: body.authors,
-      year: body.year,
-      teaching_levels: listify(body['teaching_levels[]']),
-      axes: listify(body['axes[]']),
-      accessibility_resources: listify(body['accessibility_resources[]']),
-      content: listify(body['contents[]']),
-      resources: listify(body['resources[]']),
-      license: body.license,
-      license_description: body.license_description,
-      file: body.file_name ? JSON.parse(body.file_name) : null,
-      file_url: body.file_url ? body.file_url : null,
-      approved: req.user.role === 'ADMIN',
-    };
-    learningObject = new LearningObject(learningObject);
+    const lo = req.body;    
+    lo.owner = req.user._id;
+    
+    if (lo.file_name) {
+      lo.file = JSON.parse(lo.file_name);
+    } else {
+      lo.file_url = lo.file_url;
+    }
+
+    let successMsg;
+    if (req.user.role === 'ADMIN') {
+      lo.approved = true;
+      successMsg = ' aprovado ';
+    } else {
+      successMsg = ' submetido para aprovação ';
+    }
+
+    const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
       if (err) {
-        const query = querystring.stringify({
-          teaching_levels: body['teaching_levels[]'],
-          axes: body['axes[]'],
-          accessibility_resources: body['accessibility_resources[]'],
-          contents: body['contents[]'],
-          resources: body['resources[]'],
-        });
-        req.flash('inputErrors', JSON.stringify(err));
-        if (body.object_id) {
-          return res.redirect(`/learning-object/single/${learningObject._id}?${query}`);
-        }
-        return res.redirect(`/learning-object/create?${query}`);
+        req.session.errors = err.errors;
+        req.session.post = req.body;
+        return res.redirect('back');
       }
-      let successMsg = '';
-      if (body.object_id) {
-        successMsg = 'Objeto atualizado com sucesso!';
-      } else if (req.user.role === 'ADMIN') {
-        successMsg = 'Objeto cadastrado com sucesso!';
-      } else {
-        successMsg = 'Objeto submetido para aprovação com sucesso!';
-      }
+      successMsg = `Objeto ${successMsg} com sucesso!`;
       const mailOptions = {
         to: 'edumpampa@gmail.com',
         subject: 'Novo OA submetido para aprovação',
-        html:
-                `   <p>O usuário ${req.user.name} submeteu um OA chamado ${learningObject.title} para aprovação: </p>
-                    <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
-                `,
+        html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
+          user: req.user.name,
+          title: learningObject.title,
+          lo_id: learningObject._id,
+          url: config.baseUrl,
+        }),
       };
       return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
           return res.send(mailErr);
-        }
-        delete req.session.lo;
-        req.flash('success_messages', successMsg);
+        }        
+        res.locals.success_messages = successMsg;
         return res.redirect(`/learning-object/single/${learningObject._id}`);
       });
     });

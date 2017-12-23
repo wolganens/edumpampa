@@ -1,4 +1,4 @@
-mixin panel(title, inputName, id, options, values)
+mixin panel(title, inputName, id, checkboxes, values)
   .panel.panel-default
     .panel-heading
       .checkbox
@@ -8,7 +8,7 @@ mixin panel(title, inputName, id, options, values)
             | #{title}
     .panel-body
       fieldset
-        each option in options
+        each checkbox in checkboxes
           .checkbox.block
             label
               input(
@@ -16,8 +16,8 @@ mixin panel(title, inputName, id, options, values)
                 name=`${inputName}[]`,
                 aria-labelledby=(`${id}-label`),
                 class='checked-string',
-                value=option._id,
-                checked=(values && values.indexOf(option._id.toString()) !== -1)
+                value=checkbox._id,
+                checked=values && values.indexOf(checkbox._id.toString()) != -1
               )
               span
-                | !{option.name}
+                | !{checkbox.name}

@@ -1,11 +1,11 @@
 include panel
 
-mixin loPanels({ teaching_levels, axes, accessibility_resources })
+mixin loPanels({ teaching_levels, axes, accessibility_resources }, values)
   .row
     input(type='hidden', name='checked_string', value='', id='checked-string')
     .col-md-5
-      +panel('Níveis de Ensino', 'teaching_levels', 'teach-level', teaching_levels.options, teaching_levels.values)
+      +panel('Níveis de Ensino', 'teaching_levels', 'teach-level', teaching_levels, values && values.teaching_levels)
     .col-md-3
-      +panel('Eixos', 'axes', 'axes', axes.options, axes.values)
+      +panel('Eixos', 'axes', 'axes', axes, values && values.axes)
     .col-md-4
-      +panel('Recursos de Acessibilidade', 'accessibility_resources', 'access-res', accessibility_resources.options, accessibility_resources.values)
+      +panel('Recursos de Acessibilidade', 'accessibility_resources', 'access-res', accessibility_resources, values && values.accessibility_resources)

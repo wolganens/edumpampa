@@ -190,7 +190,7 @@ module.exports = {
         const mailOptions = {
           to: user.email,
           subject: 'Senha de acesso!',
-          html: pug.renderFile(path.join(__dirname, '..', 'views', 'account/forgot-pw-after.pug'), {
+          html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/password-reset.pug'), {
             name: user.name,
             password,
           }),

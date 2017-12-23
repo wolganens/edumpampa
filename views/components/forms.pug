@@ -1,11 +1,42 @@
-mixin formGroup(label, name, value)
-	.form-group
-		label(for=name)=label
-		block
+mixin formGroup(label, name)  
+  .form-group(class=errors && errors[name] ? 'has-error': null)
+    if label
+      label(for=name)=label
+    block
 
-mixin inputText(label, name, value, placeholder)
-	+formGroup(label, name, value)
-		input.form-control(class=attributes.class, type='text', name=name, id=name, value=value, placeholder=placeholder)
+mixin input(label, name, value, placeholder)
+  -
+    attributes.name = name
+    attributes.value = value
+    attributes.placeholder = placeholder
+    attributes.type = attributes.type || 'text'
+  +formGroup(label, name)
+    input.form-control&attributes(attributes)
+    if errors && errors[name]
+      .alert.alert-danger = !{errors[name].message}
+
+mixin textarea(label, name, value, placeholder)
+  -
+    attributes.name = name
+    attributes.value = value
+    attributes.placeholder = placeholder
+    attributes.type = attributes.type || 'text'
+  +formGroup(label, name)
+    textarea.form-control&attributes(attributes)
+      | !{value}
+    if errors && errors[name]
+      .alert.alert-danger = !{errors[name].message}
+
+mixin select(label, name, selected, placeholder, options, valText)
+  -
+    attributes.name = name
+    attributes.selected = selected
+    attributes.placeholder = placeholder
+  +formGroup(label)
+    select.form-control(name=name, id=id)&attributes(attributes)
+      each option in options
+        option(value=option[val], selected=option[val]===selected)=option[text]
 
 mixin submit(text)
-	button(type='submit', class=`btn btn-primary ${attributes.class}`)=text
+  +formGroup()
+    button(type='submit', class=`btn btn-primary ${attributes.class}`)=text
