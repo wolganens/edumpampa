@@ -74,6 +74,7 @@ module.exports = {
     const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
       if (err) {
+        console.log(err)
         req.session.errors = err.errors;
         req.session.post = req.body;
         return res.redirect('back');
