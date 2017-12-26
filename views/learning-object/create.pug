@@ -15,7 +15,7 @@ block content
         +input('Título *', 'title', post && post.title, 'Informe o título do objeto')(required=true)
         +textarea('Descrição *', 'description', post && post.description, 'Informe a descrição do objeto')(required=true)
         +input('Autores *', 'authors', post && post.authors, 'Informe o nome dos autores do objeto')(required=true)        
-        +input('Ano de autoria', 'year', post && post.year, 'Informe o ano de autoria do objeto')(required)
+        +input('Ano de autoria *', 'year', post && post.year, 'Informe o ano de autoria do objeto')(required)
 
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
     //- do objeto de aprendizagem a ser cadastrado
@@ -74,7 +74,7 @@ block content
               )
     +panel-default('Licença')
       +select(
-        'Licença',
+        'Licença *',
         'license',
         post && post.license, 
         'Selecione uma licença',
