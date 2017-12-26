@@ -6,15 +6,23 @@
 //- Inicialmente os paineis estavam atrelados aos checkbox dos objetos
 //- de aprendizagem, mas tendo em vista que os metadados dos objetos podem
 //- mudar a sua forma de estarem expostos, foram "desacoplados" dos paineis
-mixin panel(type, title)
+mixin panel(type, title, checkbox)
   .panel(class=`panel-${type}`)
-    if title !== undefined
-      .panel-heading
+    .panel-heading
+      if checkbox
+        .checkbox
+          label
+            input.panel-checkall(data-target=checkbox, type='checkbox')
+            h3.panel-title= title
+      else
         h3.panel-title= title
-      .panel-body
-        block
+    .panel-body
+      block
 
 //- panel-default
-mixin panel-default(title)
-  +panel('default', title)
+//- O segundo parâmetro define se o painel tem um checkbox para 
+//- "marcar todos" os checkbox dentro de seu corpo, este parâmetro
+//- deve conter o name do checkbox
+mixin panel-default(title, checkbox)
+  +panel('default', title, checkbox)
     block

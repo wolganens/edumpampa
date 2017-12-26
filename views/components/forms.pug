@@ -35,7 +35,20 @@ mixin select(label, name, selected, placeholder, options, valText)
   +formGroup(label)
     select.form-control(name=name, id=id)&attributes(attributes)
       each option in options
-        option(value=option[val], selected=option[val]===selected)=option[text]
+        option(value=option[valText.val], selected=option[valText.val].toString()===selected)=option[valText.text]
+
+//- O parametro checkeds recebe o vetor de valores marcados
+//- o valor do checkbox precisa estar dentro desse vetor para
+//- que o mesmo esteja marcado
+mixin checkbox(label, name, value, checkeds)
+  -    
+    attributes.name = name    
+    attributes.value = value
+    attributes.checked = checkeds && checkeds.indexOf(value.toString()) != -1
+  .checkbox
+    label
+      input(type='checkbox')&attributes(attributes)
+      span=label
 
 mixin submit(text)
   +formGroup()
