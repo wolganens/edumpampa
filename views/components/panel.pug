@@ -13,3 +13,8 @@ mixin panel(type, title)
         h3.panel-title= title
       .panel-body
         block
+
+//- panel-default
+mixin panel-default(title)
+  +panel('default', title)
+    block
