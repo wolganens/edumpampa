@@ -1,24 +1,16 @@
 include ./forms
-.panel.panel-default
-  .panel-heading
-    | Licenças
-  .panel-body
-    +select('Licença', 'license', (post && post.license.toString()) || (data.lo && data.lo.license.toString()),  'Selecione uma licença', data.licenses, {val: '_id', text: 'name'})(required=true)
-    //- .form-group
-    //-   label(for="license")
-    //-     | Licença
-    //-   select(name="license", id="license", required, class="form-control")
-    //-     option(value="")
-    //-       | Selecione uma licença
-    //-     each license in data.licenses
-    //-       option(data-img=license.image, data-deed=license.deed, data-legal=license.legal, data-description=license.description, value=license._id, selected=(inputs && inputs.license.toString() == license._id) || (data.lo && license._id == data.lo.license.toString()) || (license.name == 'Atribuição-CompartilhaIgual CC BY-SA'))
-    //-         | !{license.name}
-    +input('Detentor dos Direitos Autorais *', license_owner, (post && post.license_owner.toString()) || (data.lo && data.lo.license_owner), 'Informe o nome do detentor dos direitos autorais do objeto')(required=true)    
-    .form-group
-      label(for="license_description")
-        | Descrição da licença *
-      textarea(type="text", id="license_description", placeholder="Descrição da licença de uso", required="required" name="license_description", class="form-control")
-        | !{(inputs && inputs.license_description) || (data.lo && data.lo.license_description)}
+mixin license-form({licenses}, data)
+  input(type='hidden', id="license-objects", value=JSON.stringify(licenses))
+  +panel-default('Licença')
+    +select(
+      'Licença *',
+      'license',
+      data && data.license, 
+      'Selecione uma licença',
+      licenses,
+      {val: '_id', text: 'name'})(required=true)
+    +input('Detentor dos Direitos Autorais *', 'license_owner', data && data.license_owner, 'Informe o nome do detentor dos direitos autorais do objeto')(required=true)      
+    +textarea('Descrição da Licença *', 'license_description', data && data.license_description, 'Descrição da licença de uso')    
     #license-details
       img#license-img
       a#license-deed(target="_blank", title="Ver descrição completa da licensa")

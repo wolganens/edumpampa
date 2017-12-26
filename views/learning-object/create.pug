@@ -18,8 +18,7 @@ block content
         +input('Ano de autoria *', 'year', post && post.year, 'Informe o ano de autoria do objeto')(required)
 
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
-    //- do objeto de aprendizagem a ser cadastrado
-    p=JSON.stringify(post.teaching_levels && post.teaching_levels.indexOf("59ffd2c645aeca59f1c9863f") != -1)
+    //- do objeto de aprendizagem a ser cadastrado    
     .row
       .col-md-5
         +panel-default('Níveis de Ensino', 'teaching_levels[]')
@@ -72,17 +71,15 @@ block content
                 resource._id,
                 post && post.resources
               )
-    +panel-default('Licença')
-      +select(
-        'Licença *',
-        'license',
-        post && post.license, 
-        'Selecione uma licença',
-        data.licenses,
-        {val: '_id', text: 'name'})(required=true)
-      +input('Detentor dos Direitos Autorais *', 'license_owner', post && post.license_owner, 'Informe o nome do detentor dos direitos autorais do objeto')(required=true)
+    //- A lista de licenças disponíveis está na variavel data.licenses
+    //- e na variavel post estão as informações submetidas previamente pelo usuário
+    //- dos campos da licença
+    include ../components/licenses-form
+    +license-form(data, post)
 
     include ../components/file-form
     //- Botão de submissão do formulário    
     +submit('Cadastrar')(class="btn-lg pull-right")    
     .clearfix
+block scripts
+  script(src="/javascripts/licenses.js")
