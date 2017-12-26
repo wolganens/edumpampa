@@ -80,6 +80,8 @@ block content
         'Selecione uma licença',
         data.licenses,
         {val: '_id', text: 'name'})(required=true)
+
+    include ../components/file-form
     //- Botão de submissão do formulário    
     +submit('Cadastrar')(class="btn-lg pull-right")    
     .clearfix
