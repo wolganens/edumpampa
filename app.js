@@ -72,12 +72,28 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res, next) => {
-  res.locals.post = req.session.post;  
-  res.locals.errors = req.session.errors;
+  /*
+  * A o campo post dentro de locals serve para manter dados provenientes
+  * de submissões de formulários
+  */
+  res.locals.post = req.session.post || {};  
+  /*
+  * O campo errors dentro de locals serve para exibir os erros em views,
+  * por exemplo: erros de validação de campos
+  */
+  res.locals.errors = req.session.errors || [];
   delete req.session.post;
   delete req.session.errors;
   res.locals.app = config.app;
+  /*
+  * currentUser é utilizada para exibir dados do usuário autenticado no sistema,
+  * por exemplo: nome do usuário na barra principal
+  */
   res.locals.currentUser = req.user;
+  /*
+  * Url atual da aplicação para utilizar na paginação de consultas e destacar 
+  * abas (bootstrap tabs) ativas
+  */
   res.locals.currentPath = req.url;  
   next();
 });
