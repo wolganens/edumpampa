@@ -56,6 +56,7 @@ module.exports = {
     }
     const lo = req.body;    
     lo.owner = req.user._id;
+    console.log(lo);
     
     if (lo.file_name) {
       lo.file = JSON.parse(lo.file_name);
@@ -127,22 +128,35 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
+      /*
+      * Verifica se o usuário autenticado tem permissão para editar o 
+      * objeto de aprendizagem
+      */
       if (req.user) {
-        const permission = (req.user._id.toString() === results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+        let permission;
+        /*
+        * Verifica se o usuário autenticado é "dono"(owner) do OA
+        */
+        if (req.user._id.toString() === results.lo.owner.toString()) {
+          permission = ac.can(req.user.role).updateOwn('learningObject');
+        } else {
+          /*
+          * Se o usuário autenticado não for dono do OA, então verifica se quem está
+          * tentando acessar o OA tem permissão para alterar qualquer OA
+          */
+          permission = ac.can(req.user.role).updateAny('learningObject');
+        }        
+        
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
+        return res.render('learning-object/single', {          
+          data: results,
+          title: 'Atualização de OA - EduMPampa',
+        });
       } else {
         return res.redirect(`/learning-object/details/${results.lo._id}`);
       }
-      req.session.lo = results.lo;
-      return res.render('learning-object/single', {
-        error: err,
-        data: mergeCheckboxData({
-          options: results,
-          values: Object.keys(req.query).length === 0 ? results.lo : req.query,
-        }, results),
-      });
     });
   },
   getLearningObjectDetails(req, res) {

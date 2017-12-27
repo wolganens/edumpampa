@@ -21,6 +21,7 @@ jQuery(document).ready(function($) {
 			var selected = select.find(':selected').val();
 			selected = lookup[selected]
 			var description = selected.description || null;
+			console.log(description)
 			$("#license_description").text(description);
 			if (description) {
 				lic_img.src = selected.image;

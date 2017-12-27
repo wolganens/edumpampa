@@ -1,37 +1,87 @@
 extends ../layout
-
+include ../components/forms
+include ../components/panels
+//- OBS: A variavel post, como o nome já sugere, mantem os dados que foram submetidos
+//- através de uma requisição post, nela estão armazenados os valores que o usuário já
+//- tentou submeter anteriormente. Nesta página por ser utilizada para UPDATES, ou 
+//- os dados vem do objeto a ser atualizado, ou vem de uma requisição post anterior
+//- ou seu valor está armazneado na variavel post
 block content
-  form(action="/learning-object/create", method="post", encType="multipart/form-data")
-    .panel.panel-default
-      .panel-heading
-        | Dados Gerais
-      .panel-body
-        .form-group
-          label
-          | Título *
-          input(type="text", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=data.lo.title)
-        .form-group
-          label
-          | Descrição *
-          textarea(type="text", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control", value=data.lo.description)
-            | !{data.lo.description}
-        .form-group
-          label
-          | Autores *
-          input(type="text", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=data.lo.authors)
-        .form-group
-          label
-          | Ano de autoria *
-          input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=data.lo.year)
-    include ../components/lo-panels
-    +loPanels(data)
+  h3
+    | Cadastrar Objeto de Aprendizagem    
+  form(action="/learning-object/update", method="post", encType="multipart/form-data")    
+    
+    //- Formulário de dados gerais do objeto de aprendizagem
+    +panel-default('Dados Gerais')    
+        +input('Título *', 'title', post.title || data.lo.title, 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', post.description || data.lo.description, 'Informe a descrição do objeto')(required=true)
+        +input('Autores *', 'authors', post.authors || data.lo.authors, 'Informe o nome dos autores do objeto')(required=true)        
+        +input('Ano de autoria *', 'year', post.year || data.lo.year, 'Informe o ano de autoria do objeto')(required)
 
-    include ../components/lo-cont-res-panels
-    +crPanels(data)
+    //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
+    //- do objeto de aprendizagem a ser cadastrado    
+    .row
+      .col-md-5
+        +panel-default('Níveis de Ensino', 'teaching_levels[]')
+          fieldset
+            each teaching_level in data.teaching_levels            
+              +checkbox(
+                teaching_level.name,
+                'teaching_levels[]',
+                teaching_level._id,
+                post.teaching_levels || data.lo.teaching_levels
+              )
+      .col-md-3
+        +panel-default('Eixos', 'axes[]')
+          fieldset
+            each axe in data.axes              
+              +checkbox(
+              axe.name,
+              'axes[]',
+              axe._id,
+              post.axes || data.lo.axes
+            )
+      .col-md-4
+        +panel-default('Recursos de Acessibilidade', 'accessibility_resources[]')
+          fieldset
+            each accessibility_resource in data.accessibility_resources              
+              +checkbox(
+                accessibility_resource.name,
+                'accessibility_resources[]',
+                accessibility_resource._id,
+                post.accessibility_resources || data.lo.accessibility_resources
+              )
+    .row
+      .col-md-6
+        +panel-default('Conteúdos', 'content[]')
+          fieldset
+            each content in data.contents
+              +checkbox(
+                content.name,
+                'content[]',
+                content._id,
+                post.content || data.lo.content
+              )
+      .col-md-6
+        | !{JSON.stringify(data.lo.contents)}
+        +panel-default('Recursos', 'resources[]')
+          fieldset
+            each resource in data.resources
+              +checkbox(
+                resource.name,
+                'resources[]',
+                resource._id,
+                post.resources || data.lo.resources
+              )
+    //- A lista de licenças disponíveis está na variavel data.licenses
+    //- As informações do OA sendo atualizado estão em data.lo
+    include ../components/licenses-form    
+    +license-form(data)
 
-    include ../components/licenses-form
     include ../components/file-form
-    .form-group
-      button(type="submit", class="btn-lg btn btn-primary pull-right")
-        | Cadastrar
-      .clearfix
+    +file-form(data)    
+    //- Botão de submissão do formulário    
+    +submit('Cadastrar')(class="btn-lg pull-right")    
+    .clearfix
+block scripts
+  script(src="/javascripts/licenses.js")

@@ -52,14 +52,14 @@ block content
               )
     .row
       .col-md-6
-        +panel-default('Conteúdos', 'contents[]')
+        +panel-default('Conteúdos', 'content[]')
           fieldset
             each content in data.contents
               +checkbox(
                 content.name,
-                'contents[]',
+                'content[]',
                 content._id,
-                post && post.contents
+                post && post.content
               )
       .col-md-6
         +panel-default('Recursos', 'resources[]')
@@ -78,6 +78,7 @@ block content
     +license-form(data, post)
 
     include ../components/file-form
+    +file-form(post)
     //- Botão de submissão do formulário    
     +submit('Cadastrar')(class="btn-lg pull-right")    
     .clearfix
