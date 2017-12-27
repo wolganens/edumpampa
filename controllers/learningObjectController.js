@@ -55,8 +55,7 @@ module.exports = {
       return res.status(403).send('Você não tem permissão!');
     }
     const lo = req.body;    
-    lo.owner = req.user._id;
-    console.log(lo);
+    lo.owner = req.user._id;    
     
     if (lo.file_name) {
       lo.file = JSON.parse(lo.file_name);
@@ -74,8 +73,7 @@ module.exports = {
 
     const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
-      if (err) {
-        console.log(err)
+      if (err) {        
         req.session.errors = err.errors;
         req.session.post = req.body;
         return res.redirect('back');
@@ -99,6 +97,50 @@ module.exports = {
         return res.redirect(`/learning-object/single/${learningObject._id}`);
       });
     });
+  },
+  postUpdate(req, res) {  
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar o 
+    * objeto de aprendizagem
+    */
+    if (req.user) {
+      return LearningObject.findById(req.body.object_id, (err, lo) => {
+        let permission;
+        /*
+        * Verifica se o usuário autenticado é "dono"(owner) do OA
+        */
+        if (req.user._id.toString() === lo.owner.toString()) {
+          permission = ac.can(req.user.role).updateOwn('learningObject');
+        } else {
+          /*
+          * Se o usuário autenticado não for dono do OA, então verifica se quem está
+          * tentando acessar o OA tem permissão para alterar qualquer OA
+          */
+          permission = ac.can(req.user.role).updateAny('learningObject');
+        }
+        if (!permission.granted) {
+          return res.status(403).send('Você não tem permissão');
+        }
+        /*
+        * Atualiza os campos do OA pelos que vieram na requsição e depois salva o OA
+        */
+        Object.keys(req.body).forEach((field) => {
+          if (field !== '_id') {
+            lo[field] = req.body[field];
+          }
+        })
+        return lo.save(          
+          (err) => {
+            if (err) {
+              req.session.error_message = err;              
+            }
+            req.session.success_message = 'Objeto atualizado com sucesso!';
+            return res.redirect('back');
+          }
+        );
+      });
+    }
+    return res.redirect('/accounts/signin');
   },
   getLearningObject(req, res) {
     const { loId } = req.params;
@@ -145,16 +187,25 @@ module.exports = {
           * tentando acessar o OA tem permissão para alterar qualquer OA
           */
           permission = ac.can(req.user.role).updateAny('learningObject');
-        }        
-        
+        }
+        /*Se o usuário não tem permissão para editar o OA, então ele é redirecionado
+        para a página de detalhes do OA*/
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
+        /*
+        * Caso o usuário tenha permissão para editar o OA, o formulário de edição
+        * do OA é renderizado com as informações do OA em data.lo
+        */
         return res.render('learning-object/single', {          
           data: results,
           title: 'Atualização de OA - EduMPampa',
         });
       } else {
+        /*
+        * Se o usuário não está autenticado, então é redirecionado para 
+        * a página de detalhes do OA
+        */
         return res.redirect(`/learning-object/details/${results.lo._id}`);
       }
     });
