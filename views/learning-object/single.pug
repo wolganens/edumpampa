@@ -19,7 +19,8 @@ block content
         +input('Ano de autoria *', 'year', post.year || data.lo.year, 'Informe o ano de autoria do objeto')(required)
 
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
-    //- do objeto de aprendizagem a ser cadastrado    
+    //- do objeto de aprendizagem a ser atualizado, ou os dados vem de um post anterior
+    //- ou estão no objeto data.lo    
     .row
       .col-md-5
         +panel-default('Níveis de Ensino', 'teaching_levels[]')
