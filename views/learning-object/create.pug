@@ -1,6 +1,7 @@
 extends ../layout
 include ../components/forms
 include ../components/panels
+include ../components/lo-metadata-panels
 //- OBS: A variavel post, como o nome já sugere, mantem os dados que foram submetidos
 //- através de uma requisição post, nela estão armazenados os valores que o usuário já
 //- tentou submeter anteriormente. Nesta página por ser CREATE, ou um campo está vazio
@@ -19,58 +20,7 @@ block content
 
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
     //- do objeto de aprendizagem a ser cadastrado    
-    .row
-      .col-md-5
-        +panel-default('Níveis de Ensino', 'teaching_levels[]')
-          fieldset
-            each teaching_level in data.teaching_levels            
-              +checkbox(
-                teaching_level.name,
-                'teaching_levels[]',
-                teaching_level._id,
-                post && post.teaching_levels
-              )
-      .col-md-3
-        +panel-default('Eixos', 'axes[]')
-          fieldset
-            each axe in data.axes              
-              +checkbox(
-              axe.name,
-              'axes[]',
-              axe._id,
-              post && post.axes
-            )
-      .col-md-4
-        +panel-default('Recursos de Acessibilidade', 'accessibility_resources[]')
-          fieldset
-            each accessibility_resource in data.accessibility_resources              
-              +checkbox(
-                accessibility_resource.name,
-                'accessibility_resources[]',
-                accessibility_resource._id,
-                post && post.accessibility_resources
-              )
-    .row
-      .col-md-6
-        +panel-default('Conteúdos', 'content[]')
-          fieldset
-            each content in data.contents
-              +checkbox(
-                content.name,
-                'content[]',
-                content._id,
-                post && post.content
-              )
-      .col-md-6
-        +panel-default('Recursos', 'resources[]')
-          fieldset
-            each resource in data.resources
-              +checkbox(
-                resource.name,
-                'resources[]',
-                resource._id,
-                post && post.resources
-              )
+    +lo-metadata-panels(data)
     //- A lista de licenças disponíveis está na variavel data.licenses
     //- e na variavel post estão as informações submetidas previamente pelo usuário
     //- dos campos da licença

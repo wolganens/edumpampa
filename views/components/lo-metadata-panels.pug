@@ -1,0 +1,53 @@
+mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, lo })  
+  .row
+    .col-md-5
+      +panel-default('Níveis de Ensino', 'teaching_levels[]')
+        fieldset
+          each teaching_level in data.teaching_levels            
+            +checkbox(
+              teaching_level.name,
+              'teaching_levels[]',
+              teaching_level._id,
+              (post && post.teaching_levels) || (lo && lo.teaching_levels)
+            )
+    .col-md-3
+      +panel-default('Eixos', 'axes[]')
+        fieldset
+          each axe in data.axes              
+            +checkbox(
+            axe.name,
+            'axes[]',
+            axe._id,
+            (post && post.axes) || (lo && lo.axes)
+          )
+    .col-md-4
+      +panel-default('Recursos de Acessibilidade', 'accessibility_resources[]')
+        fieldset
+          each accessibility_resource in data.accessibility_resources              
+            +checkbox(
+              accessibility_resource.name,
+              'accessibility_resources[]',
+              accessibility_resource._id,
+              (post && post.accessibility_resources) || (lo && lo.accessibility_resources)
+            )
+  .row
+    .col-md-6
+      +panel-default('Conteúdos', 'content[]')
+        fieldset
+          each content in data.contents
+            +checkbox(
+              content.name,
+              'content[]',
+              content._id,
+              (post && post.content) || (lo && lo.content)
+            )
+    .col-md-6
+      +panel-default('Recursos', 'resources[]')
+        fieldset
+          each resource in data.resources
+            +checkbox(
+              resource.name,
+              'resources[]',
+              resource._id,
+              (post && post.teaching_levels) || (lo && lo.teaching_levels)
+            )
