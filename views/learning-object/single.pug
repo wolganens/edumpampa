@@ -62,8 +62,7 @@ block content
                 content._id,
                 post.content || data.lo.content
               )
-      .col-md-6
-        | !{JSON.stringify(data.lo.contents)}
+      .col-md-6        
         +panel-default('Recursos', 'resources[]')
           fieldset
             each resource in data.resources
