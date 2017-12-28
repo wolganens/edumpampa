@@ -49,5 +49,5 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, lo })
               resource.name,
               'resources[]',
               resource._id,
-              (post && post.teaching_levels) || (lo && lo.teaching_levels)
+              (post && post.resources) || (lo && lo.resources)
             )
