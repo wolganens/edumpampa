@@ -4,7 +4,6 @@ const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
 const email = require('../config/email');
-const { mergeCheckboxData } = require('../helpers/utils');
 
 module.exports = {
   getIndex(req, res) {
@@ -19,10 +18,10 @@ module.exports = {
         TeachingLevels.find(callback);
       },
     }, (err, results) => {
-      res.render('index', {
+      return res.render('index', {
         title: 'Repositório de Objetos de Aprendizagem',
         error: err,
-        data: mergeCheckboxData({ options: results }, results),
+        data: results
       });
     });
   },

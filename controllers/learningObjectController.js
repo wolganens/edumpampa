@@ -35,7 +35,7 @@ module.exports = {
       resources(callback) {
         Resources.find({}).sort('name').exec(callback);
       },
-      contents(callback) {
+      content(callback) {
         Contents.find({}).sort('name').exec(callback);
       },
       licenses(callback) {
