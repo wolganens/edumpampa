@@ -1,0 +1,37 @@
+mixin radioPanel(title, inputName, id, options, value, formGroupId, formGroupTitle, formGroupValue)
+  .panel.panel-default
+    .panel-heading
+      span(id=`${id}-label`)
+        | #{title}
+    .panel-body
+      fieldset
+        each option in options
+          .checkbox.block
+            label
+              input(
+                type='radio',
+                aria-labelledby=`${id}-label`,
+                name=inputName,
+                value=option._id,
+                checked=(value === option._id.toString())
+              )
+              span
+                | !{option.name}
+      .form-group
+        label(for=formGroupId)
+          | #{formGroupTitle}
+        input(
+          type='text',
+          class='form-control js-other',
+          value=(formGroupValue || '')
+          id=formGroupId,
+          name=formGroupId
+        )
+
+mixin ufPanels({ qualifications, occupation_areas, institutional_links })
+  +radioPanel('Formação', 'qualification_id', 'quali', qualifications.options, qualifications.values,
+    'qualification_text', 'Outra', qualifications.formGroupValue)
+  +radioPanel('Área de Atuação', 'occupation_area_id', 'occup-area', occupation_areas.options,
+    occupation_areas.values, 'occupation_area_text', 'Outra', occupation_areas.formGroupValue)
+  +radioPanel('Vínculo Institucional', 'institutional_link_id', 'instit-link', institutional_links.options,
+    institutional_links.values, 'institutional_link_text', 'Outro', institutional_links.formGroupValue)

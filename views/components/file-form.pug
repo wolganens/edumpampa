@@ -1,0 +1,14 @@
+include ../components/panels
+include ../components/forms
+mixin file-form({lo})
+  +panel-default('Arquivo')
+      .form-group
+        input(type="hidden" name="file_name" id="file_name", value=lo ? typeof(lo.file) != null ? JSON.stringify(lo.file) : '' :'')      
+        label(for="file")
+          | Arquivo (Indicado para arquivos de até 20MB)
+        #drop
+          p(class="text-center")
+            | Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
+          .fallback
+            input(type="file", id="file", class="form-control", name="file")
+      +textarea('URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)', 'file_url', post.file_url || (lo && lo.file_url) , 'URL do arquivo')    

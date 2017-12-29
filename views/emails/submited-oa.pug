@@ -1,0 +1,8 @@
+extends ./layout
+
+block title
+  p
+    | Submição de Objeto para aprovação
+block body
+  p O usuário #{user} submeteu um OA chamado #{title} para aprovação:
+  a(href=`${url}/admin/learning-object/manage/#${lo_id}`) Ver OA

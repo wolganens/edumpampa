@@ -90,27 +90,24 @@ html(lang='pt-br')
 									a(href="/account/signin") Login
 								li(class=currentPath == '/account/signup' ? 'active' : null)
 									a(href="/account/signup") Cadastro
-
-			if error_messages && error_messages.length > 0
-				.alert.alert-danger#messages(role="alert")
-					| !{error_messages}
-			if success_messages && success_messages.length > 0
-				.alert.alert-success#messages(role="alert")
-					| !{success_messages}
-			if inputErrors
-				.hidden#input-errors
-					| !{inputErrors}
-			main#irconteudo
-				block content
-			footer.text-center
-				ul
-					li
-						a(href="http://www.unipampa.edu.br", title="UNIPAMPA", target="_blank")
-							img(src="/images/u75.jpg", alt="Universidade Federal do Pampa", class="img-responsive pull-right")
-					li
-						a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
-							img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
-		script(src='/javascripts/jquery.min.js')
-		script(src='/javascripts/bootstrap.min.js')
-		script(src='/javascripts/app.js')
-		script(src='/javascripts/dropzone.min.js')
+      if error_messages && error_messages.length > 0
+        .alert.alert-danger#messages(role="alert")
+          | !{error_messages}
+      if success_messages && success_messages.length > 0
+        .alert.alert-success#messages(role="alert")
+          | !{success_messages}
+      main#irconteudo
+        block content
+      footer.text-center
+        ul
+          li
+            a(href="http://www.unipampa.edu.br", title="UNIPAMPA", target="_blank")
+              img(src="/images/u75.jpg", alt="Universidade Federal do Pampa", class="img-responsive pull-right")
+          li
+            a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
+              img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
+    script(src='/javascripts/jquery.min.js')
+    script(src='/javascripts/bootstrap.min.js')
+    script(src='/javascripts/app.js')
+    script(src='/javascripts/dropzone.min.js')
+    block scripts

@@ -1,21 +1,21 @@
 extends ../layout
 
 block content
-    #centered-content
-        h3 
-            | Login
-        form(action="/auth/signin",method="post")
-            .form-group
-                label(for="email")
-                    | Email de acesso
-                input(type="email", id="email", name="email", class="form-control", placeholder="Digite seu email de acesso")
-            .form-group
-                label(for="password")
-                    | Senha
-                input(type="password", id="password", name="password", class="form-control", placeholder="Digite sua senha")
-            .form-group                
-                button(type="submit", value="Acessar",class="btn btn-primary btn-block") Acessar
-        //- a(href="/auth/signin-google" class="loginBtn loginBtn--google")
-        //-     | Entrar com minha conta Google 
-        a(href="/account/forgot-pw", title="Clique para recuperar sua senha")
-            | Esqueci minha senha
+  #centered-content
+    h3
+      | Login
+    form(action="/auth/signin",method="post")
+      .form-group
+        label(for="email")
+          | Email de acesso
+        input(type="email", id="email", name="email", class="form-control", placeholder="Digite seu email de acesso")
+      .form-group
+        label(for="password")
+          | Senha
+        input(type="password", id="password", name="password", class="form-control", placeholder="Digite sua senha")
+      .form-group
+        button(type="submit", value="Acessar",class="btn btn-primary btn-block") Acessar
+    //- a(href="/auth/signin-google" class="loginBtn loginBtn--google")
+    //-     | Entrar com minha conta Google
+    a(href="/account/forgot-pw", title="Clique para recuperar sua senha")
+      | Esqueci minha senha

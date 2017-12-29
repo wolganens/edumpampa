@@ -1,90 +1,90 @@
 extends ../layout
 
-block content	
-	h3
-		| !{data.lo.title}
-	if data.lo.file_url
-		p
-			| URL do OA: 
-			if currentUser
-				a(href=data.lo.file_url)
-					| !{data.lo.file_url}
-			else
-				div.alert.alert-danger
-					strong.text-danger
-						| Apenas usuários cadastrados podem baixar arquivos!
-	if data.lo.file
-		.row
-			.col-md-4
-				p
-					|Nome do arquivo
-					div
-						strong
-							| !{data.lo.file.name}
-			.col-md-4
-				p
-					| Tamanho do arquivo
-					div
-						strong
-							| !{data.lo.file.size}
-			.col-md-4
-				p
-					|Download
-					div
-						if currentUser
-							a(href="/learning-object/download/" + data.lo._id, target="_blank", title="Baixar arquivo do objeto de aprendizagem")
-								| Download
-						else
-							.badge.alert-danger
-								| Apenas usuários cadastrados podem baixar arquivos!
-	p
-		strong
-			| Título
-	p
-		| !{ data.lo.title}
-	p
-		strong
-			| Descrição do recurso
-	p
-		| !{ data.lo.description}
-	p
-		strong
-			| Autor(es)
-	p
-		| !{data.lo.authors}
-	if data.lo.teaching_levels
-		p
-			strong 
-				| Níveis de ensino
-		each tlevel in data.lo.teaching_levels
-			p
-				| !{tlevel.name}
-	if data.lo.axes
-		p
-			strong 
-				| Eixos
-		each axe in data.lo.axes
-			p
-				| !{axe.name}
-	if data.lo.accessibility_resources
-		p
-			strong 
-				| Recurso de Acessibilidade
-		each ares in data.lo.accessibility_resources
-			p
-				| !{ares.name}
-	p
-		strong
-			| Detentor do direito autoral
-	p
-		| !{data.lo.license_owner}
-	p
-		strong
-			| Licença
-	p
-		| !{data.lo.license.name}
-	
-	img(src=data.lo.license.image)
-	
-	p
-		| !{data.lo.license_description}
+block content
+  h3
+    | !{data.lo.title}
+  if data.lo.file_url
+    p
+      | URL do OA:
+      if currentUser
+        a(href=data.lo.file_url)
+          | !{data.lo.file_url}
+      else
+        div.alert.alert-danger
+          strong.text-danger
+            | Apenas usuários cadastrados podem baixar arquivos!
+  if data.lo.file
+    .row
+      .col-md-4
+        p
+          |Nome do arquivo
+          div
+            strong
+              | !{data.lo.file.name}
+      .col-md-4
+        p
+          | Tamanho do arquivo
+          div
+            strong
+              | !{data.lo.file.size}
+      .col-md-4
+        p
+          |Download
+          div
+            if currentUser
+              a(href="/learning-object/download/" + data.lo._id, target="_blank", title="Baixar arquivo do objeto de aprendizagem")
+                | Download
+            else
+              .badge.alert-danger
+                | Apenas usuários cadastrados podem baixar arquivos!
+  p
+    strong
+      | Título
+  p
+    | !{ data.lo.title}
+  p
+    strong
+      | Descrição do recurso
+  p
+    | !{ data.lo.description}
+  p
+    strong
+      | Autor(es)
+  p
+    | !{data.lo.authors}
+  if data.lo.teaching_levels
+    p
+      strong
+        | Níveis de ensino
+    each tlevel in data.lo.teaching_levels
+      p
+        | !{tlevel.name}
+  if data.lo.axes
+    p
+      strong
+        | Eixos
+    each axe in data.lo.axes
+      p
+        | !{axe.name}
+  if data.lo.accessibility_resources
+    p
+      strong
+        | Recurso de Acessibilidade
+    each ares in data.lo.accessibility_resources
+      p
+        | !{ares.name}
+  p
+    strong
+      | Detentor do direito autoral
+  p
+    | !{data.lo.license_owner}
+  p
+    strong
+      | Licença
+  p
+    | !{data.lo.license.name}
+
+  img(src=data.lo.license.image)
+
+  p
+    | !{data.lo.license_description}

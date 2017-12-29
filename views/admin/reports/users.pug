@@ -1,13 +1,13 @@
 extends tabs
 
 block tab-content
-	#users.tab-pane.active(role="tabpanel")
-		h3
-			| Resultados
-			.badge.alert-info
-				| !{count}
-		each user in users
-			p
-				| !{user.name}
-		a.btn.btn-primary.btn-lg(href="/admin/reports")
-			| Voltar
+  #users.tab-pane.active(role="tabpanel")
+    h3
+      | Resultados
+      .badge.alert-info
+        | !{count}
+    each user in users
+      p
+        | !{user.name}
+    a.btn.btn-primary.btn-lg(href="/admin/reports")
+      | Voltar

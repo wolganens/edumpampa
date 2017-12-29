@@ -1,33 +1,36 @@
 extends ../layout
-
+include ../components/forms
+include ../components/panels
+include ../components/lo-metadata-panels
+//- OBS: A variavel post, como o nome já sugere, mantem os dados que foram submetidos
+//- através de uma requisição post, nela estão armazenados os valores que o usuário já
+//- tentou submeter anteriormente. Nesta página por ser utilizada para UPDATES, ou 
+//- os dados vem do objeto a ser atualizado, ou vem de uma requisição post anterior
 block content
-	form(action="/learning-object/create", method="post", encType="multipart/form-data")
-		.panel.panel-default
-			.panel-heading 
-				| Dados Gerais
-			.panel-body
-				.form-group
-					label
-					| Título *
-					input(type="text", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=data.lo.title)
-				.form-group
-					label
-					| Descrição *
-					textarea(type="text", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control", value=data.lo.description)
-						| !{data.lo.description}
-				.form-group
-					label
-					| Autores *
-					input(type="text", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=data.lo.authors)
-				.form-group
-					label
-					| Ano de autoria *
-					input(type="text", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=data.lo.year)
-		include ../components/lo_panels
-		include ../components/lo_cont_res_panels
-		include ../components/licenses_form
-		include ../components/file_form
-		.form-group
-			button(type="submit", class="btn-lg btn btn-primary pull-right")
-				| Cadastrar
-			.clearfix
+  h3
+    | Cadastrar Objeto de Aprendizagem    
+  form(action="/learning-object/update", method="post", encType="multipart/form-data")    
+    input(type='hidden', name='object_id', value=data.lo._id)
+    //- Formulário de dados gerais do objeto de aprendizagem
+    +panel-default('Dados Gerais')    
+        +input('Título *', 'title', post.title || data.lo.title, 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', post.description || data.lo.description, 'Informe a descrição do objeto')(required=true)
+        +input('Autores *', 'authors', post.authors || data.lo.authors, 'Informe o nome dos autores do objeto')(required=true)        
+        +input('Ano de autoria *', 'year', post.year || data.lo.year, 'Informe o ano de autoria do objeto')(required)
+
+    //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
+    //- do objeto de aprendizagem a ser atualizado, ou os dados vem de um post anterior
+    //- ou estão no objeto data.lo    
+    +lo-metadata-panels(data)
+    //- A lista de licenças disponíveis está na variavel data.licenses
+    //- As informações do OA sendo atualizado estão em data.lo
+    include ../components/licenses-form    
+    +license-form(data)
+
+    include ../components/file-form
+    +file-form(data)    
+    //- Botão de submissão do formulário    
+    +submit('Cadastrar')(class="btn-lg pull-right")    
+    .clearfix
+block scripts
+  script(src="/javascripts/licenses.js")

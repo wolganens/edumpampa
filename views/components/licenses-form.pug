@@ -1,0 +1,36 @@
+include ./forms
+mixin license-form({licenses, lo})
+  input(type='hidden', id="license-objects", value=JSON.stringify(licenses))
+  +panel-default('Licença')
+    
+    //- Select para escolha da licença do OA
+    +select(
+      'Licença *',
+      'license',      
+      post.license || (lo && lo.license),
+      'Selecione uma licença',
+      licenses,
+      {val: '_id', text: 'name'})(required=true)
+    
+    //- Campo para especificar quem é o detentor dos direitos autorais do OA
+    +input(
+      'Detentor dos Direitos Autorais *',
+      'license_owner',
+      post.license_owner || (lo && lo.license_owner),
+      'Informe o nome do detentor dos direitos autorais do objeto')(required=true)
+    
+    //- Descrição completa da licença atribuida ao OA
+    +textarea(
+      'Descrição da Licença *',
+      'license_description',
+      post.license_description || (lo && lo.license_description),
+      'Descrição da licença de uso')(required=true)
+    
+    //- Elementos auxiliares para dar detalhes da licença selecionada no select do topo,
+    //- é exibida a imagem, descrição completa e descrição legal da licença
+    #license-details
+      img#license-img
+      a#license-deed(target="_blank", title="Ver descrição completa da licensa")
+        | Ver descrição completa
+      a#license-legal(target="_blank", title="Ver descrição legal da licensa")
+        | Ver descrição legal

@@ -11,25 +11,17 @@ const Resources = require('../models/resources');
 const Licenses = require('../models/licenses');
 const ac = require('../config/roles');
 const email = require('../config/email');
+const pug = require('pug');
 const config = require('../config/index');
+const { mergeCheckboxData } = require('../helpers/utils');
 
-function getReqParamAsArray(reqparam) {
-  if (reqparam) {
-    if (Array.isArray(reqparam)) {
-      return reqparam;
-    }
-    return [reqparam];
-  }
-  return null;
-}
 module.exports = {
   getCreate(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');
     }
-    async.parallel({
+    return async.parallel({
       accessibility_resources(callback) {
         AccessibilityResources.find(callback);
       },
@@ -42,95 +34,112 @@ module.exports = {
       resources(callback) {
         Resources.find({}).sort('name').exec(callback);
       },
-      contents(callback) {
+      content(callback) {
         Contents.find({}).sort('name').exec(callback);
       },
       licenses(callback) {
         Licenses.find(callback);
       },
-    }, (err, results) => res.render('learning-object/create', { error: err, data: results, title: 'Cadastro de OA - EduMPampa' }));
+    }, (err, results) => {
+      res.render('learning-object/create', {
+        error: err,
+        data: results,
+        title: 'Cadastro de OA - EduMPampa',
+      });
+    });
   },
   postCreate(req, res) {
-    let permission;
-    /* Se um objeto estiver sendo criado (não atualizado) */
-    if (!req.session.lo) {
-      /* Verifica se o papel do usuário permite que o mesmo crie seu OA */
-      permission = ac.can(req.user.role).createOwn('learningObject');
-    } else {
-      /* Caso um OA esteja sendo atualizado, verifica se é o dono do mesmo que está atualizando */
-      const userOwnsOa = req.session.lo.owner.toString() === req.user._id.toString();
-      if (userOwnsOa) {
-        permission = userOwnsOa && ac.can(req.user.role).updateOwn('learningObject');
-      } else {
-        /* Se não for o dono do OA que está atualizando, verifica se o usuário tem permissão
-        para atualizar qualquer OA */
-        permission = ac.can(req.user.role).updateAny('learningObject');
-      }
-    }
+    const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
-    const { body } = req;
-    let learningObject = {
-      owner: req.user._id,
-      title: body.title,
-      description: body.description,
-      license_owner: body.license_owner,
-      authors: body.authors,
-      year: body.year,
-      teaching_levels: getReqParamAsArray(body['teaching_levels[]']),
-      axes: getReqParamAsArray(body['axes[]']),
-      accessibility_resources: getReqParamAsArray(body['accessibility_resources[]']),
-      content: getReqParamAsArray(body['contents[]']),
-      resources: getReqParamAsArray(body['resources[]']),
-      license: body.license,
-      license_description: body.license_description,
-      file: body.file_name ? JSON.parse(body.file_name) : null,
-      file_url: body.file_url ? body.file_url : null,
-    };
-    if (req.user.role === 'ADMIN') {
-      learningObject.approved = true;
+    const lo = req.body;    
+    lo.owner = req.user._id;    
+    
+    if (lo.file_name) {
+      lo.file = JSON.parse(lo.file_name);
+    } else {
+      lo.file_url = lo.file_url;
     }
-    learningObject = new LearningObject(learningObject);
+
+    let successMsg;
+    if (req.user.role === 'ADMIN') {
+      lo.approved = true;
+      successMsg = ' aprovado ';
+    } else {
+      successMsg = ' submetido para aprovação ';
+    }
+
+    const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
-      if (err) {
-        body['teaching_levels[]'] = getReqParamAsArray(body['teaching_levels[]'] || []);
-        body['axes[]'] = getReqParamAsArray(body['axes[]'] || []);
-        body['accessibility_resources[]'] = getReqParamAsArray(body['accessibility_resources[]'] || []);
-        body['contents[]'] = getReqParamAsArray(body['contents[]'] || []);
-        body['resources[]'] = getReqParamAsArray(body['resources[]'] || []);
-        req.flash('inputs', body);
-        req.flash('inputErrors', JSON.stringify(err));
-        if (body.object_id) {
-          return res.redirect(`/learning-object/single/${learningObject._id}`);
-        }
-        return res.redirect('/learning-object/create');
+      if (err) {        
+        req.session.errors = err.errors;
+        req.session.post = req.body;
+        return res.redirect('back');
       }
-      let successMsg = '';
-      if (body.object_id) {
-        successMsg = 'Objeto atualizado com sucesso!';
-      } else if (req.user.role === 'ADMIN') {
-        successMsg = 'Objeto cadastrado com sucesso!';
-      } else {
-        successMsg = 'Objeto submetido para aprovação com sucesso!';
-      }
+      successMsg = `Objeto ${successMsg} com sucesso!`;
       const mailOptions = {
         to: 'edumpampa@gmail.com',
         subject: 'Novo OA submetido para aprovação',
-        html:
-                `   <p>O usuário ${req.user.name} submeteu um OA chamado ${learningObject.title} para aprovação: </p>
-                    <a href="${config.baseUrl}/admin/learning-object/manage/#${learningObject._id}">Ver OA</a>
-                `,
+        html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
+          user: req.user.name,
+          title: learningObject.title,
+          lo_id: learningObject._id,
+          url: config.baseUrl,
+        }),
       };
       return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
           return res.send(mailErr);
-        }
-        delete req.session.lo;
-        req.flash('success_messages', successMsg);
-        return res.redirect(`/learning-object/retrieve/#${learningObject._id}`);
+        }        
+        res.locals.success_messages = successMsg;
+        return res.redirect(`/learning-object/single/${learningObject._id}`);
       });
     });
+  },
+  postUpdate(req, res) {  
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar o 
+    * objeto de aprendizagem
+    */
+    if (req.user) {
+      return LearningObject.findById(req.body.object_id, (err, lo) => {
+        let permission;
+        /*
+        * Verifica se o usuário autenticado é "dono"(owner) do OA
+        */
+        if (req.user._id.toString() === lo.owner.toString()) {
+          permission = ac.can(req.user.role).updateOwn('learningObject');
+        } else {
+          /*
+          * Se o usuário autenticado não for dono do OA, então verifica se quem está
+          * tentando acessar o OA tem permissão para alterar qualquer OA
+          */
+          permission = ac.can(req.user.role).updateAny('learningObject');
+        }
+        if (!permission.granted) {
+          return res.status(403).send('Você não tem permissão');
+        }
+        /*
+        * Atualiza os campos do OA pelos que vieram na requsição e depois salva o OA
+        */
+        Object.keys(req.body).forEach((field) => {
+          if (field !== '_id') {
+            lo[field] = req.body[field];
+          }
+        })
+        return lo.save(          
+          (err) => {
+            if (err) {
+              req.session.error_message = err;              
+            }
+            req.session.success_message = 'Objeto atualizado com sucesso!';
+            return res.redirect('back');
+          }
+        );
+      });
+    }
+    return res.redirect('/accounts/signin');
   },
   getLearningObject(req, res) {
     const { loId } = req.params;
@@ -160,16 +169,44 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
+      /*
+      * Verifica se o usuário autenticado tem permissão para editar o 
+      * objeto de aprendizagem
+      */
       if (req.user) {
-        const permission = (req.user._id.toString() === results.lo.owner.toString()) ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
+        let permission;
+        /*
+        * Verifica se o usuário autenticado é "dono"(owner) do OA
+        */
+        if (req.user._id.toString() === results.lo.owner.toString()) {
+          permission = ac.can(req.user.role).updateOwn('learningObject');
+        } else {
+          /*
+          * Se o usuário autenticado não for dono do OA, então verifica se quem está
+          * tentando acessar o OA tem permissão para alterar qualquer OA
+          */
+          permission = ac.can(req.user.role).updateAny('learningObject');
+        }
+        /*Se o usuário não tem permissão para editar o OA, então ele é redirecionado
+        para a página de detalhes do OA*/
         if (!permission.granted) {
           return res.redirect(`/learning-object/details/${results.lo._id}`);
         }
+        /*
+        * Caso o usuário tenha permissão para editar o OA, o formulário de edição
+        * do OA é renderizado com as informações do OA em data.lo
+        */
+        return res.render('learning-object/single', {          
+          data: results,
+          title: 'Atualização de OA - EduMPampa',
+        });
       } else {
+        /*
+        * Se o usuário não está autenticado, então é redirecionado para 
+        * a página de detalhes do OA
+        */
         return res.redirect(`/learning-object/details/${results.lo._id}`);
       }
-      req.session.lo = results.lo;
-      return res.render('learning-object/single', { error: err, data: results });
     });
   },
   getLearningObjectDetails(req, res) {
@@ -337,60 +374,49 @@ module.exports = {
       },
     }, (err, results) => {
       /*
-              Variavel responsavel por armazenar os filtros de busca da query
-          */
+      * Variavel responsavel por armazenar os filtros de busca da query
+      */
       let and = {
         $and: [],
       };
       let checkedString = '';
       /*
-              Parâmetros adicionais de paginação
-          */
+      * Parâmetros adicionais de paginação
+      */
       const page = req.query && req.query.page ? req.query.page : 1;
       const skip = (page - 1) * 10;
       const limit = 10;
       /*
         Caso tenha sido selecionado algum checkbox para busca, constroi o and
       */
-      if (req.query.checked_string) {
-        ({ checkedString } = req.query);
+      if (req.query.checked_string || req.query.checked_string === '') {
         /*
-          Popula os arrays de consulta com os checkbox marcados pelo usuário
+        * Cria o objeto de consulta $and à partir dos checkbox (field)
+        * que vieram da requisição
         */
-        let qAccResources = [];
-        if (req.query.accessibility_resources) {
-          qAccResources = getReqParamAsArray(req.query.accessibility_resources);
+        Object.keys(req.query).forEach((field) => {
+          if (field !== 'checked_string') {
+            and.$and.push({
+              [field]: { $all: req.query[field] }
+            });
+          }
+        });
+        /*
+        * Se não foi selecionado nenhum checkbox, remove o $and pois este não 
+        * pode ser um array vazio, assim retorna todos os OA
+        */
+        if (and.$and.length == 0) {
+          delete and.$and;
         }
-        let qAxes = [];
-        if (req.query.axes) {
-          qAxes = getReqParamAsArray(req.query.axes);
-        }
-        let qTeachingLevels = [];
-        if (req.query.teaching_levels) {
-          qTeachingLevels = getReqParamAsArray(req.query.teaching_levels);
-        }
-        if (qAccResources.length > 0) {
-          and.$and.push({
-            accessibility_resources: { $all: qAccResources },
-          });
-        }
-        if (qAxes.length > 0) {
-          and.$and.push({
-            axes: { $all: qAxes },
-          });
-        }
-        if (qTeachingLevels.length > 0) {
-          and.$and.push({
-            teaching_levels: { $all: qTeachingLevels },
-          });
-        }
-        console.log(and);
+        checkedString = req.query.checked_string;        
         req.session.search = and;
         req.session.checkedString = checkedString;
-      } else {
+
+      } else {        
         ({ checkedString } = req.session);
         and = req.session.search;
       }
+      
       /*
         Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
         e trazendo apenas objetos já aprovados.

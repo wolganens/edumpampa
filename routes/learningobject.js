@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/create', learningObjectController.getCreate);
 router.post('/create', learningObjectController.postCreate);
+router.post('/update', learningObjectController.postUpdate);
 
 router.post('/upload-file', learningObjectController.postUploadFile);
 router.post('/remove-file', learningObjectController.postRemoveFile);

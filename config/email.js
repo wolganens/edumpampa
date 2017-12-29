@@ -5,7 +5,7 @@ const email = {
   transport: null,
   emailOptions: {
     from: '"Equipe EduMPampa" <edumpampa@gmail.com>',
-    to: '',
+    to: 'edumpampa@gmail.com',
     subject: '',
     html: '',
   },

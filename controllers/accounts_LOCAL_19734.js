@@ -10,7 +10,6 @@ const OccupationArea = require('../models/occupation_area');
 const Qualification = require('../models/qualifications');
 const passwordHelper = require('../helpers/password');
 const email = require('../config/email');
-const { mergeCheckboxData } = require('../helpers/utils');
 
 module.exports = {
   getSignIn(req, res) {
@@ -31,41 +30,15 @@ module.exports = {
         Qualification.find(callback);
       },
     }, (err, results) => {
-      const values = {
-        institutional_links: req.query.institutional_link_id,
-        occupation_areas: req.query.occupation_area_id,
-        qualifications: req.query.qualification_id,
-      };
-      const formGroupValue = {
-        institutional_links: req.query.institutional_link_text,
-        occupation_areas: req.query.occupation_area_text,
-        qualifications: req.query.qualification_text,
-      };
       if (err) {
         return res.send(err);
       }
-      return res.render('account/signup', {
-        error: err,
-        data: mergeCheckboxData({
-          options: results,
-          values,
-          formGroupValue,
-        }, results),
-        title: 'Página de cadastro de usuário - EduMPampa',
-      });
+      return res.render('account/signup', { error: err, data: results, title: 'Página de cadastro de usuário - EduMPampa' });
     });
   },
   postSignUp(req, res) {
     // TODO: refactor validation
     req.flash('inputs', req.body);
-    const query = querystring.stringify({
-      qualification_id: req.body.qualification_id,
-      occupation_area_id: req.body.occupation_area_id,
-      institutional_link_id: req.body.institutional_link_id,
-      qualification_text: req.body.qualification_text,
-      occupation_area_text: req.body.occupation_area_text,
-      institutional_link_text: req.body.institutional_link_text,
-    });
     const userData = _.pick(
       req.body,
       'name',
@@ -97,7 +70,6 @@ module.exports = {
     if (userData._id) {
       return User.findByIdAndUpdate(userData._id, userData, (err) => {
         if (err) {
-          // TODO: edit validation
           return res.send(err);
         }
         req.flash('success_messages', 'Perfil atualizado com sucesso!');
@@ -111,7 +83,7 @@ module.exports = {
         },
       };
       req.flash('inputErrors', JSON.stringify(errors));
-      return res.redirect(`/account/signup?${query}`);
+      return res.redirect('signup');
     }
     return User.register(userData, (err, user) => {
       console.log(err);
@@ -122,11 +94,11 @@ module.exports = {
           },
         };
         req.flash('inputErrors', JSON.stringify(errors));
-        return res.redirect(`/account/signup?${query}`);
+        return res.redirect('signup');
       }
       if (err) {
         req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
-        return res.redirect(`/account/signup?${query}`);
+        return res.redirect('/account/signup');
       }
       const mailOptions = {
         to: user.email,
@@ -185,7 +157,7 @@ module.exports = {
         const mailOptions = {
           to: user.email,
           subject: 'Senha de acesso!',
-          html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/password-reset.pug'), {
+          html: pug.renderFile(path.join(__dirname, '..', 'views', 'account/forgot-pw-after.pug'), {
             name: user.name,
             password,
           }),
@@ -223,35 +195,8 @@ module.exports = {
         User.findById(req.user._id, callback);
       },
     }, (err, results) => {
-      const {
-        institutional_link_id,
-        occupation_area_id,
-        qualification_id,
-        qualification_text,
-        occupation_area_text,
-        institutional_link_text,
-        // The data is not coming to req.query yet, but it's ready to receive
-      } = Object.keys(req.query).length === 0 ? results.user : req.query;
-
-      const stringify = id => (id && typeof id === 'object' ? id.toString() : id);
-
-      const values = {
-        institutional_links: stringify(institutional_link_id),
-        occupation_areas: stringify(occupation_area_id),
-        qualifications: stringify(qualification_id),
-      };
-
-      const formGroupValue = {
-        institutional_links: institutional_link_text,
-        occupation_areas: occupation_area_text,
-        qualifications: qualification_text,
-      };
-
-      return res.render('account/signup', {
-        error: err,
-        data: mergeCheckboxData({ options: results, values, formGroupValue }, results),
-        title: 'Minha conta - EduMPampa',
-      });
+      console.log(results.user);
+      return res.render('account/signup', { error: err, data: results, title: 'Minha conta - EduMPampa' });
     });
   },
   getChangePw(req, res) {

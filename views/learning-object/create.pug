@@ -1,36 +1,36 @@
 extends ../layout
-
+include ../components/forms
+include ../components/panels
+include ../components/lo-metadata-panels
+//- OBS: A variavel post, como o nome já sugere, mantem os dados que foram submetidos
+//- através de uma requisição post, nela estão armazenados os valores que o usuário já
+//- tentou submeter anteriormente. Nesta página por ser CREATE, ou um campo está vazio
+//- ou seu valor está armazneado na variavel post
 block content
-	h3
-		| Cadastrar Objeto de Aprendizagem
-	form(action="/learning-object/create", method="post", encType="multipart/form-data")
-		.panel.panel-default
-			.panel-heading 
-				| Dados Gerais
-			.panel-body
-				.form-group
-					label(for="title")
-						| Título *
-					input(type="text", id="title", placeholder="Informe o título do objeto", required="required" name="title", class="form-control", value=inputs ? inputs.title : null)
-				.form-group
-					label(for="description")
-						| Descrição *
-					textarea(type="text", id="description", placeholder="Informe a descrição do objeto", required="required" name="description", class="form-control")
-						if inputs
-							| !{inputs.description}
-				.form-group
-					label(for="authors")
-						| Autores *
-					input(type="text", id="authors", placeholder="Informe o nome dos autores do objeto", required="required" name="authors", class="form-control", value=inputs ? inputs.authors : null)
-				.form-group
-					label(for="year")
-						| Ano de autoria *
-					input(type="text", id="year", placeholder="Informe o ano de autoria do objeto", required="required" name="year", class="form-control", value=inputs ? inputs.year : null)
-		include ../components/lo_panels
-		include ../components/lo_cont_res_panels
-		include ../components/licenses_form
-		include ../components/file_form
-		.form-group
-			button(type="submit", class="btn-lg btn btn-primary pull-right")
-				| Cadastrar
-			.clearfix
+  h3
+    | Cadastrar Objeto de Aprendizagem    
+  form(action="/learning-object/create", method="post", encType="multipart/form-data")    
+    
+    //- Formulário de dados gerais do objeto de aprendizagem
+    +panel-default('Dados Gerais')    
+        +input('Título *', 'title', post && post.title, 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', post && post.description, 'Informe a descrição do objeto')(required=true)
+        +input('Autores *', 'authors', post && post.authors, 'Informe o nome dos autores do objeto')(required=true)        
+        +input('Ano de autoria *', 'year', post && post.year, 'Informe o ano de autoria do objeto')(required)
+
+    //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
+    //- do objeto de aprendizagem a ser cadastrado    
+    +lo-metadata-panels(data)
+    //- A lista de licenças disponíveis está na variavel data.licenses
+    //- e na variavel post estão as informações submetidas previamente pelo usuário
+    //- dos campos da licença
+    include ../components/licenses-form
+    +license-form(data)
+
+    include ../components/file-form
+    +file-form(data)
+    //- Botão de submissão do formulário    
+    +submit('Cadastrar')(class="btn-lg pull-right")    
+    .clearfix
+block scripts
+  script(src="/javascripts/licenses.js")

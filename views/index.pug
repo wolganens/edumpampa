@@ -1,12 +1,15 @@
 extends layout
 
 block content
-	h3.page-header      
-		| Este repositório possui Objetos de Aprendizagem didático-musicais que podem ser adotados em atividades de Educação Musical. Selecione uma ou mais opções para buscar por Objetos de Aprendizagem:  
-	form(action="/learning-object/checkbox-search", method="GET")
-		include components/lo_panels
-		.form-group
-			button(type="submit", class="btn-lg btn btn-primary pull-right")
-				i(class="fa fa-search" aria-hidden="true") 
-				|  Pesquisar
-				.clearfix
+  h3.page-header
+    | Este repositório possui Objetos de Aprendizagem didático-musicais que podem ser adotados em atividades de Educação Musical. Selecione uma ou mais opções para buscar por Objetos de Aprendizagem:
+  form(action="/learning-object/checkbox-search", method="GET")
+    input(type="hidden", name="checked_string", id="checked-string")
+    include components/lo-metadata-panels
+    +lo-metadata-panels(data)
+
+    .form-group
+      button(type="submit", class="btn-lg btn btn-primary pull-right")
+        i(class="fa fa-search" aria-hidden="true")
+        | Pesquisar
+        .clearfix
