@@ -1,7 +1,7 @@
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
-// const querystring = require('querystring');
+const querystring = require('querystring');
 const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
@@ -375,60 +375,44 @@ module.exports = {
       },
     }, (err, results) => {
       /*
-              Variavel responsavel por armazenar os filtros de busca da query
-          */
+      * Variavel responsavel por armazenar os filtros de busca da query
+      */
       let and = {
         $and: [],
       };
       let checkedString = '';
       /*
-              Parâmetros adicionais de paginação
-          */
+      * Parâmetros adicionais de paginação
+      */
       const page = req.query && req.query.page ? req.query.page : 1;
       const skip = (page - 1) * 10;
       const limit = 10;
       /*
         Caso tenha sido selecionado algum checkbox para busca, constroi o and
       */
+
       if (req.query.checked_string) {
-        ({ checkedString } = req.query);
         /*
-          Popula os arrays de consulta com os checkbox marcados pelo usuário
+        * Cria o objeto de consulta $and à partir dos checkbox (field)
+        * que vieram da requisição
         */
-        let qAccResources = [];
-        if (req.query.accessibility_resources) {
-          qAccResources = listify(req.query.accessibility_resources);
-        }
-        let qAxes = [];
-        if (req.query.axes) {
-          qAxes = listify(req.query.axes);
-        }
-        let qTeachingLevels = [];
-        if (req.query.teaching_levels) {
-          qTeachingLevels = listify(req.query.teaching_levels);
-        }
-        if (qAccResources.length > 0) {
-          and.$and.push({
-            accessibility_resources: { $all: qAccResources },
-          });
-        }
-        if (qAxes.length > 0) {
-          and.$and.push({
-            axes: { $all: qAxes },
-          });
-        }
-        if (qTeachingLevels.length > 0) {
-          and.$and.push({
-            teaching_levels: { $all: qTeachingLevels },
-          });
-        }
-        console.log(and);
+        Object.keys(req.query).forEach((field) => {
+          if (field !== 'checked_string') {
+            and.$and.push({
+              [field]: { $all: req.query[field] }
+            });
+          }
+        });
+
+        checkedString = req.query.checked_string;        
         req.session.search = and;
         req.session.checkedString = checkedString;
+
       } else {
         ({ checkedString } = req.session);
         and = req.session.search;
       }
+      
       /*
         Inicia o processo de "montagem" da query de busca, projetando apenas os campos necessários,
         e trazendo apenas objetos já aprovados.

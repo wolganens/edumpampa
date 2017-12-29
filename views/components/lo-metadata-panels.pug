@@ -11,7 +11,7 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
               'teaching_levels[]',
               teaching_level._id,
               (post && post.teaching_levels) || (lo && lo.teaching_levels)
-            )
+            )(class="checked-string")
     .col-md-3
       +panel-default('Eixos', 'axes[]')
         fieldset
@@ -21,7 +21,7 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
             'axes[]',
             axe._id,
             (post && post.axes) || (lo && lo.axes)
-          )
+          )(class="checked-string")
     .col-md-4
       +panel-default('Recursos de Acessibilidade', 'accessibility_resources[]')
         fieldset
@@ -31,7 +31,7 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
               'accessibility_resources[]',
               accessibility_resource._id,
               (post && post.accessibility_resources) || (lo && lo.accessibility_resources)
-            )
+            )(class="checked-string")
   if content && resources
     .row
       .col-md-6
