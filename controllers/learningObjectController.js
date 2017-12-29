@@ -390,8 +390,7 @@ module.exports = {
       /*
         Caso tenha sido selecionado algum checkbox para busca, constroi o and
       */
-
-      if (req.query.checked_string) {
+      if (req.query.checked_string || req.query.checked_string === '') {
         /*
         * Cria o objeto de consulta $and à partir dos checkbox (field)
         * que vieram da requisição
@@ -403,12 +402,18 @@ module.exports = {
             });
           }
         });
-
+        /*
+        * Se não foi selecionado nenhum checkbox, remove o $and pois este não 
+        * pode ser um array vazio, assim retorna todos os OA
+        */
+        if (and.$and.length == 0) {
+          delete and.$and;
+        }
         checkedString = req.query.checked_string;        
         req.session.search = and;
         req.session.checkedString = checkedString;
 
-      } else {
+      } else {        
         ({ checkedString } = req.session);
         and = req.session.search;
       }
