@@ -1,7 +1,6 @@
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
-const querystring = require('querystring');
 const AccessibilityResources = require('../models/accessibilityresources');
 const Axes = require('../models/axes');
 const TeachingLevels = require('../models/teachinglevels');
