@@ -136,18 +136,33 @@ module.exports = {
     return res.render('account/forgot-pw', { title: 'Recuperar senha de acesso - EduMPampa' });
   },
   postForgotPw(req, res, next) {
+    /*
+    * Executa 3 operações em cascata: Encontra o usuário pelo email,
+    * gera uma senha nova e altera o documento do usuário e por fim 
+    * envia um email com a senha nova.
+    */
     async.waterfall([
       (done) => {
         const userEmail = req.body.email;
+        /*
+        * Tenta encontrar um Usuário cadastrado com o email informado na página
+        * de redefinição de senha
+        */
         return User.findOne({ email: userEmail }, (err, user) => {
           if (!user) {
-            req.flash('error_messages', 'Não há nenhum cadastro com este email!');
-            return res.redirect('/account/forgot-pw');
+            /*
+            * Caso não encontre nenhum usuário, exibe a mensagem de erro abaixo
+            */
+            req.session.error_message = 'Não há nenhum cadastro com este email!';
+            return res.redirect('back');
           }
           return done(err, user);
         });
       },
       (user, done) => {
+        /*
+        * Gera uma nova senha para o usuário através do pacote generate-password
+        */
         const authUser = user;
         const password = generator.generate({
           length: 8,
@@ -155,6 +170,10 @@ module.exports = {
           symbols: true,
           strict: true,
         });
+        /*
+        * Faz o hash da nova senha recem gerada, altera a senha no documento
+        * do usuário e salva o mesmo
+        */
         return passwordHelper.hash(password, (err, hashedPassword, nSalt) => {
           authUser.password = hashedPassword;
           authUser.passwordSalt = nSalt;
@@ -167,6 +186,9 @@ module.exports = {
         });
       },
       (user, password, done) => {
+        /*
+        * Envia o email de alteração de senha para o usuário
+        */
         const mailOptions = {
           to: user.email,
           subject: 'Senha de acesso!',
@@ -186,8 +208,8 @@ module.exports = {
       if (err) {
         return next(err);
       }
-      req.flash('success_messages', successMsg);
-      return res.redirect('/account/forgot-pw');
+      req.session.success_message = successMsg;
+      return res.redirect('back');
     });
   },
   getProfile(req, res) {
@@ -207,34 +229,10 @@ module.exports = {
       user(callback) {
         User.findById(req.user._id, callback);
       },
-    }, (err, results) => {
-      const {
-        institutional_link_id,
-        occupation_area_id,
-        qualification_id,
-        qualification_text,
-        occupation_area_text,
-        institutional_link_text,
-        // The data is not coming to req.query yet, but it's ready to receive
-      } = Object.keys(req.query).length === 0 ? results.user : req.query;
-
-      const stringify = id => (id && typeof id === 'object' ? id.toString() : id);
-
-      const values = {
-        institutional_links: stringify(institutional_link_id),
-        occupation_areas: stringify(occupation_area_id),
-        qualifications: stringify(qualification_id),
-      };
-
-      const formGroupValue = {
-        institutional_links: institutional_link_text,
-        occupation_areas: occupation_area_text,
-        qualifications: qualification_text,
-      };
-
+    }, (err, results) => {     
       return res.render('account/signup', {
         error: err,
-        data: mergeCheckboxData({ options: results, values, formGroupValue }, results),
+        data: results,
         title: 'Minha conta - EduMPampa',
       });
     });
