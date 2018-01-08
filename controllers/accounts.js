@@ -42,28 +42,9 @@ module.exports = {
   },
   postSignUp(req, res) {
     const userData = req.body;
-
     const [day, month, year] = userData.birthday.split('/');
     userData.birthday = new Date(year, month - 1, day);
-    userData.institutional_post_id = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
-    userData.qualification_id = userData.qualification_id ? userData.qualification_id : null;
-    userData.occupation_area_id = userData.occupation_area_id ? userData.occupation_area_id : null;
-    userData.institutional_link_id = (
-      userData.institutional_link_id ? userData.institutional_link_id : null
-    );
-    if (req.body._id) {
-      userData._id = req.body._id;
-    }
-    if (userData._id) {
-      return User.findByIdAndUpdate(userData._id, userData, (err) => {
-        if (err) {
-          // TODO: edit validation
-          return res.send(err);
-        }
-        req.flash('success_messages', 'Perfil atualizado com sucesso!');
-        return res.redirect('/account/profile');
-      });
-    }
+    
     if (req.body.password !== req.body.password_confirm) {
       const errors = {
         errors: {
