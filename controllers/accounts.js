@@ -88,8 +88,10 @@ module.exports = {
           };
           req.session.errors = errors;
         } else {
-          /*Coloca na seesão os erros de validação (diferentes do erero acima
-          que não é um erro de validação)*/
+          /*
+          * Coloca na seesão os erros de validação (diferentes do erero acima
+          * que não é um erro de validação)
+          */
           req.session.errors = err.errors;
         }
         return res.redirect('back');
@@ -102,17 +104,21 @@ module.exports = {
         to: user.email,
         subject: 'Seja bem-vindo ao EduMPampa!',
         html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/welcome.pug'), {
-          user: user.name,          
+          user: user.name,
         }),
       };
       return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
           return res.send(mailErr);
         }
+        /*
+        * Se o email de boas vindas for enviado com sucesso, loga o usuário
+        * recem cadastrado e redireciona para a página inicial
+        */
         return req.logIn(user, (loginErr) => {
           if (loginErr) {
             return res.send(loginErr);
-          }          ;
+          }
           return res.redirect('/');
         });
       });
