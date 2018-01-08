@@ -85,8 +85,8 @@ app.use((req, res, next) => {
   /*
   * Mensagens de sucesso exibidas no topo do layout
   */
-  res.local.success_message = req.session.success_message;
-  res.local.error_message = req.session.error_message;
+  res.locals.success_message = req.session.success_message || null;
+  res.locals.error_message = req.session.error_message || null;
   delete req.session.post;
   delete req.session.errors;
   delete req.session.success_message;
