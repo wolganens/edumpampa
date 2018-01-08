@@ -51,7 +51,7 @@ block content
             institutional_post.name,
             'institutional_post_id[]',
             institutional_post._id,
-            post.institutional_posts.indexOf(institutional_post._id) !== -1
+            post.institutional_posts
           )
     +panel-default('Informações de Usuário')
       +input('Email *', 'email', post && post.email, 'Exemplo: edumpampa@mus.edu.br')(required=true)

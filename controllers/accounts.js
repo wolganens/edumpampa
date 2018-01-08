@@ -30,27 +30,12 @@ module.exports = {
       qualifications(callback) {
         Qualification.find(callback);
       },
-    }, (err, results) => {
-      const values = {
-        institutional_links: req.query.institutional_link_id,
-        occupation_areas: req.query.occupation_area_id,
-        qualifications: req.query.qualification_id,
-      };
-      const formGroupValue = {
-        institutional_links: req.query.institutional_link_text,
-        occupation_areas: req.query.occupation_area_text,
-        qualifications: req.query.qualification_text,
-      };
+    }, (err, results) => {      
       if (err) {
         return res.send(err);
       }
       return res.render('account/signup', {
-        error: err,
-        data: mergeCheckboxData({
-          options: results,
-          values,
-          formGroupValue,
-        }, results),
+        data: results,
         title: 'Página de cadastro de usuário - EduMPampa',
       });
     });
