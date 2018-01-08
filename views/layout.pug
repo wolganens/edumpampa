@@ -90,10 +90,10 @@ html(lang='pt-br')
                   a(href="/account/signin") Login
                 li(class=currentPath == '/account/signup' ? 'active' : null)
                   a(href="/account/signup") Cadastro
-      if error_messages && error_messages.length > 0
+      if error_message && error_message.length > 0
         .alert.alert-danger#messages(role="alert")
           | !{error_messages}
-      if success_messages && success_messages.length > 0
+      if success_message && success_message.length > 0
         .alert.alert-success#messages(role="alert")
           | !{success_messages}
       main#irconteudo

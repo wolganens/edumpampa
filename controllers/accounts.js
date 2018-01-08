@@ -125,6 +125,7 @@ module.exports = {
           if (loginErr) {
             return res.send(loginErr);
           }
+          req.session.success_message = `Olá ${user.name}, seja bem-vindo ao EduMPampa!`;
           return res.redirect('/');
         });
       });

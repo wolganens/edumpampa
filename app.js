@@ -82,8 +82,15 @@ app.use((req, res, next) => {
   * por exemplo: erros de validação de campos
   */
   res.locals.errors = req.session.errors || [];
+  /*
+  * Mensagens de sucesso exibidas no topo do layout
+  */
+  res.local.success_message = req.session.success_message;
+  res.local.error_message = req.session.error_message;
   delete req.session.post;
   delete req.session.errors;
+  delete req.session.success_message;
+  delete req.session.error_message;
   res.locals.app = config.app;
   /*
   * currentUser é utilizada para exibir dados do usuário autenticado no sistema,
