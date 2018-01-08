@@ -67,12 +67,7 @@ module.exports = {
     * birthday do usuário
     */
     const [day, month, year] = userData.birthday.split('/');
-    userData.birthday = new Date(year, month - 1, day);
-    /*
-    * Para a data de nascimento ir para o formulário no mesmo formato em que foi
-    * submetida anteriormente
-    */
-    req.session.post.birthday = `${day}/${month}/${year}`;
+    userData.birthday = new Date(year, month - 1, day);    
     
     return User.register(userData, (err, user) => {      
       /*
@@ -81,6 +76,11 @@ module.exports = {
       */
       delete req.session.post.password;
       delete req.session.post.password_confirm;
+      /*
+      * Para a data de nascimento ir para o formulário no mesmo formato em que foi
+      * submetida anteriormente
+      */
+      req.session.post.birthday = `${day}/${month}/${year}`;
 
       if (err){ 
         /*

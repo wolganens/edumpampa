@@ -16,7 +16,7 @@ block content
             qualification.name,
             'qualification_id',
             qualification._id,
-            post && (post.qualification_id === qualification._id)
+            post && (post.qualification_id === qualification._id.toString())
           )
       +input('Outra', 'qualification_text', post && post.qualification_text, 'Insira uma formação alternativa')(class='js-other')
     
@@ -27,7 +27,7 @@ block content
             occupation_area.name,
             'occupation_area_id',
             occupation_area._id,
-            post && (post.occupation_area_id === occupation_area._id)
+            post && (post.occupation_area_id === occupation_area._id.toString())
           )
       +input('Outra', 'occupation_area_text', post && post.occupation_area_text, 'Insira uma área de atuação alternativa')(class='js-other')
 
@@ -38,7 +38,7 @@ block content
             institutional_link.name,
             'institutional_link_id',
             institutional_link._id,
-            post && (post.institutional_link_id === institutional_link._id)
+            post && (post.institutional_link_id === institutional_link._id.toString())
           )
       +input('Outro', 'institutional_link_text', post && post.institutional_link_text, 'Insira um vínculo institucional alternativo')(class='js-other')
 
@@ -53,7 +53,7 @@ block content
             institutional_post.name,
             'institutional_post_id[]',
             institutional_post._id,
-            post.institutional_posts
+            post.institutional_post_id
           )
       +input('Outro', 'institutional_post_text', post && post.institutional_post_text, 'Insira um cargo ou função alternativos')
 
