@@ -59,8 +59,8 @@ block content
 
     +panel-default('Informações de Usuário')
       +input('Email *', 'email', post && post.email, 'Exemplo: edumpampa@mus.edu.br')(required=true)
-      +input('Senha *', 'password', post && post.password, '')(required=true, type="password")
-      +input('Confirmar Senha *', 'password_confirm', post && post.password_confirm, '')(required=true, type="password")
+      +input('Senha *', 'password', post && post.password, 'Insira uma senha de acesso')(required=true, type="password")
+      +input('Confirmar Senha *', 'password_confirm', post && post.password_confirm, 'Confirme a senha inserida')(required=true, type="password")
 
     +submit('Cadastrar')(class="btn-lg pull-right")
     .clearfix
