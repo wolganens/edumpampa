@@ -41,33 +41,8 @@ module.exports = {
     });
   },
   postSignUp(req, res) {
-    // TODO: refactor validation
-    
-    const query = querystring.stringify({
-      qualification_id: req.body.qualification_id,
-      occupation_area_id: req.body.occupation_area_id,
-      institutional_link_id: req.body.institutional_link_id,
-      qualification_text: req.body.qualification_text,
-      occupation_area_text: req.body.occupation_area_text,
-      institutional_link_text: req.body.institutional_link_text,
-    });
-    const userData = _.pick(
-      req.body,
-      'name',
-      'email',
-      'password',
-      'birthday',
-      'qualification_id',
-      'occupation_area_id',
-      'institutional_link_id',
-      'institution_name',
-      'institution_address',
-      'institutional_post_id[]',
-      'qualification_text',
-      'occupation_area_text',
-      'institutional_link_text',
-      'institutional_post_text',
-    );
+    const userData = req.body;
+
     const [day, month, year] = userData.birthday.split('/');
     userData.birthday = new Date(year, month - 1, day);
     userData.institutional_post_id = userData['institutional_post_id[]'] ? userData['institutional_post_id[]'] : null;
