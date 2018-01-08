@@ -17,7 +17,7 @@ block content
             'qualification_id',
             qualification._id,
             post && (post.qualification_id === qualification._id)
-          )(required=true)
+          )
       +input('Outra', 'qualification_text', post && post.qualification_text, 'Insira uma formação alternativa')(class='js-other')
     
     +panel-default('Área de Atuação *')
@@ -28,7 +28,8 @@ block content
             'occupation_area_id',
             occupation_area._id,
             post && (post.occupation_area_id === occupation_area._id)
-          )(required=true)
+          )
+      +input('Outra', 'occupation_area_text', post && post.occupation_area_text, 'Insira uma área de atuação alternativa')(class='js-other')
 
     +panel-default('Vínculo Institucional *')
       fieldset
@@ -38,7 +39,8 @@ block content
             'institutional_link_id',
             institutional_link._id,
             post && (post.institutional_link_id === institutional_link._id)
-          )(required=true)
+          )
+      +input('Outro', 'institutional_link_text', post && post.institutional_link_text, 'Insira um vínculo institucional alternativo')(class='js-other')
 
     +panel-default('Identificação da Instituição *')
       +input('Nome da Instituição *', 'institution_name', post && post.institution_name, 'Insira o nome da instituição')(required=true)
@@ -53,6 +55,8 @@ block content
             institutional_post._id,
             post.institutional_posts
           )
+      +input('Outro', 'institutional_post_text', post && post.institutional_post_text, 'Insira um cargo ou função alternativos')
+
     +panel-default('Informações de Usuário')
       +input('Email *', 'email', post && post.email, 'Exemplo: edumpampa@mus.edu.br')(required=true)
       +input('Senha *', 'password', post && post.password, '')(required=true, type="password")
