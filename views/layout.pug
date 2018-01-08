@@ -92,10 +92,10 @@ html(lang='pt-br')
                   a(href="/account/signup") Cadastro
       if error_message && error_message.length > 0
         .alert.alert-danger#messages(role="alert")
-          | !{error_messages}
+          | !{error_message}
       if success_message && success_message.length > 0
         .alert.alert-success#messages(role="alert")
-          | !{success_messages}
+          | !{success_message}
       main#irconteudo
         block content
       footer.text-center
