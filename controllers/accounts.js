@@ -48,6 +48,10 @@ module.exports = {
     * mantenha os dados previamente enviados
     */
     const userData = req.session.post = req.body;
+    /*
+    * Remove as senhas informadas na requisição para obrigar o usuário a
+    * inserí-las novamente na próxima submissão
+    */
     delete req.session.post.password;
     delete req.session.post.confirm_password;
     /*
@@ -87,13 +91,19 @@ module.exports = {
           /*Coloca na seesão os erros de validação (diferentes do erero acima
           que não é um erro de validação)*/
           req.session.errors = err.errors;
-        }        
+        }
         return res.redirect('back');
-      }      
+      }
+      /*
+      * Caso o usuário seja cadastrado com sucesso, envia um email de boas vindas
+      * para o email inserido
+      */
       const mailOptions = {
         to: user.email,
         subject: 'Seja bem-vindo ao EduMPampa!',
-        html: `<b>Olá ${user.name}</b><p>Seja bem-vindo ao EduMPampa</p>`,
+        html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/welcome.pug'), {
+          user: user.name,          
+        }),
       };
       return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
