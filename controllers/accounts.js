@@ -42,7 +42,7 @@ module.exports = {
   },
   postSignUp(req, res) {
     // TODO: refactor validation
-    req.flash('inputs', req.body);
+    
     const query = querystring.stringify({
       qualification_id: req.body.qualification_id,
       occupation_area_id: req.body.occupation_area_id,
@@ -94,8 +94,7 @@ module.exports = {
         errors: {
           password_confirm: { message: 'As senhas informadas não conferem!' },
         },
-      };
-      req.flash('inputErrors', JSON.stringify(errors));
+      };      
       return res.redirect(`/account/signup?${query}`);
     }
     return User.register(userData, (err, user) => {
@@ -105,12 +104,10 @@ module.exports = {
           errors: {
             email: { message: 'Este email já está sendo utilizado!' },
           },
-        };
-        req.flash('inputErrors', JSON.stringify(errors));
+        };        
         return res.redirect(`/account/signup?${query}`);
       }
-      if (err) {
-        req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
+      if (err) {        
         return res.redirect(`/account/signup?${query}`);
       }
       const mailOptions = {
@@ -125,8 +122,7 @@ module.exports = {
         return req.logIn(user, (loginErr) => {
           if (loginErr) {
             return res.send(loginErr);
-          }
-          req.flash('success_messages', `Seja bem-vindo ao EduMPampa ${user.name}!`);
+          }          ;
           return res.redirect('/');
         });
       });
