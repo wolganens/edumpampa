@@ -71,19 +71,25 @@ module.exports = {
       req.session.errors = errors;
       return res.redirect('back');
     }
-    return User.register(userData, (err, user) => {
-      console.log(err);
-      if (err && (err.code === 11000 || err.code === 11001)) {
-        const errors = {
-          errors: {
-            email: { message: 'Este email já está sendo utilizado!' },
-          },
-        };        
-        return res.redirect(`/account/signup?${query}`);
-      }
-      if (err) {        
-        return res.redirect(`/account/signup?${query}`);
-      }
+    return User.register(userData, (err, user) => {      
+      if (err){ 
+        /*
+        * Se o mongodb retornar um erro por violação de unicidade, é por que 
+        * foi inserido um email que já está sendo utilizado, assim sendo, o 
+        * objeto de erro é instanciado e colocado na sessão.
+        */
+        if (err.code === 11000 || err.code === 11001) {
+          const errors = {
+              email: { message: 'Este email já está sendo utilizado!' },
+          };
+          req.session.errors = errors;
+        } else {
+          /*Coloca na seesão os erros de validação (diferentes do erero acima
+          que não é um erro de validação)*/
+          req.session.errors = err.errors;
+        }        
+        return res.redirect('back');
+      }      
       const mailOptions = {
         to: user.email,
         subject: 'Seja bem-vindo ao EduMPampa!',
