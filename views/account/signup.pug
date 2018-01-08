@@ -6,7 +6,7 @@ block content
   h3 Novo Usuário
   form(action="/account/signup",method="post")
     +panel-default('Informações Pessoais')
-      +input('Nome *', 'name', post && post.name, 'Insira o seu nome completo')(required=true)
+      +input('Nome Completo *', 'name', post && post.name, 'Insira o seu nome completo')(required=true)
       +input('Data de Nascimento *', 'birthday', post && post.birthday, 'Formato: DD/MM/AAAA')(required=true)
 
     +panel-default('Formação *')
