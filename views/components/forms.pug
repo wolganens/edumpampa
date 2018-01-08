@@ -48,7 +48,17 @@ mixin checkbox(label, name, value, checkeds)
   .checkbox
     label
       input(type='checkbox')&attributes(attributes)
-      span=label
+      span  !{label}
+
+mixin radio(label, name, value, checked)
+  -    
+    attributes.name = name    
+    attributes.value = value
+    attributes.checked = checked
+  .checkbox
+    label
+      input(type='radio')&attributes(attributes)
+      span  !{label}
 
 mixin submit(text)
   +formGroup()

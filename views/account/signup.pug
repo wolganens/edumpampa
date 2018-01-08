@@ -1,89 +1,62 @@
 extends ../layout
+include ../components/forms
+include ../components/panels
 
 block content
-  h3
-    if data.user
-      | Minha conta
-    else
-      | Novo Usuário
+  h3 Novo Usuário
   form(action="/account/signup",method="post")
-    input(type="hidden", name="_id", value=(inputs && inputs._id) || (data.user ? data.user._id : null))
-    .panel.panel-default
-      .panel-heading
-        | Informações Pessoais
-      .panel-body
-        .form-group
-          label(for="name")
-            | Nome completo *
-          input(type="text", id="name", value=(inputs && inputs.name) || (data.user ? data.user.name: null), name="name", class="form-control", placeholder="Insira o seu nome completo", required="required")
-        .form-group
-          label(for="birthday")
-            | Data de Nascimento *
-          input(type="text", value=(inputs && inputs.birthday) || (data.user ? data.user.getFormatedBirthday: null), name="birthday",id="birthday", class="form-control", placeholder="Formato: DD/MM/AAAA", required="required")
-    include ../components/user-features-panel
-    +ufPanels(data)
-    .panel.panel-default
-      .panel-heading
-        | Identificação da Instituição *
-      .panel-body
-        .form-group
-          label(for="institution_name")
-            | Nome da Instituição *
-          input(type="text", name="institution_name",id="institution_name", class="form-control", placeholder="Insira o nome da instituição", value=(inputs && inputs.institution_name) ||(data.user ? data.user.institution_name : null), required="required")
-        .form-group
-          label(for="institution_address")
-            | Endereço da Instituição *
-          input(type="text", name="institution_address",id="institution_address", class="form-control", placeholder="Insira a rua, número, bairro, cidade, estado e país", value=(inputs && inputs.institution_address) || (data.user ? data.user.institution_address : null), required="required")
-    .panel.panel-default
-      .panel-heading
-        span#instit-post-label
-          | Cargo ou Função dentro da Instituição
-      .panel-body
-        fieldset
-          each institutional_post in data.institutional_posts
-            .checkbox.block
-              label
-                input(type="checkbox",aria-labelledby="instit-post-label", name="institutional_post_id[]", class="checked-string", value=institutional_post._id, checked= (inputs && inputs['institutional_post_id[]'] && inputs['institutional_post_id[]'].indexOf(institutional_post._id.toString()) != -1 )|| ((data.user && data.user.institutional_post_id) && data.user.institutional_post_id.indexOf(institutional_post._id.toString()) != -1))
-                span
-                  | !{institutional_post.name}
-        .form-group
-          label(for="institutional_post_text")
-            | Outra
-          input(type="text", class="form-control", value=(inputs && inputs.institutional_post_text) || (data.user ? data.user.institutional_post_text ? data.user.institutional_post_text : null : null), name="institutional_post_text", id="institutional_post_text")
-    .panel.panel-default
-      .panel-heading
-        | Informações de Usuário
-      .panel-body
-        .form-group
-          label(for="email")
-            | Email *
-          input(type="email", name="email",id="email", class="form-control", placeholder="Exemplo: edumpampa@mus.edu.br", value= (inputs && inputs.email) || (data.user ? data.user.email: null), required="required")
-        if !data.user
-          .form-group
-            label(for="password")
-              | Senha *
-            input(type="password", name="password",id="password", class="form-control", required="required")
-            p
-              | A senha deve ter entre 8 e 20 caracteres e pelo menos, 1 número e 1 letra!
-          .form-group
-            label(for="password_confirm")
-              | Confirmar Senha *
-            input(type="password", name="password_confirm",id="password_confirm" class="form-control", required="required")
-    .form-group.pull-right
-      .btn-group
-        if data.user
-          button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")
-            i(class="fa fa-floppy-o" aria-hidden="true")
-            | Atualizar
-        else
-          button(type="submit", value="Cadastrar",class="btn btn-lg btn-primary")
-            i(class="fa fa-floppy-o", aria-hidden="true")
-            | Cadastrar
-        button(type="reset", value="Limpar",class="btn btn-lg btn-primary")
-          i(class="fa fa-undo", aria-hidden="true")
-          | Limpar
-        a(href="/" , class="btn btn-lg btn-primary")
-          i(class="fa fa-arrow-left", aria-hidden="true")
-          | Voltar
-    .clearfix
+    +panel-default('Informações Pessoais')
+      +input('Nome *', 'name', post && post.name, 'Insira o seu nome completo')(required=true)
+      +input('Data de Nascimento *', 'birthday', post && post.birthday, 'Formato: DD/MM/AAAA')(required=true)
 
+    +panel-default('Formação *')
+      fieldset
+        each qualification in data.qualifications
+          +radio(
+            qualification.name,
+            'qualification_id',
+            qualification._id,
+            post && (post.qualification_id === qualification._id)
+          )(required=true)
+      +input('Outra', 'qualification_text', post && post.qualification_text, 'Insira uma formação alternativa')(class='js-other')
+    
+    +panel-default('Área de Atuação *')
+      fieldset
+        each occupation_area in data.occupation_areas
+          +radio(
+            occupation_area.name,
+            'occupation_area_id',
+            occupation_area._id,
+            post && (post.occupation_area_id === occupation_area._id)
+          )(required=true)
+
+    +panel-default('Vínculo Institucional *')
+      fieldset
+        each institutional_link in data.institutional_links
+          +radio(
+            institutional_link.name,
+            'institutional_link_id',
+            institutional_link._id,
+            post && (post.institutional_link_id === institutional_link._id)
+          )(required=true)
+
+    +panel-default('Identificação da Instituição *')
+      +input('Nome da Instituição *', 'institution_name', post && post.institution_name, 'Insira o nome da instituição')(required=true)
+      +input('Endereço da Instituição *', 'institution_address', post && post.institution_address, 'Insira a rua, número, bairro, cidade, estado e país')(required=true)
+
+    +panel-default('Cargo ou Função dentro da Instituição')
+      fieldset
+        each institutional_post in data.institutional_posts
+          +checkbox(
+            institutional_post.name,
+            'institutional_post_id[]',
+            institutional_post._id,
+            post.institutional_posts.indexOf(institutional_post._id) !== -1
+          )
+    +panel-default('Informações de Usuário')
+      +input('Email *', 'email', post && post.email, 'Exemplo: edumpampa@mus.edu.br')(required=true)
+      +input('Senha *', 'password', post && post.password, '')(required=true, type="password")
+      +input('Confirmar Senha *', 'password_confirm', post && post.password_confirm, '')(required=true, type="password")
+
+    +submit('Cadastrar')(class="btn-lg pull-right")
+    .clearfix
