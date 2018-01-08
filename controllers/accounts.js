@@ -68,6 +68,11 @@ module.exports = {
     */
     const [day, month, year] = userData.birthday.split('/');
     userData.birthday = new Date(year, month - 1, day);
+    /*
+    * Para a data de nascimento ir para o formulário no mesmo formato em que foi
+    * submetida anteriormente
+    */
+    req.session.post.birthday = `${day}/${month}/${year}`;
     
     return User.register(userData, (err, user) => {      
       /*
@@ -76,7 +81,7 @@ module.exports = {
       */
       delete req.session.post.password;
       delete req.session.post.password_confirm;
-      
+
       if (err){ 
         /*
         * Se o mongodb retornar um erro por violação de unicidade, é por que 
