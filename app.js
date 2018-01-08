@@ -76,7 +76,7 @@ app.use((req, res, next) => {
   * A o campo post dentro de locals serve para manter dados provenientes
   * de submissões de formulários
   */
-  res.locals.post = req.session.post || {};  
+  res.locals.post = req.session.post || {};
   /*
   * O campo errors dentro de locals serve para exibir os erros em views,
   * por exemplo: erros de validação de campos
