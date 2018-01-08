@@ -41,17 +41,35 @@ module.exports = {
     });
   },
   postSignUp(req, res) {
-    const userData = req.body;
+    /*
+    * Extrai os dados do formulário de cadastro do usuário
+    * para a variavel userData. Além disso, salva os dados enviados
+    * na variavel post para em caso de falha de validação o formulário
+    * mantenha os dados previamente enviados
+    */
+    const userData = req.session.post = req.body;
+    delete req.session.post.password;
+    delete req.session.post.confirm_password;
+    /*
+    * Atribui cada parte da data de nascimento submetida às variaveis
+    * day, month e year, cria uma nova data(new Date) e atribui ao campo 
+    * birthday do usuário
+    */
     const [day, month, year] = userData.birthday.split('/');
     userData.birthday = new Date(year, month - 1, day);
     
-    if (req.body.password !== req.body.password_confirm) {
+    /*
+    * Caso as senhas informadas não sejam iguais (senha e confirmar senha)
+    * Instancia um objeto de erros "semelhante" ao ValidationError do Mongoose
+    * e coloca o objeto na sessão para que o erro seja automaticamente evindenciado
+    * abaixo do input
+    */
+    if (userData.password !== req.body.password_confirm) {      
       const errors = {
-        errors: {
-          password_confirm: { message: 'As senhas informadas não conferem!' },
-        },
-      };      
-      return res.redirect(`/account/signup?${query}`);
+        password_confirm: { message: 'As senhas informadas não conferem!' },
+      };
+      req.session.errors = errors;
+      return res.redirect('back');
     }
     return User.register(userData, (err, user) => {
       console.log(err);

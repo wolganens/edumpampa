@@ -13,7 +13,7 @@ mixin input(label, name, value, placeholder)
   +formGroup(label, name)
     input.form-control&attributes(attributes)
     if errors && errors[name]
-      .alert.alert-danger = !{errors[name].message}
+      .alert.alert-danger !{errors[name].message}
 
 mixin textarea(label, name, value, placeholder)
   -
