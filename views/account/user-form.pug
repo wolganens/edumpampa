@@ -1,0 +1,19 @@
+//- Este arquivo contem os campos do formulário de cadastro de um usuário. Estes campos também
+//- são utilizados na página de visualização e atualização do perfil do usuário. Dessa forma, ou
+//- as informações vem de uma requisião (post) ou de um objeto de usuário (user)
+mixin user-form({ qualifications, occupation_areas, institutional_links, institutional_posts, user })
+  
+  +panel-default('Informações Pessoais')
+      +input('Nome Completo *', 'name', (post && post.name) || (user && user.name), 'Insira o seu nome completo')(required=true)
+      +input('Data de Nascimento *', 'birthday', (post && post.birthday) || (user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
+
+  +panel-default('Formação *')      
+      fieldset
+        each qualification in data.qualifications
+          +radio(
+            qualification.name,
+            'qualification_id',
+            qualification._id,
+            post && (post.qualification_id === qualification._id.toString()) || (user && user.qualification_id === qualification._id.toString())
+          )
+      +input('Outra', 'qualification_text', post && post.qualification_text, 'Insira uma formação alternativa')(class='js-other')

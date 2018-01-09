@@ -229,8 +229,8 @@ module.exports = {
       user(callback) {
         User.findById(req.user._id, callback);
       },
-    }, (err, results) => {     
-      return res.render('account/signup', {
+    }, (err, results) => {      
+      return res.render('account/profile', {
         error: err,
         data: results,
         title: 'Minha conta - EduMPampa',
