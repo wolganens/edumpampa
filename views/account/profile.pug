@@ -7,49 +7,6 @@ block content
   h3 Minha Conta
   form(action="/account/update", method="post")
     +user-form(data)
-    
-    
-    +panel-default('Área de Atuação *')
-      fieldset
-        each occupation_area in data.occupation_areas
-          +radio(
-            occupation_area.name,
-            'occupation_area_id',
-            occupation_area._id,
-            post && (post.occupation_area_id === occupation_area._id.toString())
-          )
-      +input('Outra', 'occupation_area_text', post && post.occupation_area_text, 'Insira uma área de atuação alternativa')(class='js-other')
 
-    +panel-default('Vínculo Institucional *')
-      fieldset
-        each institutional_link in data.institutional_links
-          +radio(
-            institutional_link.name,
-            'institutional_link_id',
-            institutional_link._id,
-            post && (post.institutional_link_id === institutional_link._id.toString())
-          )
-      +input('Outro', 'institutional_link_text', post && post.institutional_link_text, 'Insira um vínculo institucional alternativo')(class='js-other')
-
-    +panel-default('Identificação da Instituição *')
-      +input('Nome da Instituição *', 'institution_name', post && post.institution_name, 'Insira o nome da instituição')(required=true)
-      +input('Endereço da Instituição *', 'institution_address', post && post.institution_address, 'Insira a rua, número, bairro, cidade, estado e país')(required=true)
-
-    +panel-default('Cargo ou Função dentro da Instituição')
-      fieldset
-        each institutional_post in data.institutional_posts
-          +checkbox(
-            institutional_post.name,
-            'institutional_post_id[]',
-            institutional_post._id,
-            post.institutional_post_id
-          )
-      +input('Outro', 'institutional_post_text', post && post.institutional_post_text, 'Insira um cargo ou função alternativos')
-
-    +panel-default('Informações de Usuário')
-      +input('Email *', 'email', post && post.email, 'Exemplo: edumpampa@mus.edu.br')(required=true)
-      +input('Senha *', 'password', post && post.password, 'Insira uma senha de acesso')(required=true, type="password")
-      +input('Confirmar Senha *', 'password_confirm', post && post.password_confirm, 'Confirme a senha inserida')(required=true, type="password")
-
-    +submit('Cadastrar')(class="btn-lg pull-right")
+    +submit('Atualizar')(class="btn-lg pull-right")
     .clearfix
