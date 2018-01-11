@@ -13,5 +13,6 @@ router.get('/signin', accountCtrl.getSignIn);
 router.get('/signup', accountCtrl.getSignUp);
 router.post('/signup', accountCtrl.postSignUp);
 router.get('/profile', accountCtrl.getProfile);
+router.post('/update', accountCtrl.postUpdate);
 
 module.exports = router;
