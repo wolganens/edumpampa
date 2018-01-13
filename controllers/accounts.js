@@ -10,7 +10,7 @@ const OccupationArea = require('../models/occupation_area');
 const Qualification = require('../models/qualifications');
 const passwordHelper = require('../helpers/password');
 const email = require('../config/email');
-const { mergeCheckboxData } = require('../helpers/utils');
+const { strDateToObject } = require('../helpers/utils');
 
 module.exports = {
   getSignIn(req, res) {
@@ -63,12 +63,9 @@ module.exports = {
       return res.redirect('back');
     }
     /*
-    * Atribui cada parte da data de nascimento submetida às variaveis
-    * day, month e year, cria uma nova data(new Date) e atribui ao campo 
-    * birthday do usuário
-    */
-    const [day, month, year] = userData.birthday.split('/');
-    userData.birthday = new Date(year, month - 1, day);    
+    * Converte a string de data em um objeto Date
+    */    
+    userData.birthday = strDateToObject(userData.birthday);
     
     return User.register(userData, (err, user) => {      
       /*
@@ -143,16 +140,22 @@ module.exports = {
       /*
       * Atualiza os valores dos campos do modelo, atribuindo aos mesmos
       * os valores enviados no formulário
-      */
+      */      
       Object.keys(req.body).forEach(function(field){
         /*
-        * Impede o usuário de inserir um campo fictício para aleterar 
+        * Impede o usuário de inserir um campo fictício para alterar 
         * seu nível de permissão (role) dentro da aplicação
         */
         if (field !== 'role') {
-          user[field] = req.body[field];
+          user[field] = req.body[field];          
         }
-      });
+        if (field === 'birthday') {
+          /*
+          * Converte a string de data em um objeto Date
+          */
+          user[field] = strDateToObject(req.body[field]);
+        }
+      });      
       /*
       * Atualiza o modelo, retornando com sucesso ou com os erros
       */

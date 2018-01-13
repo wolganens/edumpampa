@@ -71,5 +71,14 @@ module.exports = {
 
     return data;
   },
+  strDateToObject(strDate) {
+    /*
+    * Converte uma string de data formatada DD/MM/YYYY
+    * em um objeto de Date
+    */
+    console.log(strDate);
+    
+    const [day, month, year] = strDate.split('/');
+    return new Date(year, month - 1, day);
+  },
 };
-
