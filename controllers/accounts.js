@@ -277,10 +277,23 @@ module.exports = {
     return res.render('account/change-pw');
   },
   postChangePw(req, res) {
+    /*
+    * Verifica se a senha e confirmação são iguais
+    */
+    if (req.body.password !== req.body.confirm_password) {
+      const errors = {
+        confirm_password: { message: 'As senhas informadas não conferem!' },
+      };
+      req.session.errors = errors;
+      return res.redirect('back');
+    }
+    /*
+    * Encontra o modelo do usuário autenticado e altera a senha de acesso
+    */
     return User.findById(req.user._id, (err, user) => {
       if (err) {
         res.send(err);
-      }
+      }   
       return user.changePassword(req.body.old_pw, req.body.password, (error) => {
         if (error) {
           res.send(error);
