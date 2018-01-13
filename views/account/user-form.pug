@@ -55,7 +55,9 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
           )
       +input('Outro', 'institutional_post_text', (post && post.institutional_post_text) || (user && user.institutional_post_text), 'Insira um cargo ou função alternativos')
 
-  +panel-default('Informações de Usuário')
-      +input('Email *', 'email', (post && post.email) || (user && user.email), 'Exemplo: edumpampa@mus.edu.br')(required=true)
-      +input('Senha *', 'password', (post && post.password) || (user && user.password), 'Insira uma senha de acesso')(required=true, type="password")
-      +input('Confirmar Senha *', 'password_confirm', (post && post.password_confirm) || (user && user.password_confirm), 'Confirme a senha inserida')(required=true, type="password")
+  //- Usuários autenticados alteram sua senha em uma página específica separadamente  
+  if (!user)
+    +panel-default('Informações de Usuário')
+        +input('Email *', 'email', (post && post.email) || (user && user.email), 'Exemplo: edumpampa@mus.edu.br')(required=true)
+        +input('Senha *', 'password', (post && post.password) || (user && user.password), 'Insira uma senha de acesso')(required=true, type="password")
+        +input('Confirmar Senha *', 'password_confirm', (post && post.password_confirm) || (user && user.password_confirm), 'Confirme a senha inserida')(required=true, type="password")
