@@ -285,8 +285,8 @@ module.exports = {
         if (error) {
           res.send(error);
         }
-        req.flash('success_messages', 'Senha alterada com sucesso!');
-        return res.redirect('/account/profile');
+        req.session.success_message = 'Senha alterada com sucesso!';        
+        return res.redirect('back');
       });
     });
   },
