@@ -8,6 +8,11 @@ const passport = require('passport');
 module.exports = {
   signin(req, res, next) {
     return passport.authenticate('local', (authErr, user, info) => {
+      console.log('user');
+      console.log(user);
+      console.log('autherror');
+      console.log(authErr);
+      console.log(info);
       if (authErr || !user) {
         return res.format({
           html() {

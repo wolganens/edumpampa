@@ -7,14 +7,14 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
       +input('Nome Completo *', 'name', (post && post.name) || (user && user.name), 'Insira o seu nome completo')(required=true)
       +input('Data de Nascimento *', 'birthday', (post && post.birthday) || (user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
 
-  +panel-default('Formação *')      
+  +panel-default('Formação *')
       fieldset
-        each qualification in qualifications
+        each qualification in qualifications          
           +radio(
             qualification.name,
             'qualification_id',
             qualification._id,
-            (post && post.qualification_id === qualification._id.toString()) || (user && user.qualification_id === qualification._id.toString())
+            (post && post.qualification_id === qualification._id.toString()) || (user && user.qualification_id.toString() === qualification._id.toString())
           )
       +input('Outra', 'qualification_text', (post && post.qualification_text) || (user && user.qualification_text), 'Insira uma formação alternativa')(class='js-other')
 
@@ -25,7 +25,7 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             occupation_area.name,
             'occupation_area_id',
             occupation_area._id,
-            (post && post.occupation_area_id === occupation_area._id.toString()) || (user && user.occupation_area_id === occupation_area._id.toString())
+            (post && post.occupation_area_id === occupation_area._id.toString()) || (user && user.occupation_area_id.toString() === occupation_area._id.toString())
           )
       +input('Outra', 'occupation_area_text', (post && post.occupation_area_text) || (user && user.occupation_area_text), 'Insira uma área de atuação alternativa')(class='js-other')
 
@@ -36,7 +36,7 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             institutional_link.name,
             'institutional_link_id',
             institutional_link._id,
-            (post && post.institutional_link_id === institutional_link._id.toString()) || (user && user.institutional_link_id === institutional_link._id.toString())
+            (post && post.institutional_link_id === institutional_link._id.toString()) || (user && user.institutional_link_id.toString() === institutional_link._id.toString())
           )
       +input('Outro', 'institutional_link_text', (post && post.institutional_link_text) || (user && user.institutional_link_text), 'Insira um vínculo institucional alternativo')(class='js-other')
 

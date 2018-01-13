@@ -132,6 +132,39 @@ module.exports = {
       });
     });
   },
+  postUpdate(req, res){
+    /*
+    * Busca a model do usuário autenticado
+    */
+    return User.findById(req.user._id, (findErr, user) => {
+      if (findErr) {
+        return res.send(findErr);
+      }
+      /*
+      * Atualiza os valores dos campos do modelo, atribuindo aos mesmos
+      * os valores enviados no formulário
+      */
+      Object.keys(req.body).forEach(function(field){
+        /*
+        * Impede o usuário de inserir um campo fictício para aleterar 
+        * seu nível de permissão (role) dentro da aplicação
+        */
+        if (field !== 'role') {
+          user[field] = req.body[field];
+        }
+      });
+      /*
+      * Atualiza o modelo, retornando com sucesso ou com os erros
+      */
+      return user.save((saveErr) => {
+        if (saveErr) {
+          return res.send(saveErr);
+        }
+        req.session.success_message = 'Perfil atualizado com sucesso!';
+        return res.redirect('back');
+      });
+    });
+  },
   getForgotPw(req, res) {
     return res.render('account/forgot-pw', { title: 'Recuperar senha de acesso - EduMPampa' });
   },
