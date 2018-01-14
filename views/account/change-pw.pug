@@ -1,21 +1,13 @@
 extends ../layout
+include ../components/forms
 
 block content
   #centered-content
     h3
       | Alterar senha
     form(action="/account/change-pw",method="post")
-      .form-group
-        label(for="old_pw")
-          | Senha antiga
-        input(type="password", required, id="old_pw", name="old_pw", class="form-control", placeholder="Digite sua antiga senha")
-      .form-group
-        label(for="password")
-          | Senha
-        input(type="password", required, id="password", name="password", class="form-control", placeholder="Digite sua nova senha")
-      .form-group
-        label(for="confirm_password")
-          | Confirmar senha
-        input(type="password",required,  id="confirm_password", name="confirm_password", class="form-control", placeholder="Digite sua nova senha novamente")
-      .form-group
-        button(type="submit", value="Acessar",class="btn btn-primary btn-block") Alterar senha
+      +input('Senha antiga *', 'old_pw', null, 'Digite sua senha antiga')(type="password")
+      +input('Senha nova *', 'password', null, 'Digite sua senha nova')(type="password")
+      +input('Confirmar senha nova *', 'confirm_password', null, 'Confirme sua senha nova ')(type="password")
+      +submit('Alterar senha')(class="btn-lg pull-right btn-block")
+      .clearfix
