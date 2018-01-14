@@ -14,9 +14,15 @@ const { strDateToObject } = require('../helpers/utils');
 
 module.exports = {
   getSignIn(req, res) {
+    /*
+    * Exibe a página de login (autenticação de conta) de usuários
+    */
     return res.render('account/signin', { title: 'Página de login de usuário - EduMPampa' });
   },
   getSignUp(req, res) {
+    /*
+    * Exibe a página de cadastro de usuários (criação de contas)
+    */
     async.parallel({
       institutional_links(callback) {
         InstitutionalLink.find(callback);
@@ -30,7 +36,12 @@ module.exports = {
       qualifications(callback) {
         Qualification.find(callback);
       },
-    }, (err, results) => {      
+    }, (err, results) => {
+      /*
+      * Busca na base de dados informações necessárias para o cadastro de um usuário:
+      * Formação, Áreas de atuação, etc. Os resultados ficam armazenados na variavel result.
+      * Ex: results.qualifications, results.occupation_areas
+      */
       if (err) {
         return res.send(err);
       }
@@ -249,6 +260,9 @@ module.exports = {
     });
   },
   getProfile(req, res) {
+    /*
+    * Exibe a página de perfil do usuário (informações de cadastro)
+    */
     async.parallel({
       institutional_links(callback) {
         InstitutionalLink.find(callback);
@@ -274,6 +288,9 @@ module.exports = {
     });
   },
   getChangePw(req, res) {
+    /*
+    * Exibe a página de alteração de senha
+    */
     return res.render('account/change-pw');
   },
   postChangePw(req, res) {
