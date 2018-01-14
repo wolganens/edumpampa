@@ -13,16 +13,6 @@ const Contents = require('../models/contents');
 const Resources = require('../models/resources');
 const { sortDocsInArray, mergeCheckboxData } = require('../helpers/utils.js');
 
-function getReqParamAsArray(reqparam) {
-  if (reqparam) {
-    if (Array.isArray(reqparam)) {
-      return reqparam;
-    }
-    return [reqparam];
-  }
-  return null;
-}
-
 module.exports = {
   getUserManage(req, res) {
     const permission = ac.can(req.user.role).updateAny('user');
