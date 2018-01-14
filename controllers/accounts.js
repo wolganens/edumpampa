@@ -157,7 +157,7 @@ module.exports = {
         }
       });      
       /*
-      * Atualiza o modelo, retornando com sucesso ou com os erros
+      * Atualiza o modelo, exibindo a mensagem de sucesso ou os erros
       */
       return user.save((saveErr) => {
         if (saveErr) {
