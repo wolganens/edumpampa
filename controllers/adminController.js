@@ -11,43 +11,71 @@ const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
 const Contents = require('../models/contents');
 const Resources = require('../models/resources');
-const { sortDocsInArray, mergeCheckboxData } = require('../helpers/utils.js');
+const { sortDocsInArray } = require('../helpers/utils.js');
 
 module.exports = {
+  /*
+  * Exibe a página de gerenciamento de usuários
+  */
   getUserManage(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualuer usuário
+    */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');      
     }
-    const query = User.find();
+    /*
+    * Inicia a consulta procurando por todos os usuários, sem restrições
+    */
+    const users = User.find();
+    /*
+    * Se houver algum filtro por situação, aplica na consulta
+    */
     if (req.query.situation) {
       if (req.query.situation === 'aut') {
-        query.where('role').equals('AUTHORIZED');
+        users.where('role').equals('AUTHORIZED');
       } else if (req.query.situation === 'des') {
-        query.where('role').equals('COMMON');
+        users.where('role').equals('COMMON');
       }
     }
+    /*
+    * Se houver algum filtro por nome de usuário, aplica na consulta
+    */
     if (req.query.name) {
-      query.where('name').equals(new RegExp(req.query.name, 'i'));
+      users.where('name').equals(new RegExp(req.query.name, 'i'));
     }
+    /*
+    * Se houver alguma ordem de data definida, aplica a ordem na consulta
+    */
     const { sort } = req.query;
     if (sort) {
       if (sort === 'newer') {
-        query.sort({ createdAt: -1 });
+        users.sort({ createdAt: -1 });
       } else if (sort === 'older') {
-        query.sort({ createdAt: 1 });
+        users.sort({ createdAt: 1 });
       }
     }
-    query.exec((err, result) => {
+    /*
+    * Executa a consulta na base de dados
+    */
+    return users.exec((err, result) => {
       let data = result;
       if (err) {
-        res.send(err);
+        return res.send(err);
       }
+      /*
+      * Caso não tenha sido especificada uma ordenação, ou seja especificada ordenação
+      por nome de usuário, aplica a função para ordenar;
+      */
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'name');
       }
-      req.flash('inputs', req.query);
+      /*
+      *Mantém o formulário preenchindo com as informações vindas da requisição
+      */
+      req.session.post = req.query;
+      
       return res.render('admin/user/manage', {
         sort, data, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
       });
