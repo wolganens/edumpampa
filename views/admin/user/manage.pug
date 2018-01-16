@@ -1,30 +1,14 @@
 extends ../../layout
+include ../../components/forms
 
 block content
   h3
     | Gerenciar Usuários
   form(class="form-inline", action="", method="GET")
-    .form-group
-      label(for="sort")
-        | Ordenar:
-      select.form-control(name="sort", id="sort")
-        option(value="") Selecionar ordem
-        option(value="name", selected=sort == "name") Nome
-        option(value="newer", selected=sort == "newer") Mais novos
-        option(value="older", selected=sort == "older") Mais antigos
-    .form-group
-      label(for="situation")
-        | Situação:
-      select.form-control(name="situation", id="situation")
-        option(value="") Selecionar situação
-        option(value="aut", selected=situation == "aut") Autorizadoo
-        option(value="des", selected=situation == "des") Desautorizados
-    .form-group
-      label(for="name")
-        | Nome
-      input(placeholder="Filtrar por nome", name="name", id="name", class="form-control", value=name)
-    .form-group
-      button(type="submit", class="btn btn-primary") Aplicar
+    +select('Ordenar: ', 'sort', post && post.sort, 'Ordenar resultados', sortOptions, {val: 'value', text: 'text'})    
+    +select('Situação: ', 'situation', post && post.situation, 'Situação', situationOptions, {val: 'value', text: 'text'})
+    +input('Nome', 'name', post && post.name, 'Filtrar por nome')    
+    +submit('Aplicar filtros')
   .clearfix
   .form-group
     label

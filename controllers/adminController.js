@@ -26,6 +26,23 @@ module.exports = {
       return res.status(403).send('Você não tem permissão!');      
     }
     /*
+    * Opções de ordenação de resultados (data)
+    */
+    const sortOptions = [
+      {value: '' , text: 'Ordenar resultados' },
+      {value: 'name' , text: 'Nome' },
+      {value: 'newer' , text: 'Mais novo'},
+      {value: 'older' , text: 'Mais antigos'},
+    ]
+    /*
+    * Opções de filtros por situação do OA
+    */
+    const situationOptions = [
+      {value: '' , text: 'Selecionar situação'},
+      {value: 'aut' , text: 'Autorizados'},
+      {value: 'des' , text: 'Desautorizados'},
+    ]
+    /*
     * Inicia a consulta procurando por todos os usuários, sem restrições
     */
     const users = User.find();
@@ -72,12 +89,15 @@ module.exports = {
         data = sortDocsInArray(data, 'name');
       }
       /*
-      *Mantém o formulário preenchindo com as informações vindas da requisição
+      * Mantém o formulário preenchindo com as informações vindas da requisição
       */
       req.session.post = req.query;
       
       return res.render('admin/user/manage', {
-        sort, data, title: 'Gerenciar usuários - EduMPampa', situation: req.query.situation || '', name: req.query.name || '',
+        sortOptions,
+        situationOptions,
+        data,
+        title: 'Gerenciar usuários - EduMPampa',
       });
     });
   },
