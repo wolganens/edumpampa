@@ -189,7 +189,8 @@ module.exports = {
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'title');
       }
-      req.flash('inputs', req.query);
+      req.session.post = req.query;
+      
       return res.render('admin/learning-object/manage', {
         sort, data, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
       });
