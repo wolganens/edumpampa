@@ -184,7 +184,7 @@ module.exports = {
     return query.exec((err, result) => {
       let data = result;
       if (err) {
-        res.send(err);
+        return res.send(err);
       }
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'title');
