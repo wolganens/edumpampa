@@ -132,7 +132,7 @@ module.exports = {
       if (err) {
         return res.send(err);        
       }
-      req.flash('success_messages', 'Usuário desautorizado com sucesso!');
+      req.session.success_message = 'Usuário desautorizado com sucesso!';      
       return res.redirect('back');
     });
   },
