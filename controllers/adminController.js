@@ -19,7 +19,7 @@ module.exports = {
   */
   getUserManage(req, res) {
     /*
-    * Verifica se o usuário autenticado tem permissão para editar qualuer usuário
+    * Verifica se o usuário autenticado tem permissão para editar qualquer usuário
     */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
@@ -82,7 +82,7 @@ module.exports = {
         return res.send(err);
       }
       /*
-      * Caso não tenha sido especificada uma ordenação, ou seja especificada ordenação
+      * Caso não tenha sido especificada uma ordenação ou seja especificada ordenação
       por nome de usuário, aplica a função para ordenar;
       */
       if (!sort || sort === 'name') {
@@ -102,21 +102,25 @@ module.exports = {
     });
   },
   getUserAuthorize(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer usuário
+    */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');      
     }
-    User.findByIdAndUpdate(req.params.id, { $set: { role: 'AUTHORIZED' } }, (err) => {
+    return User.findByIdAndUpdate(req.params.id, { $set: { role: 'AUTHORIZED' } }, (err) => {
       if (err) {
-        res.send(err);
-        return;
+        return res.send(err);        
       }
       req.flash('success_messages', 'Usuário autorizado com sucesso!');
       res.redirect('/admin/user/manage');
     });
   },
   getUserUnauthorize(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer usuário (admin)
+    */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
       res.status(403).send('Você não tem permissão!');
