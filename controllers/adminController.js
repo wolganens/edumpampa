@@ -147,7 +147,13 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');      
     }
+    /*
+    * Inicia a cosulta trazendo todos os OA da base de dados
+    */
     const query = LearningObject.find();
+    /*
+    * Se na requisição existir um filtor pela situação do OA, aplica o filtro na consulta
+    */
     if (req.query.situation) {
       if (req.query.situation === 'hab') {
         query.where('approved').equals(true);
@@ -155,9 +161,15 @@ module.exports = {
         query.where('approved').equals(false);
       }
     }
+    /*
+    * Se houver um filtro pelo título, aplica na consulta uma busca por expressão regular
+    */
     if (req.query.title) {
       query.where('title').equals(new RegExp(req.query.title, 'i'));
     }
+    /*
+    * Ordena os documentos caso seja especificada uma ordem na consulta
+    */
     const { sort } = req.query;
     if (sort) {
       if (sort === 'newer') {
@@ -166,6 +178,9 @@ module.exports = {
         query.sort({ createdAt: 1 });
       }
     }
+    /*
+    * Executa a consulta, buscando os dados na base de dados e armazenando na variavel result
+    */
     return query.exec((err, result) => {
       let data = result;
       if (err) {
