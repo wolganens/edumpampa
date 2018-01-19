@@ -109,12 +109,15 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');      
     }
+    /*
+    * Encontra o usuário e atualiza seu papel para 'AUTHORIZED'
+    */
     return User.findByIdAndUpdate(req.params.id, { $set: { role: 'AUTHORIZED' } }, (err) => {
       if (err) {
         return res.send(err);        
       }
       req.session.success_message = 'Usuário autorizado com sucesso!';      
-      res.redirect('/admin/user/manage');
+      return res.redirect('back');
     });
   },
   getUserUnauthorize(req, res) {
