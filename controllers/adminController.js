@@ -128,6 +128,9 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');      
     }
+    /*
+    * Encontra o usuário e atualiza seu papel para 'COMMON'
+    */
     return User.findByIdAndUpdate(req.params.id, { $set: { role: 'COMMON' } }, (err) => {
       if (err) {
         return res.send(err);        
@@ -137,10 +140,12 @@ module.exports = {
     });
   },
   getLearningObjectManage(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer OA (admin)
+    */
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');      
     }
     const query = LearningObject.find();
     if (req.query.situation) {
@@ -161,7 +166,7 @@ module.exports = {
         query.sort({ createdAt: 1 });
       }
     }
-    query.exec((err, result) => {
+    return query.exec((err, result) => {
       let data = result;
       if (err) {
         res.send(err);
