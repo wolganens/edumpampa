@@ -113,7 +113,7 @@ module.exports = {
       if (err) {
         return res.send(err);        
       }
-      req.flash('success_messages', 'Usuário autorizado com sucesso!');
+      req.session.success_message = 'Usuário autorizado com sucesso!';      
       res.redirect('/admin/user/manage');
     });
   },
