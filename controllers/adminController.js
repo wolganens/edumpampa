@@ -126,16 +126,14 @@ module.exports = {
     */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
+      return res.status(403).send('Você não tem permissão!');      
     }
-    User.findByIdAndUpdate(req.params.id, { $set: { role: 'COMMON' } }, (err) => {
+    return User.findByIdAndUpdate(req.params.id, { $set: { role: 'COMMON' } }, (err) => {
       if (err) {
-        res.send(err);
-        return;
+        return res.send(err);        
       }
       req.flash('success_messages', 'Usuário desautorizado com sucesso!');
-      res.redirect('/admin/user/manage');
+      return res.redirect('back');
     });
   },
   getLearningObjectManage(req, res) {
