@@ -189,6 +189,9 @@ module.exports = {
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'title');
       }
+      /*
+      * Mantém o formulário preenchindo com as informações vindas da requisição
+      */
       req.session.post = req.query;
       
       return res.render('admin/learning-object/manage', {
