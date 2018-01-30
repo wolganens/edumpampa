@@ -200,7 +200,7 @@ module.exports = {
     });
   },
   /*
-      Página de relatórios
+  * Página de relatórios
   */
   getReports(req, res) {
     async.parallel({
@@ -214,7 +214,7 @@ module.exports = {
         Qualification.find(callback);
       },
     }, (err, results) => {
-      res.render('admin/reports/index', {
+      return res.render('admin/reports/index', {
         data: mergeCheckboxData({ options: results }, results),
         title: 'Relatórios - EduMPampa',
         activetab: 'Usuários',
