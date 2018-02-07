@@ -53,6 +53,7 @@ app.use(fileUpload({
   limits: { fileSize: 20 * 1024 * 1024 },
 }));
 
+
 app.use((req, res, next) => {
   /*
   * Se for um campo multivalorado, garante que o valor seja um array.
@@ -74,9 +75,9 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   /*
   * A o campo post dentro de locals serve para manter dados provenientes
-  * de submissões de formulários
+  * de submissões de formulários e variaveis de url
   */
-  res.locals.post = req.session.post || {};
+  res.locals.post = Object.assign({}, req.body, req.query);
   /*
   * O campo errors dentro de locals serve para exibir os erros em views,
   * por exemplo: erros de validação de campos
@@ -104,13 +105,13 @@ app.use((req, res, next) => {
   res.locals.currentPath = req.url;  
   next();
 });
-
-
 app.use('/', index);
 app.use('/account', accounts);
 app.use('/auth', auth);
 app.use('/admin', admin);
 app.use('/learning-object', lo);
+
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

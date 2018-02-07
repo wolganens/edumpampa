@@ -7,16 +7,10 @@ const passport = require('passport');
  */
 module.exports = {
   signin(req, res, next) {
-    return passport.authenticate('local', (authErr, user, info) => {
-      console.log('user');
-      console.log(user);
-      console.log('autherror');
-      console.log(authErr);
-      console.log(info);
+    return passport.authenticate('local', (authErr, user, info) => {      
       if (authErr || !user) {
         return res.format({
-          html() {
-            req.flash('error_messages', info.message);
+          html() {            
             req.session.historyData = info;
             return res.redirect('/account/signin');
           },
@@ -30,10 +24,10 @@ module.exports = {
           },
         });
       }
-      return req.logIn(user, (err) => {
+      return req.logIn(user, (err) => {        
         if (err) {
           return next(err);
-        }
+        }        
         return res.format({
           html() {
             delete req.session.historyData;
