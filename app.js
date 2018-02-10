@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const fileUpload = require('express-fileupload');
-const flash = require('connect-flash');
 const mongoose = require('mongoose');
 
 const index = require('./routes/index');
@@ -45,7 +44,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(session({ secret: '5cb1aeca94a165b0f5543cd3d6c4acc8a1d4388fa2ead70bd190f86ce943a180c42292e2fc0be8a149c0aeaf484e6bb6238217ad5ef5ad6b51556db1e75fbe3c', resave: false, saveUninitialized: false }));
-app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
