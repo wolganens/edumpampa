@@ -139,6 +139,13 @@ module.exports = {
   },
   getLearningObjectManage(req, res) {
     /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer OA (admin)
+    */
+    const permission = ac.can(req.user.role).updateAny('learningObject');
+    if (!permission.granted) {
+      return res.status(403).send('Você não tem permissão!');      
+    }
+    /*
     * Opções de ordenação de resultados (data)
     */
     const sortOptions = [
@@ -152,16 +159,9 @@ module.exports = {
     */
     const situationOptions = [
       {value: '' , text: 'Selecionar situação'},
-      {value: 'aut' , text: 'Autorizados'},
+      {value: 'hab' , text: 'Autorizados'},
       {value: 'des' , text: 'Desautorizados'},
     ]
-    /*
-    * Verifica se o usuário autenticado tem permissão para editar qualquer OA (admin)
-    */
-    const permission = ac.can(req.user.role).updateAny('learningObject');
-    if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
-    }
     /*
     * Inicia a cosulta trazendo todos os OA da base de dados
     */
@@ -204,10 +204,6 @@ module.exports = {
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'title');
       }
-      /*
-      * Mantém o formulário preenchindo com as informações vindas da requisição
-      */
-      req.session.post = req.query;
       
       return res.render('admin/learning-object/manage', {
         sortOptions, situationOptions, data, title: "Gerenciar OA's - EduMPampa",
