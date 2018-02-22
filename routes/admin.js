@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use((req, res, next) => {
   if (!req.user || req.user.role !== 'ADMIN') {
-    req.flash('error_messages', 'Acesso exclusivo para administradores');
+    req.session.error_message = 'Acesso exclusivo para administradores';
     return res.redirect('back');
   }
   return next();
