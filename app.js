@@ -71,11 +71,6 @@ app.use((req, res, next) => {
 });
 app.use((req, res, next) => {
   /*
-  * A o campo post dentro de locals serve para manter dados provenientes
-  * de submissões de formulários e variaveis de url
-  */
-  
-  /*
   * Mapa para manter os valores dos campos get e post
   */
   res.locals.old = new Map();
@@ -86,11 +81,12 @@ app.use((req, res, next) => {
   Object.keys(query_body).forEach(key => {
     res.locals.old.set(key, query_body[key]);
   });
+  console.log('Parâmetros get e post:' query_body);
   /*
   * Esta função é utilizada nas views para retornar valores da requisição (ex: campos de formulários)
   * Se o campo procurado não existir, pode ser especificado um valor padrão a ser retornado
   */
-  res.locals.oldInput = (field, dflt) => {
+  res.locals.oldInput = (field, dflt) => {    
     if (res.locals.old.has(field)) {
       return res.locals.old.get(field);
     }

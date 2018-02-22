@@ -11,4 +11,4 @@ mixin file-form({lo})
             | Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
           .fallback
             input(type="file", id="file", class="form-control", name="file")
-      +textarea('URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)', 'file_url', post.file_url || (lo && lo.file_url) , 'URL do arquivo')    
+      +textarea('URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)', 'file_url', oldInput('file_url', lo && lo.file_url) , 'URL do arquivo')    

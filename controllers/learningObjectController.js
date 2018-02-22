@@ -73,8 +73,7 @@ module.exports = {
     const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
       if (err) {        
-        req.session.errors = err.errors;
-        req.session.post = req.body;
+        req.session.errors = err.errors;        
         return res.redirect('back');
       }
       successMsg = `Objeto ${successMsg} com sucesso!`;

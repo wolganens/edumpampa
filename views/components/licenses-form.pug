@@ -7,7 +7,7 @@ mixin license-form({licenses, lo})
     +select(
       'Licença *',
       'license',      
-      post.license || (lo && lo.license),
+      oldInput('license', lo && lo.license),
       'Selecione uma licença',
       licenses,
       {val: '_id', text: 'name'})(required=true)
@@ -16,14 +16,14 @@ mixin license-form({licenses, lo})
     +input(
       'Detentor dos Direitos Autorais *',
       'license_owner',
-      post.license_owner || (lo && lo.license_owner),
+      oldInput('license_owner', lo && lo.license_owner),
       'Informe o nome do detentor dos direitos autorais do objeto')(required=true)
     
     //- Descrição completa da licença atribuida ao OA
     +textarea(
       'Descrição da Licença *',
       'license_description',
-      post.license_description || (lo && lo.license_description),
+      oldInput('license_description', lo && lo.license_description),
       'Descrição da licença de uso')(required=true)
     
     //- Elementos auxiliares para dar detalhes da licença selecionada no select do topo,
