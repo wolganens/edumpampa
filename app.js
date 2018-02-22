@@ -51,7 +51,6 @@ app.use(fileUpload({
   limits: { fileSize: 20 * 1024 * 1024 },
 }));
 
-
 app.use((req, res, next) => {
   /*
   * Se for um campo multivalorado, garante que o valor seja um array.
@@ -75,7 +74,28 @@ app.use((req, res, next) => {
   * A o campo post dentro de locals serve para manter dados provenientes
   * de submissões de formulários e variaveis de url
   */
-  res.locals.post = Object.assign({}, req.body, req.query);
+  
+  /*
+  * Mapa para manter os valores dos campos get e post
+  */
+  res.locals.old = new Map();
+  /*
+  * Cria uma entrada no mapa para cada parametro get e post
+  */
+  const query_body = Object.assign({}, req.body, req.query);
+  Object.keys(query_body).forEach(key => {
+    res.locals.old.set(key, query_body[key]);
+  });
+  /*
+  * Esta função é utilizada nas views para retornar valores da requisição (ex: campos de formulários)
+  * Se o campo procurado não existir, pode ser especificado um valor padrão a ser retornado
+  */
+  res.locals.oldInput = (field, dflt) => {
+    if (res.locals.old.has(field)) {
+      return res.locals.old.get(field);
+    }
+    return dflt || null;
+  }
   /*
   * O campo errors dentro de locals serve para exibir os erros em views,
   * por exemplo: erros de validação de campos
