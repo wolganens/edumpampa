@@ -159,8 +159,8 @@ module.exports = {
     */
     const situationOptions = [
       {value: '' , text: 'Selecionar situação'},
-      {value: 'hab' , text: 'Autorizados'},
-      {value: 'des' , text: 'Desautorizados'},
+      {value: 'hab' , text: 'Habilitados'},
+      {value: 'des' , text: 'Desabilitados'},
     ]
     /*
     * Inicia a cosulta trazendo todos os OA da base de dados
@@ -204,7 +204,7 @@ module.exports = {
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'title');
       }
-      
+
       return res.render('admin/learning-object/manage', {
         sortOptions, situationOptions, data, title: "Gerenciar OA's - EduMPampa",
       });
