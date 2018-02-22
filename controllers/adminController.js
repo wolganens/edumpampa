@@ -411,7 +411,7 @@ module.exports = {
     return LearningObject.updateMany(
       {
         owner: {
-          $in: req.body['user_ids[]'],
+          $in: req.body['user_ids'],
         },
       },
       {
@@ -434,7 +434,7 @@ module.exports = {
     return LearningObject.updateMany(
       {
         owner: {
-          $in: req.body['user_ids[]'],
+          $in: req.body['user_ids'],
         },
       },
       {
@@ -456,7 +456,7 @@ module.exports = {
     }
     return LearningObject.deleteMany({
       owner: {
-        $in: req.body['user_ids[]'],
+        $in: req.body['user_ids'],
       },
     }, (err, result) => {
       if (err) {
