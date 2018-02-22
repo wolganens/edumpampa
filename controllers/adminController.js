@@ -37,7 +37,7 @@ module.exports = {
       {value: 'older' , text: 'Mais antigos'},
     ]
     /*
-    * Opções de filtros por situação do OA
+    * Opções de filtros por situação
     */
     const situationOptions = [
       {value: '' , text: 'Selecionar situação'},
@@ -139,6 +139,23 @@ module.exports = {
   },
   getLearningObjectManage(req, res) {
     /*
+    * Opções de ordenação de resultados (data)
+    */
+    const sortOptions = [
+      {value: '' , text: 'Ordenar resultados' },
+      {value: 'name' , text: 'Título' },
+      {value: 'newer' , text: 'Mais novos'},
+      {value: 'older' , text: 'Mais antigos'},
+    ]
+    /*
+    * Opções de filtros por situação
+    */
+    const situationOptions = [
+      {value: '' , text: 'Selecionar situação'},
+      {value: 'aut' , text: 'Autorizados'},
+      {value: 'des' , text: 'Desautorizados'},
+    ]
+    /*
     * Verifica se o usuário autenticado tem permissão para editar qualquer OA (admin)
     */
     const permission = ac.can(req.user.role).updateAny('learningObject');
@@ -193,7 +210,7 @@ module.exports = {
       req.session.post = req.query;
       
       return res.render('admin/learning-object/manage', {
-        sort, data, title: "Gerenciar OA's - EduMPampa", situation: req.query.situation || '', oatitle: req.query.title || '',
+        sortOptions, situationOptions, data, title: "Gerenciar OA's - EduMPampa",
       });
     });
   },
