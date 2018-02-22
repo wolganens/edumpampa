@@ -11,6 +11,8 @@ const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
 const Contents = require('../models/contents');
 const Resources = require('../models/resources');
+
+/*Ordena um vetor de objetos com base em um campo do objeto*/
 const { sortDocsInArray } = require('../helpers/utils.js');
 
 module.exports = {
