@@ -81,7 +81,7 @@ module.exports = {
       if (error) {
         return console.log(error);
       }
-      req.flash('success_messages', 'Mensagem de contato enviada com sucesso, em breve entraremos em contato!');
+      req.session.success_message = 'Mensagem de contato enviada com sucesso, em breve entraremos em contato!';
       return res.redirect('back');
     });
   },

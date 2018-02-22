@@ -285,7 +285,7 @@ module.exports = {
         if (errUser) {
           return res.send(errUser);
         }
-        req.flash('success_messages', 'Usuário removido com sucesso!');
+       req.session.success_message = 'Usuário removido com sucesso!';
         return res.redirect('/admin/user/manage');
       });
     });
@@ -400,7 +400,7 @@ module.exports = {
     // { activetab: 'OA\'s por usuário' }
   },
   getUserLoReports(req, res) {
-    req.flash('success_messages', "Página em construção!");
+    req.session.success_message = "Página em construção!";
     return res.redirect('back');
   },
   postAprroveUserOa(req, res) {

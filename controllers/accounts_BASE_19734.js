@@ -75,7 +75,7 @@ module.exports = {
         if (err) {
           return res.send(err);
         }
-        req.flash('success_messages', 'Perfil atualizado com sucesso!');
+        req.session.success_message = 'Perfil atualizado com sucesso!';
         return res.redirect('/account/profile');
       });
     }
@@ -100,7 +100,7 @@ module.exports = {
         return res.redirect('signup');
       }
       if (err) {
-        req.flash('error_messages', 'Algo deu errado, tente novamente mais tarde');
+       req.session.error_message = 'Algo deu errado, tente novamente mais tarde';
         return res.redirect('/account/signup');
       }
       const mailOptions = {
@@ -116,7 +116,7 @@ module.exports = {
           if (loginErr) {
             return res.send(loginErr);
           }
-          req.flash('success_messages', `Seja bem-vindo ao EduMPampa ${user.name}!`);
+          req.session.success_message = `Seja bem-vindo ao EduMPampa ${user.name}!`;
           return res.redirect('/');
         });
       });
@@ -131,7 +131,7 @@ module.exports = {
         const userEmail = req.body.email;
         return User.findOne({ email: userEmail }, (err, user) => {
           if (!user) {
-            req.flash('error_messages', 'Não há nenhum cadastro com este email!');
+           req.session.error_message = 'Não há nenhum cadastro com este email!';
             return res.redirect('/account/forgot-pw');
           }
           return done(err, user);
@@ -177,7 +177,7 @@ module.exports = {
       if (err) {
         return next(err);
       }
-      req.flash('success_messages', successMsg);
+      req.session.success_message = successMsg;
       return res.redirect('/account/forgot-pw');
     });
   },
@@ -215,7 +215,7 @@ module.exports = {
         if (error) {
           res.send(error);
         }
-        req.flash('success_messages', 'Senha alterada com sucesso!');
+        req.session.success_message = 'Senha alterada com sucesso!';
         return res.redirect('/account/profile');
       });
     });

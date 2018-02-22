@@ -478,9 +478,9 @@ module.exports = {
       lo.approved = !lo.approved;
       lo.save();
       if (lo.approved) {
-        req.flash('success_messages', 'Objeto aprovado com sucesso!');
+        req.session.success_message = 'Objeto aprovado com sucesso!';
       } else {
-        req.flash('success_messages', 'Objeto desaprovado com sucesso!');
+        req.session.success_message = 'Objeto desaprovado com sucesso!';
       }
       return res.redirect('/admin/learning-object/manage');
     });
@@ -509,7 +509,7 @@ module.exports = {
             lo.remove({
               single: true,
             });
-            req.flash('success_messages', 'Objeto removido com sucesso!');
+            req.session.success_message = 'Objeto removido com sucesso!';
             return res.redirect('back');
           });
         });
@@ -517,7 +517,7 @@ module.exports = {
       lo.remove({
         single: true,
       });
-      req.flash('success_messages', 'Objeto removido com sucesso!');
+      req.session.success_message = 'Objeto removido com sucesso!';
       return res.redirect('back');
     });
   },
@@ -527,7 +527,7 @@ module.exports = {
   getMyLearningObjects(req, res) {
     /* Apenas usuários autenticados podem ver seus OA's(Obviamente) */
     if (!req.user) {
-      req.flash('error_messages', 'Página restrita para usuários cadastrados!');
+     req.session.error_message = 'Página restrita para usuários cadastrados!';
       return res.redirect('/');
     }
     /* Busca na base de dados, OA's cujo dono é o usuário autenticado (req.user) */
@@ -557,7 +557,7 @@ module.exports = {
   getDownloadOaFile(req, res) {
     /* Apenas usuários autenticados podem baixar arquivos */
     if (!req.user) {
-      req.flash('error_messages', 'Apenas usuários autenticados podem baixar arquivos');
+     req.session.error_message = 'Apenas usuários autenticados podem baixar arquivos';
       return res.redirect('back');
     }
     /* Busca o objeto pelo id passado na URL */
@@ -591,7 +591,7 @@ module.exports = {
         });
       }
       /* Sem URL e sem Arquivo apenas retorna com erro */
-      req.flash('error_messages', 'O Objeto de aprendizagem não possui arquivos');
+     req.session.error_message = 'O Objeto de aprendizagem não possui arquivos';
       return res.redirect('back');
     });
   },
