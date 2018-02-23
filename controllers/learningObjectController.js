@@ -74,7 +74,7 @@ module.exports = {
     return learningObject.save((err) => {
       if (err) {        
         req.session.errors = err.errors;
-        Mantem o corpo do POST até a próxima requisição
+        /*Mantem o corpo do POST até a próxima requisição*/
         req.flash('body', req.body);
         return res.redirect('back');
       }
@@ -132,7 +132,9 @@ module.exports = {
         return lo.save(          
           (err) => {
             if (err) {
-              req.session.error_message = err;              
+              req.session.error_message = err;
+              /*Mantem o corpo do POST até a próxima requisição*/
+              req.flash('body', req.body);
             }
             req.session.success_message = 'Objeto atualizado com sucesso!';
             return res.redirect('back');
