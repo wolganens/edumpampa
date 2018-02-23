@@ -18,6 +18,7 @@ block content
         +input('Autores *', 'authors', oldInput('authors'), 'Informe o nome dos autores do objeto')(required=true)        
         +input('Ano de autoria *', 'year', oldInput('year'), 'Informe o ano de autoria do objeto')(required)
 
+    p= flash ? flash.atane : 'flash indefinido'
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
     //- do objeto de aprendizagem a ser cadastrado    
     +lo-metadata-panels(data)

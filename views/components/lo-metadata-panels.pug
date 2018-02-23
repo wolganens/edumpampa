@@ -10,27 +10,27 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
               teaching_level.name,
               'teaching_levels[]',
               teaching_level._id,
-              (post && post.teaching_levels) || (lo && lo.teaching_levels)
+              oldInput('teaching_levels', lo && lo.teaching_levels)
             )(class="checked-string")
     .col-md-3
       +panel-default('Eixos', 'axes[]')
         fieldset
-          each axe in axes              
+          each axe in axes
             +checkbox(
             axe.name,
             'axes[]',
             axe._id,
-            (post && post.axes) || (lo && lo.axes)
+            oldInput('axes', lo && lo.axes)
           )(class="checked-string")
     .col-md-4
       +panel-default('Recursos de Acessibilidade', 'accessibility_resources[]')
         fieldset
-          each accessibility_resource in accessibility_resources              
+          each accessibility_resource in accessibility_resources
             +checkbox(
               accessibility_resource.name,
               'accessibility_resources[]',
               accessibility_resource._id,
-              (post && post.accessibility_resources) || (lo && lo.accessibility_resources)
+              oldInput('accessibility_resources', lo && lo.accessibility_resources)
             )(class="checked-string")
   if content && resources
     .row
@@ -42,7 +42,7 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
                 cont.name,
                 'content[]',
                 cont._id,
-                (post && post.content) || (lo && lo.content)
+                oldInput('content', lo && lo.content)
               )
       .col-md-6
         +panel-default('Recursos', 'resources[]')
@@ -52,5 +52,5 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
                 resource.name,
                 'resources[]',
                 resource._id,
-                (post && post.resources) || (lo && lo.resources)
+                oldInput('resources', lo && lo.resources)
               )

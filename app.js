@@ -1,22 +1,23 @@
 const express = require('express');
 const path = require('path');
 // const favicon = require('serve-favicon');
-const logger = require('morgan');
 const bodyParser = require('body-parser');
-const session = require('express-session');
-const passport = require('passport');
 const fileUpload = require('express-fileupload');
+const flash = require('connect-flash');
+const logger = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const session = require('express-session');
 
-const index = require('./routes/index');
-const auth = require('./routes/authentication');
-const admin = require('./routes/admin');
-const lo = require('./routes/learningobject');
 const accounts = require('./routes/accounts');
+const admin = require('./routes/admin');
+const auth = require('./routes/authentication');
+const app = express();
 const config = require('./config/index');
 const configPassport = require('./config/passport');
+const index = require('./routes/index');
+const lo = require('./routes/learningobject');
 
-const app = express();
 
 // Set up mongoose connection
 mongoose.Promise = global.Promise;
@@ -46,6 +47,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({ secret: '5cb1aeca94a165b0f5543cd3d6c4acc8a1d4388fa2ead70bd190f86ce943a180c42292e2fc0be8a149c0aeaf484e6bb6238217ad5ef5ad6b51556db1e75fbe3c', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload({
   limits: { fileSize: 20 * 1024 * 1024 },
@@ -73,15 +75,15 @@ app.use((req, res, next) => {
   /*
   * Mapa para manter os valores dos campos get e post
   */
-  res.locals.old = new Map();
+  res.locals.old = new Map();  
   /*
   * Cria uma entrada no mapa para cada parametro get e post
   */
-  const query_body = Object.assign({}, req.body, req.query);
+  const query_body = Object.assign({}, req.flash('body')[0], req.query);
   Object.keys(query_body).forEach(key => {
     res.locals.old.set(key, query_body[key]);
   });
-  console.log('Parâmetros get e post:' query_body);
+  console.log('Parâmetros get e post:', query_body);
   /*
   * Esta função é utilizada nas views para retornar valores da requisição (ex: campos de formulários)
   * Se o campo procurado não existir, pode ser especificado um valor padrão a ser retornado

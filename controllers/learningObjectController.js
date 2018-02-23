@@ -70,10 +70,12 @@ module.exports = {
       successMsg = ' submetido para aprovação ';
     }
 
-    const learningObject = new LearningObject(lo);
+    const learningObject = new LearningObject(lo);    
     return learningObject.save((err) => {
       if (err) {        
-        req.session.errors = err.errors;        
+        req.session.errors = err.errors;
+        Mantem o corpo do POST até a próxima requisição
+        req.flash('body', req.body);
         return res.redirect('back');
       }
       successMsg = `Objeto ${successMsg} com sucesso!`;
