@@ -245,7 +245,7 @@ module.exports = {
     }
     /*
     * Aprova os OA's que são de propriedade dos usuários enviados
-    por parâmetro (user_ids)
+    * por parâmetro (user_ids)
     */
     return LearningObject.updateMany(
       {
@@ -270,6 +270,10 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
+    /*
+    * Desaprova os OA's que são de propriedade dos usuários enviados
+    * por parâmetro (user_ids)
+    */
     return LearningObject.updateMany(
       {
         owner: {
@@ -293,6 +297,10 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
+    /*
+    * Remove os OA's que são de propriedade dos usuários enviados
+    * por parâmetro (user_ids)
+    */
     return LearningObject.deleteMany({
       owner: {
         $in: req.body['user_ids'],
