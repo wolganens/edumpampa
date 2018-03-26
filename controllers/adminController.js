@@ -210,204 +210,43 @@ module.exports = {
       });
     });
   },
-  /*
-  * Página de relatórios
-  */
-  getReports(req, res) {
-    async.parallel({
-      institutional_links(callback) {
-        InstitutionalLink.find(callback);
-      },
-      occupation_areas(callback) {
-        OccupationArea.find(callback);
-      },
-      qualifications(callback) {
-        Qualification.find(callback);
-      },
-    }, (err, results) => {
-      return res.render('admin/reports/index', {
-        data: mergeCheckboxData({ options: results }, results),
-        title: 'Relatórios - EduMPampa',
-        activetab: 'Usuários',
-      });
-    });
-  },
-  /*
-      Relatórios de usuários com base na área de atuação, formação e vínculo instituicional
-  */
-  getReportsUsers(req, res) {
-    const userQueryDocument = {};
-
-    if (req.query.qualification_id) {
-      userQueryDocument.qualification_id = req.query.qualification_id;
-    } else if (req.query.qualification_text) {
-      userQueryDocument.qualification_text = req.query.qualification_text;
-    }
-
-    if (req.query.occupation_area_id) {
-      userQueryDocument.occupation_area_id = req.query.occupation_area_id;
-    } else if (req.query.occupation_area_text) {
-      userQueryDocument.occupation_area_text = req.query.occupation_area_text;
-    }
-
-    if (req.query.institutional_link_id) {
-      userQueryDocument.institutional_link_id = req.query.institutional_link_id;
-    } else if (req.query.institutional_link_text) {
-      userQueryDocument.institutional_link_text = req.query.institutional_link_text;
-    }
-    return User.count(userQueryDocument, (countErr, count) => {
-      if (countErr) {
-        return res.send(countErr);
-      }
-      return User.find(userQueryDocument, (err, users) => {
-        if (err) {
-          return res.send(err);
-        }
-        return res.render('admin/reports/users', {
-          count,
-          users,
-          title: 'Resultado do Relatório - EduMPampa',
-          activetab: 'Usuários',
-        });
-      });
-    });
-  },
   getUserRemove(req, res) {
+    /*
+    * Verifica se o usupário tem permissão para remover usuários (Admin)
+    */
     const permission = ac.can(req.user.role).deleteAny('user');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
+    /*
+    * Remove todos os objetos de aprendizagem que são de propriedade
+    * do usuário que está tentando ser excluído (owner)
+    */
     return LearningObject.remove({ owner: req.params.id }, (errLO) => {
       if (errLO) {
         return res.send(errLO);
       }
+      /*
+      * Remove o usuário em si
+      */
       return User.findByIdAndRemove(req.params.id, (errUser) => {
         if (errUser) {
           return res.send(errUser);
         }
-       req.session.success_message = 'Usuário removido com sucesso!';
+        req.session.success_message = 'Usuário removido com sucesso!';
         return res.redirect('/admin/user/manage');
       });
     });
-  },
-  /*
-      Relatório de Objetos de aprendizagem
-      */
-  getLoReports(req, res) {
-    const permission = ac.can(req.user.role).updateAny('learningObject');
-    if (!permission.granted) {
-      res.status(403).send('Você não tem permissão!');
-      return;
-    }
-    async.parallel({
-      accessibility_resources(callback) {
-        AccessibilityResources.find(callback);
-      },
-      axes(callback) {
-        Axes.find(callback);
-      },
-      teaching_levels(callback) {
-        TeachingLevels.find(callback);
-      },
-      resources(callback) {
-        Resources.find({}).sort('name').exec(callback);
-      },
-      contents(callback) {
-        Contents.find({}).sort('name').exec(callback);
-      },
-    }, (err, results) => {
-      if (err) {
-        return res.send(err);
-      }
-      return res.render('admin/reports/learning-objects', {
-        title: 'Relatórios OA - EduMPampa',
-        data: mergeCheckboxData({ options: results }, results),
-        activetab: 'OA\'s',
-      });
-    });
-  },
-  getLoReportsResults(req, res) {
-    /*
-          Variavel responsavel por armazenar os filtros de busca da query
-      */
-    const and = {
-      $and: [],
-    };
-    /*
-          Popula os arrays de consulta com os checkbox marcados pelo usuário
-      */
-    let qAccResources = [];
-    if (req.query.accessibility_resources) {
-      qAccResources = getReqParamAsArray(req.query.accessibility_resources);
-    }
-    let qAxes = [];
-    if (req.query.axes) {
-      qAxes = getReqParamAsArray(req.query.axes);
-    }
-    let qTeachingLevels = [];
-    if (req.query.teaching_levels) {
-      qTeachingLevels = getReqParamAsArray(req.query.teaching_levels);
-    }
-    let qResources = [];
-    if (req.query.resources) {
-      qResources = getReqParamAsArray(req.query.resources);
-    }
-    let qContents = [];
-    if (req.query.contents) {
-      qContents = getReqParamAsArray(req.query.contents);
-    }
-    if (qAccResources.length > 0) {
-      and.$and.push({
-        accessibility_resources: { $all: qAccResources },
-      });
-    }
-    if (qAxes.length > 0) {
-      and.$and.push({
-        axes: { $all: qAxes },
-      });
-    }
-    if (qTeachingLevels.length > 0) {
-      and.$and.push({
-        teaching_levels: { $all: qTeachingLevels },
-      });
-    }
-    if (qContents.length > 0) {
-      and.$and.push({
-        content: { $all: qContents },
-      });
-    }
-    if (qResources.length > 0) {
-      and.$and.push({
-        resources: { $all: qResources },
-      });
-    }
-    console.log(JSON.stringify(and));
-    LearningObject.aggregate([
-      {
-        $match: and,
-      },
-      {
-        $project: { title: '$title' },
-      },
-    ], (err, result) => {
-      if (err) {
-        return res.send(err);
-      }
-      return res.send(result);
-    });
-    // Quando for renderizar a View, inserir também no objeto
-    // para ativar a tab:
-    // { activetab: 'OA\'s por usuário' }
-  },
-  getUserLoReports(req, res) {
-    req.session.success_message = "Página em construção!";
-    return res.redirect('back');
   },
   postAprroveUserOa(req, res) {
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
+    /*
+    * Aprova os OA's que são de propriedade dos usuários enviados
+    por parâmetro (user_ids)
+    */
     return LearningObject.updateMany(
       {
         owner: {

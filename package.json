@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "nodemon ./bin/www",
+    "devstart": "nodemon ./bin/www --watch controllers/*.js",
     "lint": "eslint --config .eslintrc.json app.js controllers/**/*.js passaport.js bin/**/*.js helpers/**/*.js routes/**/*.js config/**/*.js models/**/*.js || exit 0"
   },
   "dependencies": {

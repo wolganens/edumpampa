@@ -491,38 +491,39 @@ module.exports = {
   getRemoveObject(req, res) {
     return LearningObject.findById(req.params.id, { owner: 1, file: 1 }, (findErr, lo) => {
       if (findErr) {
-        return res.send(findErr);
-      }
-      const permission = lo.owner.toString() === req.user._id.toString() ? ac.can(req.user.role).deleteOwn('learningObject') : ac.can(req.user.role).deleteAny('learningObject');
-      if (!permission.granted) {
-        return res.status(403).send('Você não tem permissão!');
-      }
-      if (lo.file) {
-        const filePath = path.join(__dirname, '..', 'public', lo.file.url);
-        return fs.stat(filePath, (statErr, stat) => {
-          if (statErr) {
-            return res.send(statErr);
-          }
-          console.log(`O diretório existe: ${stat}`);
-          return fs.unlink(filePath, (err, unlinkRes) => {
-            if (err) {
-              return res.send(err);
+        req.session.error_message = findErr;
+        return redirect('back');
+      } else {
+        if (lo.file) {
+          const filePath = path.join(__dirname, '..', 'public', lo.file.url);
+          return fs.stat(filePath, (statErr, stat) => {
+            if (statErr) {
+              console.log(statErr);
+            } else {
+              console.log(`O diretório existe: ${stat}`);
+              return fs.unlink(filePath, (err, unlinkRes) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(`Arquivo removido: ${unlinkRes}`);
+                }
+              });
             }
-            console.log(`Arquivo removido: ${unlinkRes}`);
             lo.remove({
               single: true,
             });
             req.session.success_message = 'Objeto removido com sucesso!';
             return res.redirect('back');
           });
-        });
+        } else {
+          lo.remove({
+            single: true,
+          });
+          req.session.success_message = 'Objeto removido com sucesso!';
+          return res.redirect('back');
+        }
       }
-      lo.remove({
-        single: true,
-      });
-      req.session.success_message = 'Objeto removido com sucesso!';
-      return res.redirect('back');
-    });
+    })   
   },
   /*
       Página de listagem de OA's do usuário autenticado
