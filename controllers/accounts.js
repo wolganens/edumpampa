@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const async = require('async');
 const pug = require('pug');
 const path = require('path');
@@ -58,14 +57,14 @@ module.exports = {
     * na variavel post para em caso de falha de validação o formulário
     * mantenha os dados previamente enviados
     */
-    const userData = req.body;    
+    const userData = req.body;
     /*
     * Caso as senhas informadas não sejam iguais (senha e confirmar senha)
     * Instancia um objeto de erros "semelhante" ao ValidationError do Mongoose
     * e coloca o objeto na sessão para que o erro seja automaticamente evindenciado
     * abaixo do input
     */
-    if (userData.password !== userData.password_confirm) {      
+    if (userData.password !== userData.password_confirm) {
       const errors = {
         password_confirm: { message: 'As senhas informadas não conferem!' },
       };
@@ -74,25 +73,18 @@ module.exports = {
     }
     /*
     * Converte a string de data em um objeto Date
-    */    
+    */
     userData.birthday = strDateToObject(userData.birthday);
-    
     return User.register(userData, (err, user) => {
-      /*
-      * Para a data de nascimento ir para o formulário no mesmo formato em que foi
-      * submetida anteriormente
-      */
-      req.session.post.birthday = `${day}/${month}/${year}`;
-
-      if (err){ 
+      if (err) {
         /*
-        * Se o mongodb retornar um erro por violação de unicidade, é por que 
-        * foi inserido um email que já está sendo utilizado, assim sendo, o 
+        * Se o mongodb retornar um erro por violação de unicidade, é por que
+        * foi inserido um email que já está sendo utilizado, assim sendo, o
         * objeto de erro é instanciado e colocado na sessão.
         */
         if (err.code === 11000 || err.code === 11001) {
           const errors = {
-              email: { message: 'Este email já está sendo utilizado!' },
+            email: { message: 'Este email já está sendo utilizado!' },
           };
           req.session.errors = errors;
         } else {
@@ -133,37 +125,38 @@ module.exports = {
       });
     });
   },
-  postUpdate(req, res){
+  postUpdate(req, res) {
     /*
     * Busca a model do usuário autenticado
     */
     return User.findById(req.user._id, (findErr, user) => {
+      const userData = user;
       if (findErr) {
         return res.send(findErr);
       }
       /*
       * Atualiza os valores dos campos do modelo, atribuindo aos mesmos
       * os valores enviados no formulário
-      */      
-      Object.keys(req.body).forEach(function(field){
+      */
+      Object.keys(req.body).forEach((field) => {
         /*
-        * Impede o usuário de inserir um campo fictício para alterar 
+        * Impede o usuário de inserir um campo fictício para alterar
         * seu nível de permissão (role) dentro da aplicação
         */
         if (field !== 'role') {
-          user[field] = req.body[field];          
+          userData[field] = req.body[field];
         }
         if (field === 'birthday') {
           /*
           * Converte a string de data em um objeto Date
           */
-          user[field] = strDateToObject(req.body[field]);
+          userData[field] = strDateToObject(req.body[field]);
         }
-      });      
+      });
       /*
       * Atualiza o modelo, exibindo a mensagem de sucesso ou os erros
       */
-      return user.save((saveErr) => {
+      return userData.save((saveErr) => {
         if (saveErr) {
           return res.send(saveErr);
         }
@@ -178,7 +171,7 @@ module.exports = {
   postForgotPw(req, res, next) {
     /*
     * Executa 3 operações em cascata: Encontra o usuário pelo email,
-    * gera uma senha nova e altera o documento do usuário e por fim 
+    * gera uma senha nova e altera o documento do usuário e por fim
     * envia um email com a senha nova.
     */
     async.waterfall([
@@ -272,13 +265,11 @@ module.exports = {
       user(callback) {
         User.findById(req.user._id, callback);
       },
-    }, (err, results) => {      
-      return res.render('account/profile', {
-        error: err,
-        data: results,
-        title: 'Minha conta - EduMPampa',
-      });
-    });
+    }, (err, results) => res.render('account/profile', {
+      error: err,
+      data: results,
+      title: 'Minha conta - EduMPampa',
+    }));
   },
   getChangePw(req, res) {
     /*
@@ -303,12 +294,12 @@ module.exports = {
     return User.findById(req.user._id, (err, user) => {
       if (err) {
         res.send(err);
-      }   
+      }
       return user.changePassword(req.body.old_pw, req.body.password, (error) => {
         if (error) {
           res.send(error);
         }
-        req.session.success_message = 'Senha alterada com sucesso!';        
+        req.session.success_message = 'Senha alterada com sucesso!';
         return res.redirect('back');
       });
     });
