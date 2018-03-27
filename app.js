@@ -1,22 +1,23 @@
-const express = require('express');
-const path = require('path');
-// const favicon = require('serve-favicon');
-const bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload');
-const flash = require('connect-flash');
-const logger = require('morgan');
-const mongoose = require('mongoose');
-const passport = require('passport');
-const session = require('express-session');
-
+const config = require('./config/index');
+const configPassport = require('./config/passport');
 const accounts = require('./routes/accounts');
 const admin = require('./routes/admin');
 const auth = require('./routes/authentication');
-const app = express();
-const config = require('./config/index');
-const configPassport = require('./config/passport');
 const index = require('./routes/index');
 const lo = require('./routes/learningobject');
+const bodyParser = require('body-parser');
+const flash = require('connect-flash');
+const express = require('express');
+const fileUpload = require('express-fileupload');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const logger = require('morgan');
+const passport = require('passport');
+const path = require('path');
+// const favicon = require('serve-favicon');
+
+
+const app = express();
 
 
 // Set up mongoose connection
@@ -60,14 +61,14 @@ app.use((req, res, next) => {
   */
   Object.keys(req.body).forEach((field) => {
     const indexArrayChar = field.indexOf('[');
-    if (indexArrayChar != -1) {
+    if (indexArrayChar !== -1) {
       if (!Array.isArray(req.body[field])) {
         req.body[field.substr(0, indexArrayChar)] = [req.body[field]];
       } else {
         req.body[field.substr(0, indexArrayChar)] = req.body[field];
       }
       delete req.body[field];
-    }    
+    }
   });
   next();
 });
@@ -75,25 +76,26 @@ app.use((req, res, next) => {
   /*
   * Mapa para manter os valores dos campos get e post
   */
-  res.locals.old = new Map();  
+  res.locals.old = new Map();
   /*
   * Cria uma entrada no mapa para cada parametro get e post
   */
-  const query_body = Object.assign({}, req.flash('body')[0], req.query);
-  Object.keys(query_body).forEach(key => {
-    res.locals.old.set(key, query_body[key]);
+  const queryBody = Object.assign({}, req.flash('body')[0], req.query);
+  Object.keys(queryBody).forEach((key) => {
+    res.locals.old.set(key, queryBody[key]);
   });
-  console.log('Parâmetros get e post:', query_body);
+  console.log('Parâmetros get e post:', queryBody);
   /*
-  * Esta função é utilizada nas views para retornar valores da requisição (ex: campos de formulários)
-  * Se o campo procurado não existir, pode ser especificado um valor padrão a ser retornado
+  * Esta função é utilizada nas views para retornar valores da requisição
+  * (ex: campos de formulários)Se o campo procurado não existir, pode ser
+  * especificado um valor padrão a ser retornado
   */
-  res.locals.oldInput = (field, dflt) => {    
+  res.locals.oldInput = (field, dflt) => {
     if (res.locals.old.has(field)) {
       return res.locals.old.get(field);
     }
     return dflt || null;
-  }
+  };
   /*
   * O campo errors dentro de locals serve para exibir os erros em views,
   * por exemplo: erros de validação de campos
@@ -114,10 +116,10 @@ app.use((req, res, next) => {
   */
   res.locals.currentUser = req.user;
   /*
-  * Url atual da aplicação para utilizar na paginação de consultas e destacar 
+  * Url atual da aplicação para utilizar na paginação de consultas e destacar
   * abas (bootstrap tabs) ativas
   */
-  res.locals.currentPath = req.url;  
+  res.locals.currentPath = req.url;
   next();
 });
 app.use('/', index);
@@ -125,8 +127,6 @@ app.use('/account', accounts);
 app.use('/auth', auth);
 app.use('/admin', admin);
 app.use('/learning-object', lo);
-
-
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
