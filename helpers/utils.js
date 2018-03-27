@@ -77,7 +77,7 @@ module.exports = {
     * em um objeto de Date
     */
     console.log(strDate);
-    
+
     const [day, month, year] = strDate.split('/');
     return new Date(year, month - 1, day);
   },
