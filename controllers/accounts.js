@@ -58,8 +58,7 @@ module.exports = {
     * na variavel post para em caso de falha de validação o formulário
     * mantenha os dados previamente enviados
     */
-    const userData = req.body;
-    req.session.post = req.body;    
+    const userData = req.body;    
     /*
     * Caso as senhas informadas não sejam iguais (senha e confirmar senha)
     * Instancia um objeto de erros "semelhante" ao ValidationError do Mongoose
@@ -78,13 +77,7 @@ module.exports = {
     */    
     userData.birthday = strDateToObject(userData.birthday);
     
-    return User.register(userData, (err, user) => {      
-      /*
-      * Remove as senhas informadas na requisição para obrigar o usuário a
-      * inserí-las novamente na próxima submissão
-      */
-      delete req.session.post.password;
-      delete req.session.post.password_confirm;
+    return User.register(userData, (err, user) => {
       /*
       * Para a data de nascimento ir para o formulário no mesmo formato em que foi
       * submetida anteriormente
