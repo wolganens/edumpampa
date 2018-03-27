@@ -17,13 +17,11 @@ module.exports = {
       teaching_levels(callback) {
         TeachingLevels.find(callback);
       },
-    }, (err, results) => {
-      return res.render('index', {
-        title: 'Repositório de Objetos de Aprendizagem',
-        error: err,
-        data: results
-      });
-    });
+    }, (err, results) => res.render('index', {
+      title: 'Repositório de Objetos de Aprendizagem',
+      error: err,
+      data: results,
+    }));
   },
   /*
       Renderiza a página de formulário de contato
@@ -75,7 +73,7 @@ module.exports = {
     const mailOptions = {
       to: 'edumpampa@gmail.com',
       subject: req.body.subject,
-      html: req.body.message + `<p>Email de contato: ${req.body.email}</p>`,
+      html: `$(req.body.message)<p>Email de contato: ${req.body.email}</p>`,
     };
     return email.sendMail(mailOptions, (error) => {
       if (error) {
