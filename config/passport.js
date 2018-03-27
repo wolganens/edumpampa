@@ -1,5 +1,6 @@
 const passport = require('passport');
 const mongoose = require('mongoose');
+require('../models/user')
 
 const localStrategy = require('./strategies/local');
 const googleStrategy = require('./strategies/google');

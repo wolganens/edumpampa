@@ -1,3 +1,4 @@
+require('dotenv').load();
 const config = require('./config/index');
 const configPassport = require('./config/passport');
 const accounts = require('./routes/accounts');
@@ -23,7 +24,7 @@ const app = express();
 // Set up mongoose connection
 mongoose.Promise = global.Promise;
 
-const mongoDB = process.env.MONGODB_URI || 'mongodb://edumpampa:unipampaedumpampa@ds129459.mlab.com:29459/edumpampa';
+const mongoDB = process.env.MONGODB_URI
 
 
 configPassport(app);
