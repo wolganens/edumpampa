@@ -77,13 +77,7 @@ module.exports = {
     */    
     userData.birthday = strDateToObject(userData.birthday);
     
-    return User.register(userData, (err, user) => {      
-      /*
-      * Remove as senhas informadas na requisição para obrigar o usuário a
-      * inserí-las novamente na próxima submissão
-      */
-      delete req.session.post.password;
-      delete req.session.post.password_confirm;
+    return User.register(userData, (err, user) => {
       /*
       * Para a data de nascimento ir para o formulário no mesmo formato em que foi
       * submetida anteriormente
