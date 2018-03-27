@@ -1,18 +1,10 @@
-const async = require('async');
-
-const User = require('../models/user');
 const ac = require('../config/roles');
-const InstitutionalLink = require('../models/institutional_link');
-const OccupationArea = require('../models/occupation_area');
-const Qualification = require('../models/qualifications');
-const AccessibilityResources = require('../models/accessibilityresources');
-const Axes = require('../models/axes');
-const TeachingLevels = require('../models/teachinglevels');
 const LearningObject = require('../models/learningobject');
-const Contents = require('../models/contents');
-const Resources = require('../models/resources');
+const User = require('../models/user');
 
-/*Ordena um vetor de objetos com base em um campo do objeto*/
+/*
+* Ordena um vetor de objetos com base em um campo do objeto
+*/
 const { sortDocsInArray } = require('../helpers/utils.js');
 
 module.exports = {
@@ -25,25 +17,25 @@ module.exports = {
     */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
+      return res.status(403).send('Você não tem permissão!');
     }
     /*
     * Opções de ordenação de resultados (data)
     */
     const sortOptions = [
-      {value: '' , text: 'Ordenar resultados' },
-      {value: 'name' , text: 'Nome' },
-      {value: 'newer' , text: 'Mais novo'},
-      {value: 'older' , text: 'Mais antigos'},
-    ]
+      { value: '', text: 'Ordenar resultados' },
+      { value: 'name', text: 'Nome' },
+      { value: 'newer', text: 'Mais novo' },
+      { value: 'older', text: 'Mais antigos' },
+    ];
     /*
     * Opções de filtros por situação
     */
     const situationOptions = [
-      {value: '' , text: 'Selecionar situação'},
-      {value: 'aut' , text: 'Autorizados'},
-      {value: 'des' , text: 'Desautorizados'},
-    ]
+      { value: '', text: 'Selecionar situação' },
+      { value: 'aut', text: 'Autorizados' },
+      { value: 'des', text: 'Desautorizados' },
+    ];
     /*
     * Inicia a consulta procurando por todos os usuários, sem restrições
     */
@@ -89,8 +81,8 @@ module.exports = {
       */
       if (!sort || sort === 'name') {
         data = sortDocsInArray(data, 'name');
-      }      
-      
+      }
+
       return res.render('admin/user/manage', {
         sortOptions,
         situationOptions,
@@ -105,16 +97,16 @@ module.exports = {
     */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
+      return res.status(403).send('Você não tem permissão!');
     }
     /*
     * Encontra o usuário e atualiza seu papel para 'AUTHORIZED'
     */
     return User.findByIdAndUpdate(req.params.id, { $set: { role: 'AUTHORIZED' } }, (err) => {
       if (err) {
-        return res.send(err);        
+        return res.send(err);
       }
-      req.session.success_message = 'Usuário autorizado com sucesso!';      
+      req.session.success_message = 'Usuário autorizado com sucesso!';
       return res.redirect('back');
     });
   },
@@ -124,16 +116,16 @@ module.exports = {
     */
     const permission = ac.can(req.user.role).updateAny('user');
     if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
+      return res.status(403).send('Você não tem permissão!');
     }
     /*
     * Encontra o usuário e atualiza seu papel para 'COMMON'
     */
     return User.findByIdAndUpdate(req.params.id, { $set: { role: 'COMMON' } }, (err) => {
       if (err) {
-        return res.send(err);        
+        return res.send(err);
       }
-      req.session.success_message = 'Usuário desautorizado com sucesso!';      
+      req.session.success_message = 'Usuário desautorizado com sucesso!';
       return res.redirect('back');
     });
   },
@@ -143,25 +135,25 @@ module.exports = {
     */
     const permission = ac.can(req.user.role).updateAny('learningObject');
     if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');      
+      return res.status(403).send('Você não tem permissão!');
     }
     /*
     * Opções de ordenação de resultados (data)
     */
     const sortOptions = [
-      {value: '' , text: 'Ordenar resultados' },
-      {value: 'name' , text: 'Título' },
-      {value: 'newer' , text: 'Mais novos'},
-      {value: 'older' , text: 'Mais antigos'},
-    ]
+      { value: '', text: 'Ordenar resultados' },
+      { value: 'name', text: 'Título' },
+      { value: 'newer', text: 'Mais novos' },
+      { value: 'older', text: 'Mais antigos' },
+    ];
     /*
     * Opções de filtros por situação
     */
     const situationOptions = [
-      {value: '' , text: 'Selecionar situação'},
-      {value: 'hab' , text: 'Habilitados'},
-      {value: 'des' , text: 'Desabilitados'},
-    ]
+      { value: '', text: 'Selecionar situação' },
+      { value: 'hab', text: 'Habilitados' },
+      { value: 'des', text: 'Desabilitados' },
+    ];
     /*
     * Inicia a cosulta trazendo todos os OA da base de dados
     */
@@ -250,7 +242,7 @@ module.exports = {
     return LearningObject.updateMany(
       {
         owner: {
-          $in: req.body['user_ids'],
+          $in: req.body.user_ids,
         },
       },
       {
@@ -277,7 +269,7 @@ module.exports = {
     return LearningObject.updateMany(
       {
         owner: {
-          $in: req.body['user_ids'],
+          $in: req.body.user_ids,
         },
       },
       {
@@ -303,7 +295,7 @@ module.exports = {
     */
     return LearningObject.deleteMany({
       owner: {
-        $in: req.body['user_ids'],
+        $in: req.body.user_ids,
       },
     }, (err, result) => {
       if (err) {
