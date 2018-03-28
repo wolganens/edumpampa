@@ -4,9 +4,6 @@ html(lang='pt-br')
     title= title
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    //- script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
-    link(rel='stylesheet', href='/stylesheets/app.css')
-    link(rel='stylesheet', href='/stylesheets/dropzone.min.css')
   body
     .container
       ul#atalhos.nav.navbar-nav
@@ -103,8 +100,5 @@ html(lang='pt-br')
           li
             a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
               img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
-    script(src='/javascripts/jquery.min.js')
-    script(src='/javascripts/bootstrap.min.js')
-    script(src='/javascripts/app.js')
-    script(src='/javascripts/dropzone.min.js')
+    script(src='/app.js')    
     block scripts

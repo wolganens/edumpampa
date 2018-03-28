@@ -1,0 +1,21 @@
+#drop {
+	width: 100%;
+	min-height:150px;	
+	border: 10px dashed rgb(98, 183, 219);
+	background-color: #fff;
+	background-image: url('../img/outbox.svg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 70px;
+	padding: 10px;
+	cursor: pointer;
+	&.dz-drag-hover{
+		opacity: 0.5;
+	}
+	p {
+		color: #050709
+	}
+}
+.dz-complete > div {
+	display: inline;
+}
