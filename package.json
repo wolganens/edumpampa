@@ -48,6 +48,14 @@
     "eslint-plugin-import": "^2.8.0",
     "mongoose": "^4.12.4",
     "nodemon": "^1.12.1",
-    "webpack": "^4.3.0"
+    "webpack": "^4.3.0",
+    "css-loader": "^0.28.9",
+    "file-loader": "^1.1.6",
+    "gifsicle": "^3.0.4",
+    "node-sass": "^4.7.2",
+    "raw-loader": "^0.5.1",
+    "sass-loader": "^6.0.6",
+    "script-loader": "^0.7.2",
+    "style-loader": "^0.20.1"
   }
 }
