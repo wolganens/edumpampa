@@ -4,8 +4,8 @@
 mixin user-form({ qualifications, occupation_areas, institutional_links, institutional_posts, user })
   
   +panel-default('Informações Pessoais')
-      +input('Nome Completo *', 'name', (post && post.name) || (user && user.name), 'Insira o seu nome completo')(required=true)
-      +input('Data de Nascimento *', 'birthday', (post && post.birthday) || (user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
+      +input('Nome Completo *', 'name', oldInput('name', user && user.name), 'Insira o seu nome completo')(required=true)
+      +input('Data de Nascimento *', 'birthday', oldInput('birthday', user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
 
   +panel-default('Formação *')
       fieldset
@@ -14,9 +14,9 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             qualification.name,
             'qualification_id',
             qualification._id,
-            (post && post.qualification_id === qualification._id.toString()) || (user && user.qualification_id.toString() === qualification._id.toString())
+            oldInput('qualification_id') === qualification._id.toString() || (user && user.qualification_id.toString() === qualification._id.toString())
           )
-      +input('Outra', 'qualification_text', (post && post.qualification_text) || (user && user.qualification_text), 'Insira uma formação alternativa')(class='js-other')
+      +input('Outra', 'qualification_text', oldInput('qualification_text', user && user.qualification_text), 'Insira uma formação alternativa')(class='js-other')
 
   +panel-default('Área de Atuação *')
       fieldset
@@ -25,9 +25,9 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             occupation_area.name,
             'occupation_area_id',
             occupation_area._id,
-            (post && post.occupation_area_id === occupation_area._id.toString()) || (user && user.occupation_area_id.toString() === occupation_area._id.toString())
+            oldInput('occupation_area_id') === occupation_area._id.toString() || (user && user.occupation_area_id.toString() === occupation_area._id.toString())
           )
-      +input('Outra', 'occupation_area_text', (post && post.occupation_area_text) || (user && user.occupation_area_text), 'Insira uma área de atuação alternativa')(class='js-other')
+      +input('Outra', 'occupation_area_text', oldInput('occupation_area_text', user && user.occupation_area_text), 'Insira uma área de atuação alternativa')(class='js-other')
 
   +panel-default('Vínculo Institucional *')
       fieldset
@@ -36,13 +36,13 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             institutional_link.name,
             'institutional_link_id',
             institutional_link._id,
-            (post && post.institutional_link_id === institutional_link._id.toString()) || (user && user.institutional_link_id.toString() === institutional_link._id.toString())
+            oldInput('institutional_link_id') === institutional_link._id.toString() || (user && user.institutional_link_id.toString() === institutional_link._id.toString())
           )
-      +input('Outro', 'institutional_link_text', (post && post.institutional_link_text) || (user && user.institutional_link_text), 'Insira um vínculo institucional alternativo')(class='js-other')
+      +input('Outro', 'institutional_link_text', oldInput('institutional_link_text', user && user.institutional_link_text), 'Insira um vínculo institucional alternativo')(class='js-other')
 
   +panel-default('Identificação da Instituição *')
-      +input('Nome da Instituição *', 'institution_name', (post && post.institution_name) || (user && user.institution_name), 'Insira o nome da instituição')(required=true)
-      +input('Endereço da Instituição *', 'institution_address', (post && post.institution_address) || (user && user.institution_address), 'Insira a rua, número, bairro, cidade, estado e país')(required=true)
+      +input('Nome da Instituição *', 'institution_name', oldInput('institution_name', user && user.institution_name), 'Insira o nome da instituição')(required=true)
+      +input('Endereço da Instituição *', 'institution_address', oldInput('institution_address', user && user.institution_address), 'Insira a rua, número, bairro, cidade, estado e país')(required=true)
 
   +panel-default('Cargo ou Função dentro da Instituição')
       fieldset
@@ -51,13 +51,13 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             institutional_post.name,
             'institutional_post_id[]',
             institutional_post._id,
-            post.institutional_post_id || user.institutional_post_id
+            oldInput('institutional_post_id', user && user.institutional_post_id)
           )
-      +input('Outro', 'institutional_post_text', (post && post.institutional_post_text) || (user && user.institutional_post_text), 'Insira um cargo ou função alternativos')
+      +input('Outro', 'institutional_post_text', oldInput('institutional_post_text', user && user.institutional_post_text), 'Insira um cargo ou função alternativos')
 
   //- Usuários autenticados alteram sua senha em uma página específica separadamente  
   if (!user)
     +panel-default('Informações de Usuário')
-        +input('Email *', 'email', (post && post.email) || (user && user.email), 'Exemplo: edumpampa@mus.edu.br')(required=true)
-        +input('Senha *', 'password', (post && post.password) || (user && user.password), 'Insira uma senha de acesso')(required=true, type="password")
-        +input('Confirmar Senha *', 'password_confirm', (post && post.password_confirm) || (user && user.password_confirm), 'Confirme a senha inserida')(required=true, type="password")
+        +input('Email *', 'email', oldInput('email', user && user.email), 'Exemplo: edumpampa@mus.edu.br')(required=true)
+        +input('Senha *', 'password', oldInput('password', user && user.password), 'Insira uma senha de acesso')(required=true, type="password")
+        +input('Confirmar Senha *', 'password_confirm', oldInput('password_confirm', user && user.password_confirm), 'Confirme a senha inserida')(required=true, type="password")
