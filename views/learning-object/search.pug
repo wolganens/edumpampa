@@ -47,7 +47,7 @@ block content
       if data.learningObject.length > 0
         each lo in data.learningObject
           article
-            a(href="/learning-object/single/" + lo._id.toString())
+            a(target="_blank" href="/learning-object/single/" + lo._id.toString())
               | !{lo.title}
             p
               | Publicado em
