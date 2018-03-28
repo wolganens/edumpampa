@@ -15,6 +15,18 @@ mixin input(label, name, value, placeholder)
     if errors && errors[name]
       .alert.alert-danger !{errors[name].message}
 
+mixin datepicker(label, name, value, placeholder)
+  -
+    attributes.name = name
+    attributes.value = value
+    attributes.placeholder = placeholder
+    attributes.type = 'text'
+    attributes['data-date-format'] = 'dd/mm/yyyy';
+  .input-group.date
+      input.form-control&attributes(attributes)
+      .input-group-addon
+          span.glyphicon.glyphicon-th
+
 mixin textarea(label, name, value, placeholder)
   -
     attributes.name = name
