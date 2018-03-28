@@ -1,11 +1,10 @@
 //- Este arquivo contem os campos do formulário de cadastro de um usuário. Estes campos também
 //- são utilizados na página de visualização e atualização do perfil do usuário. Dessa forma, ou
 //- as informações vem de uma requisião (post) ou de um objeto de usuário (user)
-mixin user-form({ qualifications, occupation_areas, institutional_links, institutional_posts, user })
-  
+mixin user-form({ qualifications, occupation_areas, institutional_links, institutional_posts, user })    
   +panel-default('Informações Pessoais')
       +input('Nome Completo *', 'name', oldInput('name', user && user.name), 'Insira o seu nome completo')(required=true)
-      +input('Data de Nascimento *', 'birthday', oldInput('birthday', user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
+      +datepicker('Data de Nascimento *', 'birthday', oldInput('birthday', user && user.getFormatedBirthday), 'Formato: DD/MM/AAAA')(required=true)
 
   +panel-default('Formação *')
       fieldset
