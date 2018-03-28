@@ -51,6 +51,7 @@ module.exports = {
     });
   },
   postSignUp(req, res) {
+    req.flash('body', req.body);
     /*
     * Extrai os dados do formulário de cadastro do usuário
     * para a variavel userData. Além disso, salva os dados enviados

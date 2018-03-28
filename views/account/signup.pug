@@ -5,7 +5,7 @@ include user-form
 
 block content
   h3 Novo Usuário
-  form(action="/account/create", method="post")
+  form(action="/account/signup", method="post")
     +user-form(data)
 
     +submit('Cadastrar')(class="btn-lg pull-right")
