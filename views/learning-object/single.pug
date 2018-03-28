@@ -13,10 +13,10 @@ block content
     input(type='hidden', name='object_id', value=data.lo._id)
     //- Formulário de dados gerais do objeto de aprendizagem
     +panel-default('Dados Gerais')    
-        +input('Título *', 'title', post.title || data.lo.title, 'Informe o título do objeto')(required=true)
-        +textarea('Descrição *', 'description', post.description || data.lo.description, 'Informe a descrição do objeto')(required=true)
-        +input('Autores *', 'authors', post.authors || data.lo.authors, 'Informe o nome dos autores do objeto')(required=true)        
-        +input('Ano de autoria *', 'year', post.year || data.lo.year, 'Informe o ano de autoria do objeto')(required)
+        +input('Título *', 'title', oldInput('title', data.lo.title), 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', oldInput('description', data.lo.description), 'Informe a descrição do objeto')(required=true)
+        +input('Autores *', 'authors', oldInput('authors', data.lo.authors), 'Informe o nome dos autores do objeto')(required=true)        
+        +input('Ano de autoria *', 'year', oldInput('year', data.lo.year), 'Informe o ano de autoria do objeto')(required)
 
     //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
     //- do objeto de aprendizagem a ser atualizado, ou os dados vem de um post anterior

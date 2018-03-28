@@ -94,7 +94,7 @@ module.exports = {
         if (mailErr) {
           return res.send(mailErr);
         }
-        res.locals.success_messages = successMsg;
+        req.session.success_message = successMsg;
         return res.redirect(`/learning-object/single/${learningObject._id}`);
       });
     });
