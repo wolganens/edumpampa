@@ -24,7 +24,7 @@ const app = express();
 // Set up mongoose connection
 mongoose.Promise = global.Promise;
 
-const mongoDB = process.env.MONGODB_URI
+const mongoDB = process.env.MONGODB_URI;
 
 
 configPassport(app);
