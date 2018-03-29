@@ -30,8 +30,8 @@ html(lang='pt-br')
           label.sr-only.hidden(for="irbusca")
             | Busca pelo título
           input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" title="Busca pelo título", placeholder="Buscar objetos pelo título", id="irbusca")
-        button.btn.btn-primary(type="submit") 
-          i(class="fa fa-search" aria-hidden="true") 
+        button.btn.btn-primary(type="submit")
+          i(class="fa fa-search" aria-hidden="true")
           | Buscar
       .clearfix
       nav.navbar.navbar-default#irmenu
@@ -62,23 +62,23 @@ html(lang='pt-br')
                       | Gerenciar OA
                   li(class=currentPath == '/admin/user/manage' ? 'active' : null)
                     a(href="/admin/user/manage", title="Gerenciar Usuários")
-                      | Gerenciar Usuarios                  
+                      | Gerenciar Usuarios
             ul.nav.navbar-nav.navbar-right
               li(class=currentPath == '/contact' ? 'active' : null)
                 a(href="/contact", title="Enviar uma mensagem de contato")
                   | Contato
-              if currentUser                              
+              if currentUser
                 li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
                   a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
                     | !{currentUser.name}
                     span.caret
                   ul.dropdown-menu
                     li
-                      a(href="/account/profile", title="Ver minha conta") Minha conta
+                      a(href="/account/profile", title="Ver minha conta") Meu cadastro
                     li
                       a(href="/account/change-pw", title="Alterar senha") Alterar minha senha
                     li
-                      a(href="/auth/signout", title="Sair do EduMPampa") Sair 
+                      a(href="/auth/signout", title="Sair do EduMPampa") Sair
               else
                 li(class=currentPath == '/account/signin' ? 'active' : null)
                   a(href="/account/signin") Login
@@ -100,5 +100,5 @@ html(lang='pt-br')
           li
             a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
               img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
-    script(src='/app.js')    
+    script(src='/app.js')
     block scripts
