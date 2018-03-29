@@ -190,6 +190,9 @@ jQuery(document).ready(function($) {
     $(".mass-actions").click(function(){
     	var action = $(this).data('action');
     	user_ids = getMassSelectedCheckbox();
+    	if (user_ids.length == 0) {
+    		user_ids.push($(this).data('id'));
+    	}
     	switch (action) {    		
 			case 'approve-all':
 				$.post('/admin/approve-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
@@ -208,12 +211,14 @@ jQuery(document).ready(function($) {
 				});
 				break;
 			case 'remove-all':
-				$.post('/admin/remove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
-					console.log(data);
-					if (data.ok == 1) {
-						alert("Ação realizada com sucesso");
-					}
-				});
+				if (confirm("Tem certeza?")) {
+					$.post('/admin/remove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
+						console.log(data);
+						if (data.ok == 1) {
+							alert("Ação realizada com sucesso");
+						}
+					});
+				}
 				break;
     		default:
     			alert("Ação em massa inválida")

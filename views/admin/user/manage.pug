@@ -58,11 +58,11 @@ block content
                   | Desautorizar
               a.btn.btn-default.btn-xs.remove(href="/admin/user/remove/" + user._id)
                 i(class="fa fa-trash-o" aria-hidden="true")
-                | Remover            
-              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="approve-all")
+                | Remover
+              button.btn.btn-default.btn-xs.mass-actions(data-action="approve-all" data-id=user._id)
                 | Habilitar OA's
-              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="disapprove-all")
+              button.btn.btn-default.btn-xs.mass-actions(data-action="disapprove-all" data-id=user._id)
                 | Desabilitar OA's
-              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="remove-all")
+              button.btn.btn-default.btn-xs.mass-actions(data-action="remove-all" data-id=user._id)
                 | Remover OA's
 
