@@ -29,7 +29,10 @@ tr:target {
 .form-inline {
 	.form-group, label {
 		margin: 0 20px 0 0;
-	}	
+	}
+	& > .form-group:not(:first-child) {
+		margin-left: 25px;
+	}
 }
 .inline-label {
 	margin-right: 15px;
