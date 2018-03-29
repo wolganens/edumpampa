@@ -27,12 +27,9 @@ tr:target {
 	border: 2px dotted green;
 }
 .form-inline {
-	.form-group {
-		margin-left: 15px;
-	}
-	label {
-		margin-right: 5px;
-	}
+	.form-group, label {
+		margin: 0 20px 0 0;
+	}	
 }
 .inline-label {
 	margin-right: 15px;
