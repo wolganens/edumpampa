@@ -161,17 +161,19 @@ jQuery(document).ready(function($) {
     });
     function getMassSelectedCheckbox() {
     	var mass_checkbox = document.getElementsByClassName('mass-checkbox');
-    	var i, n;
+    	var i, n = mass_checkbox.length;
     	user_ids = [];
-    	for (i = 0, n = mass_checkbox.length ; i < n ; i++){
-    		if(mass_checkbox[i].checked) {
-    			user_ids.push(mass_checkbox[i].value)
-    		} else {
-    			var index = user_ids.indexOf(mass_checkbox[i].value);
-    			if (index != -1) {
-    				users_id.slice(index, 1);
-    			}
-    		}
+    	if (n > 0) {
+	    	for (i = 0 ; i < n ; i++){
+	    		if(mass_checkbox[i].checked) {
+	    			user_ids.push(mass_checkbox[i].value)
+	    		} else {
+	    			var index = user_ids.indexOf(mass_checkbox[i].value);
+	    			if (index != -1) {
+	    				users_id.slice(index, 1);
+	    			}
+	    		}
+	    	}
     	}
     	return user_ids;
     }

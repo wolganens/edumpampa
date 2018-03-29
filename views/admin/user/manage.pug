@@ -7,12 +7,13 @@ block content
   form(class="form-inline", action="", method="GET")
     +select('Ordenar: ', 'sort', oldInput('sort'), 'Ordenar resultados', sortOptions, {val: 'value', text: 'text'})    
     +select('Situação: ', 'situation', oldInput('situation'), 'Situação', situationOptions, {val: 'value', text: 'text'})
-    +input('Nome', 'name', oldInput('name'), 'Filtrar por nome')
+    +input('Nome: ', 'name', oldInput('name'), 'Filtrar por nome')
     +submit('Aplicar filtros')
   .clearfix
+  br
   .form-group
-    label
-      | Ações em massa
+    label.block
+      | Ações em massa sobre os usuários selecionados:
     .btn-group
       button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
         | Habilitar OA's
@@ -48,14 +49,20 @@ block content
           td
             .btn-group
               if user.role == 'COMMON'
-                a.btn.btn-success(href="/admin/user/authorize/" + user._id)
+                a.btn.btn-success.btn-xs(href="/admin/user/authorize/" + user._id)
                   i(class="fa fa-thumbs-o-up" aria-hidden="true")
                   | Autorizar
               else if user.role == 'AUTHORIZED'
-                a.btn.btn-danger(href="/admin/user/unauthorize/" + user._id)
+                a.btn.btn-danger.btn-xs(href="/admin/user/unauthorize/" + user._id)
                   i(class="fa fa-thumbs-o-down" aria-hidden="true")
                   | Desautorizar
-              a.btn.btn-default.remove(href="/admin/user/remove/" + user._id)
+              a.btn.btn-default.btn-xs.remove(href="/admin/user/remove/" + user._id)
                 i(class="fa fa-trash-o" aria-hidden="true")
-                | Remover
+                | Remover            
+              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="approve-all")
+                | Habilitar OA's
+              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="disapprove-all")
+                | Desabilitar OA's
+              button.btn.btn-default.btn-xs.mass-actions(class="disabled" disabled, data-action="remove-all")
+                | Remover OA's
 
