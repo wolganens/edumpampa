@@ -15,20 +15,20 @@ block content
     label.block
       | Ações em massa sobre os usuários selecionados:
     .btn-group
-      button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="approve-all")
-        | Habilitar OA's
-      button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="disapprove-all")
-        | Desabilitar OA's
-      button.btn.btn-default.mass-actions(class="disabled" disabled, data-action="remove-all")
-        | Remover OA's
+      button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="approve")
+        | Habilitar OA
+      button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="disapprove")
+        | Desabilitar OA
+      button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="remove" data-confirm="true")
+        | Remover OA
   table.table
     thead
       th
         .checkbox
           label
-            input(type="checkbox").table-checkall
-      th
-        | Usuário
+            strong
+              input(type="checkbox").table-checkall
+              | Usuário
       th
         | Situação
       th
@@ -40,10 +40,9 @@ block content
             .checkbox
               label
                 input(type="checkbox", value=user._id, name="user-checkbox").mass-checkbox
-          td
-            strong
-              | !{user.name}<br/>
-            | !{user.email}
+                strong
+                  | !{user.name}<br/>
+                | !{user.email}          
           td
             | !{user.htmlSituation}
           td
@@ -59,10 +58,9 @@ block content
               a.btn.btn-default.btn-xs.remove(href="/admin/user/remove/" + user._id)
                 i(class="fa fa-trash-o" aria-hidden="true")
                 | Remover
-              button.btn.btn-default.btn-xs.mass-actions(data-action="approve-all" data-id=user._id)
+              button.btn.btn-default.btn-xs.mass-lo-action.single(data-user="true" data-action="approve" data-id=user._id)
                 | Habilitar OA's
-              button.btn.btn-default.btn-xs.mass-actions(data-action="disapprove-all" data-id=user._id)
+              button.btn.btn-default.btn-xs.mass-lo-action.single(data-user="true" data-action="disapprove" data-id=user._id)
                 | Desabilitar OA's
-              button.btn.btn-default.btn-xs.mass-actions(data-action="remove-all" data-id=user._id)
+              button.btn.btn-default.btn-xs.mass-lo-action.single(data-confirm="true" data-user="true" data-action="remove" data-id=user._id)
                 | Remover OA's
-

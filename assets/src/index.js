@@ -159,70 +159,66 @@ jQuery(document).ready(function($) {
     		$(parent).find('[type="checkbox"]').removeAttr("checked");
     	}
     });
+    $('.mass-checkbox, .table-checkall').prop('checked', false);
+    $('.mass_checkbox, .table-checkall').removeAttr('checked');
     function getMassSelectedCheckbox() {
     	var mass_checkbox = document.getElementsByClassName('mass-checkbox');
     	var i, n = mass_checkbox.length;
-    	user_ids = [];
+    	resource_ids = [];
     	if (n > 0) {
 	    	for (i = 0 ; i < n ; i++){
 	    		if(mass_checkbox[i].checked) {
-	    			user_ids.push(mass_checkbox[i].value)
+	    			resource_ids.push(mass_checkbox[i].value)
 	    		} else {
-	    			var index = user_ids.indexOf(mass_checkbox[i].value);
+	    			var index = resource_ids.indexOf(mass_checkbox[i].value);
 	    			if (index != -1) {
-	    				users_id.slice(index, 1);
+	    				resource_ids.slice(index, 1);
 	    			}
 	    		}
 	    	}
     	}
-    	return user_ids;
+    	return resource_ids;
     }
     $(".table-checkall, .mass-checkbox").change(function(event){
-    	user_ids = getMassSelectedCheckbox();
-    	if (user_ids.length > 0) {
-    		$(".mass-actions").removeClass("disabled");
-    		$(".mass-actions").removeAttr("disabled");
+    	resource_ids = getMassSelectedCheckbox();
+    	if (resource_ids.length > 0) {
+    		$(".mass-lo-action").removeClass("disabled");
+    		$(".mass-lo-action").removeAttr("disabled");
     	} else {
-    		$(".mass-actions").addClass("disabled");
-    		$(".mass-actions").attr("disabled", "disabled");
+    		$(".mass-lo-action").addClass("disabled");
+    		$(".mass-lo-action").attr("disabled", "disabled");
     	}
     })
-    $(".mass-actions").click(function(){
+    function massActionRequest(_id, owner, action) {
+    	var url = '';
+    	if (action == 'remove') {
+    		url = '/admin/learning-object/remove';
+    	} else {
+    		url = '/admin/learning-object/set-approve';
+    	}
+		$.post(url,
+			{
+				_id,
+				owner,
+				status: action == 'approve' ? true : false
+			}, function(data, textStatus, xhr) {
+			if (data.ok == 1) {
+				alert("Ação realizada com sucesso");
+			}
+		});
+		window.location.reload();
+    }
+    $(".mass-lo-action").click(function(){
+    	var resource_ids = $(this).data('id') ? [$(this).data('id')] : getMassSelectedCheckbox();
+    	var user = $(this).data('user') || null;
     	var action = $(this).data('action');
-    	user_ids = getMassSelectedCheckbox();
-    	if (user_ids.length == 0) {
-    		user_ids.push($(this).data('id'));
-    	}
-    	switch (action) {    		
-			case 'approve-all':
-				$.post('/admin/approve-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
-					console.log(data);
-					if (data.ok == 1) {
-						alert("Ação realizada com sucesso");
-					}
-				});
-				break;
-			case 'disapprove-all':
-				$.post('/admin/disapprove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
-					console.log(data);
-					if (data.ok == 1) {
-						alert("Ação realizada com sucesso");
-					}
-				});
-				break;
-			case 'remove-all':
-				if (confirm("Tem certeza?")) {
-					$.post('/admin/remove-user-oa', {user_ids: user_ids}, function(data, textStatus, xhr) {
-						console.log(data);
-						if (data.ok == 1) {
-							alert("Ação realizada com sucesso");
-						}
-					});
-				}
-				break;
-    		default:
-    			alert("Ação em massa inválida")
-    			break;
-    	}
+    	    
+    	if ($(this).data('confirm')) {
+    		if (confirm("Tem certeza")) {
+    			massActionRequest(resource_ids, user, action);
+    		}
+    	} else {
+    		massActionRequest(resource_ids, user, action);
+    	}	
     });
 });

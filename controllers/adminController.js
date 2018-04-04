@@ -3,11 +3,25 @@ const LearningObject = require('../models/learningobject');
 const User = require('../models/user');
 
 /*
+* Métodos "privados" da controller
+*/
+const setOaApprovedStatus = (filter, status) => {
+  return LearningObject.updateMany(
+    filter,
+    {
+      $set: {approved: status}
+    }
+  );
+}
+const removeLearningObjects = (filter) => {
+  return LearningObject.remove(filter);
+}
+/*
 * Ordena um vetor de objetos com base em um campo do objeto
 */
 const { sortDocsInArray } = require('../helpers/utils.js');
 
-module.exports = {
+const routeMethods = {
   /*
   * Exibe a página de gerenciamento de usuários
   */
@@ -230,78 +244,43 @@ module.exports = {
       });
     });
   },
-  postAprroveUserOa(req, res) {
-    const permission = ac.can(req.user.role).updateAny('learningObject');
-    if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');
-    }
-    /*
-    * Aprova os OA's que são de propriedade dos usuários enviados
-    * por parâmetro (user_ids)
-    */
-    return LearningObject.updateMany(
-      {
-        owner: {
-          $in: req.body.user_ids,
-        },
-      },
-      {
-        $set: {
-          approved: true,
-        },
-      }, (err, result) => {
-        if (err) {
-          return res.send(err);
-        }
-        return res.send(result);
-      },
-    );
-  },
-  postDisapproveUserOa(req, res) {
-    const permission = ac.can(req.user.role).updateAny('learningObject');
-    if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');
-    }
-    /*
-    * Desaprova os OA's que são de propriedade dos usuários enviados
-    * por parâmetro (user_ids)
-    */
-    return LearningObject.updateMany(
-      {
-        owner: {
-          $in: req.body.user_ids,
-        },
-      },
-      {
-        $set: {
-          approved: false,
-        },
-      }, (err, result) => {
-        if (err) {
-          return res.send(err);
-        }
-        return res.send(result);
-      },
-    );
-  },
-  postRemoveUserOa(req, res) {
-    const permission = ac.can(req.user.role).deleteAny('user');
-    if (!permission.granted) {
-      return res.status(403).send('Você não tem permissão!');
-    }
-    /*
-    * Remove os OA's que são de propriedade dos usuários enviados
-    * por parâmetro (user_ids)
-    */
-    return LearningObject.deleteMany({
-      owner: {
-        $in: req.body.user_ids,
-      },
-    }, (err, result) => {
-      if (err) {
-        return res.send(err);
+  postLearningObjectSetApproveStatus(req, res) {
+    let filter = {};
+    if (req.body.owner) {
+      filter["owner"] = {
+        $in: req.body._id
       }
-      return res.send(result);
+    } else {
+      filter["_id"] = {
+        $in: req.body._id
+      }
+    }
+    return setOaApprovedStatus(filter, req.body.status).exec((err, result) => {
+      if (err) {        
+        return res.send(err);
+      } else {        
+        return res.send({ok: 1});
+      }
     });
   },
+  postLearningObjectRemove(req, res) {
+    let filter = {};
+    if (req.body.owner) {
+      filter["owner"] = {
+        $in: req.body._id
+      }
+    } else {
+      filter["_id"] = {
+        $in: req.body._id
+      }
+    }
+    return removeLearningObjects(filter).exec((err, result) => {
+      if (err) {        
+        return res.send(err);
+      } else {        
+        return res.send({ok: 1});
+      }
+    });
+  }
 };
+module.exports = routeMethods;

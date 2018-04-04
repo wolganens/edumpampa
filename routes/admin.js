@@ -16,9 +16,9 @@ router.get('/user/manage', adminController.getUserManage);
 router.get('/user/authorize/:id', adminController.getUserAuthorize);
 router.get('/user/unauthorize/:id', adminController.getUserUnauthorize);
 router.get('/user/remove/:id', adminController.getUserRemove);
-router.post('/approve-user-oa', adminController.postAprroveUserOa);
-router.post('/disapprove-user-oa', adminController.postDisapproveUserOa);
-router.post('/remove-user-oa', adminController.postRemoveUserOa);
+
 router.get('/learning-object/manage', adminController.getLearningObjectManage);
+router.post('/learning-object/set-approve', adminController.postLearningObjectSetApproveStatus);
+router.post('/learning-object/remove', adminController.postLearningObjectRemove);
 
 module.exports = router;
