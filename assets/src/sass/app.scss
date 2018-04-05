@@ -1,8 +1,8 @@
 @import 'custom_variables';
 @import "~dropzone/dist/dropzone.css";
-@import 'dropzone.scss';
-@import 'buttons.scss';
-@import 'text.scss';
+@import 'dropzone';
+@import 'buttons';
+@import 'text';
 @import 'components';
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";

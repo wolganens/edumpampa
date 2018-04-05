@@ -182,11 +182,11 @@ jQuery(document).ready(function($) {
     $(".table-checkall, .mass-checkbox").change(function(event){
     	resource_ids = getMassSelectedCheckbox();
     	if (resource_ids.length > 0) {
-    		$(".mass-lo-action").removeClass("disabled");
-    		$(".mass-lo-action").removeAttr("disabled");
+    		$(".mass-lo-action:not(.single)").removeClass("disabled");
+    		$(".mass-lo-action:not(.single)").removeAttr("disabled");
     	} else {
-    		$(".mass-lo-action").addClass("disabled");
-    		$(".mass-lo-action").attr("disabled", "disabled");
+    		$(".mass-lo-action:not(.single)").addClass("disabled");
+    		$(".mass-lo-action:not(.single)").attr("disabled", "disabled");
     	}
     })
     function massActionRequest(_id, owner, action) {
@@ -203,10 +203,17 @@ jQuery(document).ready(function($) {
 				status: action == 'approve' ? true : false
 			}, function(data, textStatus, xhr) {
 			if (data.ok == 1) {
-				alert("Ação realizada com sucesso");
+				var text = action == 'approve' ? 'Habilitado' : 'Desabilitado';
+				for (var i = _id.length - 1; i >= 0; i--) {
+					$('#' + _id[i])
+					.find('.badge')
+					.toggleClass('alert-danger alert-success')
+					.text(text);
+				}
+				$('.table-checkall').prop('checked', false).trigger('change');
+				alert('Ação realizada com sucesso!');
 			}
 		});
-		window.location.reload();
     }
     $(".mass-lo-action").click(function(){
     	var resource_ids = $(this).data('id') ? [$(this).data('id')] : getMassSelectedCheckbox();

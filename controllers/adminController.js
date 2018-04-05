@@ -1,6 +1,10 @@
 const ac = require('../config/roles');
 const LearningObject = require('../models/learningobject');
 const User = require('../models/user');
+/*
+* Ordena um vetor de objetos com base em um campo do objeto
+*/
+const { sortDocsInArray } = require('../helpers/utils.js');
 
 /*
 * Métodos "privados" da controller
@@ -16,10 +20,6 @@ const setOaApprovedStatus = (filter, status) => {
 const removeLearningObjects = (filter) => {
   return LearningObject.remove(filter);
 }
-/*
-* Ordena um vetor de objetos com base em um campo do objeto
-*/
-const { sortDocsInArray } = require('../helpers/utils.js');
 
 const routeMethods = {
   /*
