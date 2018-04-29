@@ -1,6 +1,7 @@
 const ac = require('../config/roles');
 const LearningObject = require('../models/learningobject');
 const User = require('../models/user');
+const moment = require('moment')
 /*
 * Ordena um vetor de objetos com base em um campo do objeto
 */
@@ -80,6 +81,26 @@ const routeMethods = {
       } else if (sort === 'older') {
         users.sort({ createdAt: 1 });
       }
+    }
+    if (req.query.export && req.query.export === 'csv') {
+      let csv_string = `"Nome","Email","Aniversário","Formação","Área de Atuação","Vínculo Institucional","Cargo na Instituição","Instituição","Enredeço da Instituição"\n`;
+      return users
+      .populate('qualification_id')
+      .populate('occupation_area_id')
+      .populate('institutional_link_id')
+      .populate('institutional_post_id')
+      .exec(function(err, result) {
+        result.forEach(function(user) {
+          
+          csv_string+= `"${user.name}","${user.email}","${moment(user.birthday).format('DD/MM/YYYY')}","${user.qualification_id ? user.qualification_id.name : user.qualification_text}","${user.occupation_area_id ? user.occupation_area_id.name: user.occupation_area_text}","${user.institutional_link_id ? user.institutional_link_id.name: user.institutional_link_text}","${user.institutional_post_id ? user.institutional_post_id.map(post => post.name).join(',') : user.institutional_post_text}","${user.institution_name}","${user.institution_address}"   
+          `
+        })
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-disposition', 'attachment; filename=users.csv');
+        res.write(csv_string);
+        return res.end();
+      })
     }
     /*
     * Executa a consulta na base de dados
@@ -237,7 +258,7 @@ const routeMethods = {
       */
       return User.findByIdAndRemove(req.params.id, (errUser) => {
         if (errUser) {
-          return res.send(errUser);
+return res.send(errUser);
         }
         req.session.success_message = 'Usuário removido com sucesso!';
         return res.redirect('/admin/user/manage');

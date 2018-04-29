@@ -40,6 +40,7 @@ const UserSchema = new Schema({
   },
   qualification_id: {
     type: Schema.Types.ObjectId,
+    ref: 'Qualification',
     required: [function required() { return !this.qualification_text; }, 'Escolha ou informe uma formação!'],
   },
   qualification_text: {
@@ -48,6 +49,7 @@ const UserSchema = new Schema({
   },
   occupation_area_id: {
     type: Schema.Types.ObjectId,
+    ref: 'OccupationArea',
     required: [function required() { return !this.occupation_area_text; }, 'Escolha ou informe uma área de atuação!'],
   },
   occupation_area_text: {
@@ -56,16 +58,18 @@ const UserSchema = new Schema({
   },
   institutional_link_id: {
     type: Schema.Types.ObjectId,
+    ref: 'InstitutionalLink',
     required: [function required() { return !this.institutional_link_text; }, 'Escolha ou informe um vínculo institucional!'],
   },
   institutional_link_text: {
     type: String,
     required: [function required() { return !this.institutional_link_id; }, 'Escolha ou informe um vínculo institucional!'],
   },
-  institutional_post_id: {
-    type: [Schema.Types.ObjectId],
+  institutional_post_id: [{
+    type: Schema.Types.ObjectId,
+    ref: 'InstitutionalPost',
     required: false,
-  },
+  }],
   institutional_post_text: {
     type: String,
     required: false,

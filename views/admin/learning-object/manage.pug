@@ -56,3 +56,20 @@ block content
               a.btn.btn-default.btn-xs.remove(href="/learning-object/remove/" + lo._id)
                 i(class="fa fa-trash-o" aria-hidden="true")
                 | Remover
+  form(class="form-inline", action="", method="GET")
+    +select('Ordenar: ', 'sort', oldInput('sort'), 'Ordenar resultados', sortOptions, {val: 'value', text: 'text'})
+    +select('Situação: ', 'situation', oldInput('situation'), 'Situação', situationOptions, {val: 'value', text: 'text'})
+    +input('Título: ', 'title', oldInput('title'), 'Filtrar por título')
+    +submit('Aplicar')    
+    .clearfix
+  br
+  .form-group
+    label.block
+      | Ações em massa sobre os objetos selecionados:
+    .btn-group
+      button.btn.btn-default.mass-lo-action(class="disabled" disabled data-action="approve")
+        | Habilitar OA
+      button.btn.btn-default.mass-lo-action(class="disabled" disabled data-action="disapprove")
+        | Desabilitar OA
+      button.btn.btn-default.mass-lo-action(class="disabled" disabled data-action="remove" data-confirm="true")
+        | Remover OA's

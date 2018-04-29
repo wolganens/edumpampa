@@ -6,7 +6,7 @@ mixin file-form({lo})
         input(type="hidden" name="file_name" id="file_name", value=lo ? typeof(lo.file) != null ? JSON.stringify(lo.file) : '' :'')      
         label(for="file")
           | Arquivo (Indicado para arquivos de até 20MB)
-        #drop
+        #drop.drop
           p(class="text-center")
             | Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
           .fallback

@@ -1,5 +1,4 @@
-
-const nodemailer = require('nodemailer');
+var mailgun = require('mailgun-js')({apiKey: process.env.API_KEY, domain: process.env.DOMAIN});
 
 const email = {
   transport: null,
@@ -7,28 +6,18 @@ const email = {
     from: '"Equipe EduMPampa" <edumpampa@gmail.com>',
     to: 'edumpampa@gmail.com',
     subject: '',
-    html: '',
-  },
-  setTransport() {
-    this.transport = nodemailer.createTransport({
-	        host: 'smtp.gmail.com',
-	        port: 465,
-	        secure: true, // true for 465, false for other ports
-	        auth: {
-	            user: 'edumpampa@gmail.com', // generated ethereal user
-	            pass: 'unipampa123', // generated ethereal password
-	        },
-	    });
+    text: '',
   },
   setEmailOptions(options) {
     this.emailOptions.to = options.to;
     this.emailOptions.subject = options.subject;
-    this.emailOptions.html = options.html;
+    this.emailOptions.text = options.html;
   },
-  sendMail(options, callback) {
-    this.setTransport();
+  sendMail(options, callback) {    
     this.setEmailOptions(options);
-    this.transport.sendMail(this.emailOptions);
+    mailgun.messages().send(this.emailOptions, function (error, body) {
+      console.log(body);
+    });
     callback();
   },
 };

@@ -6,90 +6,94 @@ html(lang='pt-br')
     meta(name='viewport', content='width=device-width, initial-scale=1')
   body
     .container
-      ul#atalhos.nav.navbar-nav
-        li
-          a(href="#irconteudo", accesskey="1") Ir Conteúdo [1]
-        li
-          a(href="#irmenu", accesskey="2") Ir Menu [2]
-        li
-          a(href="#irbusca", accesskey="3") Ir Busca [3]
-        li
-          a(href="#", , accesskey="4")#contrast Ativar/desativar alto contraste
-      .clearfix
-      .row
-        .col-md-4
-          a(href="/", title="EduMPampa - Repositório de Objetos de Aprendizagem")
-            img.img-responsive(src="/images/logo.png", alt="Repositório de objetos de aprendizagem EduMPampa")
-        .col-md-8
-          .header-title
-            h1
-              strong EduMPampa
-            h2 Repositório de Objetos de Aprendizagem para Educação Musical Inclusiva
-      form(action="/learning-object/text-search", method="GET").navbar-form.navbar-right
-        .form-group
-          label.sr-only.hidden(for="irbusca")
-            | Busca pelo título
-          input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" title="Busca pelo título", placeholder="Buscar objetos pelo título", id="irbusca")
-        button.btn.btn-primary(type="submit")
-          i(class="fa fa-search" aria-hidden="true")
-          | Buscar
-      .clearfix
-      nav.navbar.navbar-default#irmenu
-        .container-fluid
-          .navbar-header
-            button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#bs-example-navbar-collapse-1", aria-expanded="false")
-              span.sr-only Toggle navigation
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-          #bs-example-navbar-collapse-1.collapse.navbar-collapse
-            ul.nav.navbar-nav
-              li(class=currentPath == '/' ? 'active' : null)
-                a(href="/")
-                  | Início
-                  span.sr-only (current)
-              if currentUser
-                if currentUser.role != 'COMMON'
-                  li(class=currentPath == '/learning-object/create' ? 'active' : null)
-                    a(href="/learning-object/create", title="Cadastrar objeto de aprendizagem")
-                      | Cadastrar OA
-                  li(class=currentPath == '/learning-object/retrieve' ? 'active' : null)
-                    a(href="/learning-object/retrieve", title="Meus objetos de aprendizagem")
-                      | Ver meus OA
-                if currentUser.role == 'ADMIN'
-                  li(class=currentPath == '/admin/learning-object/manage' ? 'active' : null)
-                    a(href="/admin/learning-object/manage", title="Gerenciar objetos de aprendizagem")
-                      | Gerenciar OA
-                  li(class=currentPath == '/admin/user/manage' ? 'active' : null)
-                    a(href="/admin/user/manage", title="Gerenciar Usuários")
-                      | Gerenciar Usuarios
-            ul.nav.navbar-nav.navbar-right
-              li(class=currentPath == '/contact' ? 'active' : null)
-                a(href="/contact", title="Enviar uma mensagem de contato")
-                  | Contato
-              if currentUser
-                li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
-                  a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
-                    | !{currentUser.name}
-                    span.caret
-                  ul.dropdown-menu
-                    li
-                      a(href="/account/profile", title="Ver minha conta") Meu cadastro
-                    li
-                      a(href="/account/change-pw", title="Alterar senha") Alterar minha senha
-                    li
-                      a(href="/auth/signout", title="Sair do EduMPampa") Sair
-              else
-                li(class=currentPath == '/account/signin' ? 'active' : null)
-                  a(href="/account/signin") Login
-                li(class=currentPath == '/account/signup' ? 'active' : null)
-                  a(href="/account/signup") Cadastro
-      if error_message && error_message.length > 0
-        .alert.alert-danger#messages(role="alert")
-          | !{error_message}
-      if success_message && success_message.length > 0
-        .alert.alert-success#messages(role="alert")
-          | !{success_message}
+      header
+        ul#atalhos.nav.navbar-nav
+          li
+            a(href="#irconteudo", accesskey="1") Ir Conteúdo [1]
+          li
+            a(href="#irmenu", accesskey="2") Ir Menu [2]
+          li
+            a(href="#irbusca", accesskey="3") Ir Busca [3]
+          li
+            a(href="#", , accesskey="4")#contrast Ativar/desativar alto contraste
+        .clearfix
+        .row
+          .col-md-4
+            a(href="/", title="EduMPampa - Repositório de Objetos de Aprendizagem")
+              img.img-responsive(src="/images/logo.png", alt="Repositório de objetos de aprendizagem EduMPampa")
+          .col-md-8
+            .header-title
+              h1
+                strong EduMPampa
+              h2 Repositório de Objetos de Aprendizagem para Educação Musical Inclusiva
+        form(action="/learning-object/text-search", method="GET").navbar-form.navbar-right
+          .form-group
+            label.sr-only.hidden(for="irbusca")
+              | Busca pelo título
+            input.form-control(type="text", value=search_text ? search_text: null, name="search_text", style="min-width:300px;" title="Busca pelo título", placeholder="Buscar objetos pelo título", id="irbusca")
+          button.btn.btn-primary(type="submit")
+            i(class="fa fa-search" aria-hidden="true")
+            | Buscar
+        .clearfix
+        nav.navbar.navbar-default#irmenu
+          .container-fluid
+            .navbar-header
+              button.navbar-toggle.collapsed(type="button", data-toggle="collapse", data-target="#bs-example-navbar-collapse-1", aria-expanded="false")
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            #bs-example-navbar-collapse-1.collapse.navbar-collapse
+              ul.nav.navbar-nav
+                li(class=currentPath == '/' ? 'active' : null)
+                  a(href="/")
+                    | Início
+                    span.sr-only (current)
+                if currentUser
+                  if currentUser.role != 'COMMON'
+                    li(class=currentPath == '/learning-object/create' ? 'active' : null)
+                      a(href="/learning-object/create", title="Cadastrar objeto de aprendizagem")
+                        | Cadastrar OA
+                    li(class=currentPath == '/learning-object/retrieve' ? 'active' : null)
+                      a(href="/learning-object/retrieve", title="Meus objetos de aprendizagem")
+                        | Ver meus OA
+                  if currentUser.role == 'ADMIN'
+                    li(class=currentPath == '/admin/learning-object/manage' ? 'active' : null)
+                      a(href="/admin/learning-object/manage", title="Gerenciar objetos de aprendizagem")
+                        | Gerenciar OA
+                    li(class=currentPath == '/admin/user/manage' ? 'active' : null)
+                      a(href="/admin/user/manage", title="Gerenciar Usuários")
+                        | Gerenciar Usuarios
+              ul.nav.navbar-nav.navbar-right
+                if currentUser
+                  li.dropdown(class=currentPath == '/account/profile' ? 'active' : null)
+                    a.dropdown-toggle(href="#", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false")
+                      | !{currentUser.name}
+                      span.caret
+                    ul.dropdown-menu
+                      li
+                        a(href="/account/profile", title="Ver minha conta") Meu cadastro
+                      li(class=currentPath == '/contact' ? 'active' : null)
+                        a(href="/contact", title="Enviar uma mensagem de contato")
+                          | Contato
+                      li
+                        a(href="/account/change-pw", title="Alterar senha") Alterar minha senha
+                      li
+                        a(href="/auth/signout", title="Sair do EduMPampa") Sair
+                else
+                  li(class=currentPath == '/account/signup' ? 'active' : null)
+                    a(href="/account/signup") Cadastro
+                  li(class=currentPath == '/contact' ? 'active' : null)
+                    a(href="/contact", title="Enviar uma mensagem de contato")
+                      | Contato
+                  li(class=currentPath == '/account/signin' ? 'active' : null)
+                    a(href="/account/signin") Login
+        if error_message && error_message.length > 0
+          .alert.alert-danger#messages(role="alert")
+            | !{error_message}
+        if success_message && success_message.length > 0
+          .alert.alert-success#messages(role="alert")
+            | !{success_message}
       main#irconteudo
         block content
       footer.text-center

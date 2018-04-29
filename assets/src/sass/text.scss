@@ -1,9 +1,14 @@
-#license_description{
+#license_description {
 	min-height: 100px;
 }
-.header-title {
-	h1 {
-		margin-top: 100px !important;
+header {
+	.header-title {
+		h1 {
+			margin-top: 20px !important;
+		}
+	}
+	img {
+		margin: 0 auto;
 	}
 }
 #centered-content {

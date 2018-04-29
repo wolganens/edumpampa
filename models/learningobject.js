@@ -77,7 +77,6 @@ const learningObjectSchema = new Schema({
     default: new Date(),
   },
 });
-
 learningObjectSchema.virtual('htmlSituation').get(function htmlSituation() {
   if (this.approved) {
     return '<div class="badge alert-success">Habilitado</div>';

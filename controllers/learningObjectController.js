@@ -131,6 +131,8 @@ module.exports = {
             loData[field] = req.body[field];
           }
         });
+        /*Desautoriza o objeto devido a sua atualização*/
+        loData.approved = false;
         return loData.save((saveErr) => {
           if (saveErr) {
             req.session.error_message = saveErr;
@@ -139,7 +141,7 @@ module.exports = {
             */
             req.flash('body', req.body);
           }
-          req.session.success_message = 'Objeto atualizado com sucesso!';
+          req.session.success_message = 'Objeto atualizado com sucesso! <br/> <strong>Obs: O objeto será avaliado antes de sua publicação.</strong>';
           return res.redirect('back');
         });
       });
@@ -504,27 +506,35 @@ module.exports = {
         req.session.error_message = findErr;
         return res.redirect('back');
       }
-      if (lo.file) {
-        const filePath = path.join(__dirname, '..', 'public', lo.file.url);
-        return fs.stat(filePath, (statErr, stat) => {
-          if (statErr) {
-            console.log(statErr);
-          } else {
-            console.log(`O diretório existe: ${stat}`);
-            return fs.unlink(filePath, (err, unlinkRes) => {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log(`Arquivo removido: ${unlinkRes}`);
-              }
+      if (lo.file && Object.keys(lo.file).length === 0 && lo.file.constructor === Object) {
+        let findedPath = true;
+        try {
+          const filePath = path.join(__dirname, '..', 'public', lo.file.url);
+        } catch(e) {
+          findedPath = false;
+          console.log(e)
+        }
+        if (findedPath) {
+          return fs.stat(filePath, (statErr, stat) => {
+            if (statErr) {
+              console.log(statErr);
+            } else {
+              console.log(`O diretório existe: ${stat}`);
+              return fs.unlink(filePath, (err, unlinkRes) => {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log(`Arquivo removido: ${unlinkRes}`);
+                }
+              });
+            }
+            lo.remove({
+              single: true,
             });
-          }
-          lo.remove({
-            single: true,
+            req.session.success_message = 'Objeto removido com sucesso!';
+            return res.redirect('back');
           });
-          req.session.success_message = 'Objeto removido com sucesso!';
-          return res.redirect('back');
-        });
+        }
       }
       lo.remove({
         single: true,
