@@ -4,6 +4,8 @@ html(lang='pt-br')
     title= title
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
+    if highContrast == '1'
+      link(rel="stylesheet", href="/default.css")    
   body
     .container
       header
@@ -15,7 +17,7 @@ html(lang='pt-br')
           li
             a(href="#irbusca", accesskey="3") Ir Busca [3]
           li
-            a(href="#", , accesskey="4")#contrast Ativar/desativar alto contraste
+            a(href="/contrast", accesskey="4") Ativar/desativar alto contraste
         .clearfix
         .row
           .col-md-4
@@ -104,5 +106,8 @@ html(lang='pt-br')
           li
             a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
               img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
-    script(src='/app.js')
+    if highContrast == '1'
+      script(src='/app-contrast.js')
+    else
+      script(src='/app.js')
     block scripts

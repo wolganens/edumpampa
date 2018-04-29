@@ -15,6 +15,7 @@ const mongoose = require('mongoose');
 const logger = require('morgan');
 const passport = require('passport');
 const path = require('path');
+const cookieParser = require('cookie-parser')
 // const favicon = require('serve-favicon');
 
 
@@ -50,6 +51,7 @@ app.use(session({ secret: '5cb1aeca94a165b0f5543cd3d6c4acc8a1d4388fa2ead70bd190f
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload({
   limits: { fileSize: 20 * 1024 * 1024 },
@@ -116,6 +118,8 @@ app.use((req, res, next) => {
   * por exemplo: nome do usuário na barra principal
   */
   res.locals.currentUser = req.user;
+  console.log(req.cookies);
+  res.locals.highContrast = req.cookies.contrast;
   /*
   * Url atual da aplicação para utilizar na paginação de consultas e destacar
   * abas (bootstrap tabs) ativas

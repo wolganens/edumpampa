@@ -23,6 +23,15 @@ module.exports = {
       data: results,
     }));
   },
+  getContrast(req, res) {
+    if (req.cookies.contrast !== '1') {
+      res.cookie('contrast', '1', { expires: new Date(Date.now() + 900000), httpOnly: false });
+    } else {
+      res.cookie('contrast', '0', { expires: new Date(Date.now() + 900000), httpOnly: false });
+    }
+    console.log(req.cookies);
+    return res.redirect("back");
+  },
   /*
       Renderiza a página de formulário de contato
   */
