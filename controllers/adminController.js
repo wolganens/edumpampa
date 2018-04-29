@@ -126,6 +126,68 @@ const routeMethods = {
       });
     });
   },
+  getMassUserAuthorize(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer usuário
+    */
+    const permission = ac.can(req.user.role).updateAny('user');
+    if (!permission.granted) {
+      return res.status(403).send('Você não tem permissão!');
+    }    
+    return User.updateMany({_id: req.body.resource_ids, role: {$ne: 'ADMIN'}}, {role: 'AUTHORIZED' }, (err, result) => {
+      console.log(result)
+      if (err) {
+        return res.send(err);
+      }
+      req.session.success_message = 'Usuários autorizados com sucesso!';
+      return res.sendStatus(200);
+    });
+  },
+  getMassUserRemove(req, res) {
+     /*
+    * Verifica se o usuário tem permissão para remover usuários (Admin)
+    */
+    const permission = ac.can(req.user.role).deleteAny('user');
+    if (!permission.granted) {
+      return res.status(403).send('Você não tem permissão!');
+    }
+    /*
+    * Remove todos os objetos de aprendizagem que são de propriedade
+    * do usuário que está tentando ser excluído (owner)
+    */
+    return LearningObject.remove({ owner: req.body.resource_ids }, (errLO) => {
+      if (errLO) {
+        return res.send(errLO);
+      }
+      /*
+      * Remove o usuário em si
+      */
+      return User.remove({_id: req.body.resource_ids}, (errUser) => {
+        if (errUser) {
+          return res.send(errUser);
+        }
+        req.session.success_message = 'Usuários removidos com sucesso!';
+        res.sendStatus(200);
+      });
+    });
+  },
+  getMassUserUnauthorize(req, res) {
+    /*
+    * Verifica se o usuário autenticado tem permissão para editar qualquer usuário
+    */
+    const permission = ac.can(req.user.role).updateAny('user');
+    if (!permission.granted) {
+      return res.status(403).send('Você não tem permissão!');
+    }    
+    return User.updateMany({_id: req.body.resource_ids, role: {$ne: 'ADMIN'}}, {role: 'COMMON' }, (err, result) => {
+      console.log(result)
+      if (err) {
+        return res.send(err);
+      }
+      req.session.success_message = 'Usuários desautorizados com sucesso!';
+      return res.sendStatus(200);
+    });
+  },
   getUserAuthorize(req, res) {
     /*
     * Verifica se o usuário autenticado tem permissão para editar qualquer usuário
@@ -258,7 +320,7 @@ const routeMethods = {
       */
       return User.findByIdAndRemove(req.params.id, (errUser) => {
         if (errUser) {
-return res.send(errUser);
+          return res.send(errUser);
         }
         req.session.success_message = 'Usuário removido com sucesso!';
         return res.redirect('/admin/user/manage');

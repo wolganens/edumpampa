@@ -15,6 +15,9 @@ router.use((req, res, next) => {
 router.get('/user/manage', adminController.getUserManage);
 router.get('/user/authorize/:id', adminController.getUserAuthorize);
 router.get('/user/unauthorize/:id', adminController.getUserUnauthorize);
+router.post('/user/massAuthorize/', adminController.getMassUserAuthorize);
+router.post('/user/massUnauthorize/', adminController.getMassUserUnauthorize);
+router.post('/user/massRemove/', adminController.getMassUserRemove);
 router.get('/user/remove/:id', adminController.getUserRemove);
 
 router.get('/learning-object/manage', adminController.getLearningObjectManage);

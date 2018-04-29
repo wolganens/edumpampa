@@ -14,16 +14,16 @@ block content
   -    
     currentPath = currentPath.match(/manage$/) ? currentPath + '?' : currentPath + '&';
   a(href=currentPath + 'export=csv').btn.btn-primary Baixar CSV
-  //- .form-group
-  //-   label.block
-  //-     | Ações em massa sobre os usuários selecionados:
-  //-   .btn-group
-  //-     button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="approve")
-  //-       | Habilitar OA
-  //-     button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="disapprove")
-  //-       | Desabilitar OA
-  //-     button.btn.btn-default.mass-lo-action(class="disabled" data-user="true" disabled data-action="remove" data-confirm="true")
-  //-       | Remover OA
+  .form-group
+    label.block
+      | Ações em massa sobre os usuários selecionados:
+    .btn-group
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="authorize")
+        | Autorizar
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="unauthorize")
+        | Desautorizar
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="remove")
+        | Remover      
   table.table
     thead
       th
@@ -73,3 +73,17 @@ block content
     +input('Nome: ', 'name', oldInput('name'), 'Filtrar por nome')
     +submit('Aplicar filtros')
   .clearfix
+    br
+  -    
+    currentPath = currentPath.match(/manage$/) ? currentPath + '?' : currentPath + '&';
+  a(href=currentPath + 'export=csv').btn.btn-primary Baixar CSV
+  .form-group
+    label.block
+      | Ações em massa sobre os usuários selecionados:
+    .btn-group
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="authorize")
+        | Autorizar
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="unauthorize")
+        | Desautorizar
+      a.btn.btn-default.mass-user-action(class="disabled" data-user="true" disabled data-action="remove")
+        | Remover 

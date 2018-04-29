@@ -185,9 +185,15 @@ jQuery(document).ready(function($) {
     	if (resource_ids.length > 0) {
     		$(".mass-lo-action:not(.single)").removeClass("disabled");
     		$(".mass-lo-action:not(.single)").removeAttr("disabled");
+
+    		$(".mass-user-action:not(.single)").removeClass("disabled");
+    		$(".mass-user-action:not(.single)").removeAttr("disabled");
     	} else {
     		$(".mass-lo-action:not(.single)").addClass("disabled");
     		$(".mass-lo-action:not(.single)").attr("disabled", "disabled");
+
+    		$(".mass-user-action:not(.single)").addClass("disabled");
+    		$(".mass-user-action:not(.single)").attr("disabled", "disabled");
     	}
     })
     function massActionRequest(_id, owner, action) {
@@ -229,4 +235,31 @@ jQuery(document).ready(function($) {
     		massActionRequest(resource_ids, user, action);
     	}	
     });
+    $(".mass-user-action").click(function(event){
+    	event.preventDefault();
+    	var resource_ids = $(this).data('id') ? [$(this).data('id')] : getMassSelectedCheckbox();
+    	var url = '';
+    	var action = $(this).data('action');
+    	if (action == 'remove') {
+    		url = '/admin/user/massRemove';
+    	} else if(action == 'authorize') {
+    		url = '/admin/user/massAuthorize';
+    	} else {
+    		url = '/admin/user/massUnauthorize';
+    	}
+    	if (action == 'remove') {
+    		if (!confirm("Tem certeza?")) {
+    			return;
+    		}
+    	}
+    	$.post(url,
+			{
+				resource_ids				
+			}, function(data, textStatus, xhr) {
+			console.log(xhr)
+			if(xhr.status == 200) {
+				window.location.reload()
+			}
+		});
+    })
 });
