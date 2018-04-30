@@ -50,7 +50,7 @@ mixin select(label, name, selected, placeholder, options, valText)
       each option in options
         option(
           value=option[valText.val],
-          selected=option[valText.val].toString()===selected.toString())=option[valText.text]
+          selected=option[valText.val].toString()=== selected ? selected.toString() : false)=option[valText.text]
 
 //- O parametro checkeds recebe o vetor de valores marcados
 //- o valor do checkbox precisa estar dentro desse vetor para

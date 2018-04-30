@@ -72,14 +72,7 @@ module.exports = {
       year,
       owner: req.user._id,
       approved: false,
-    }
-    /*let successMsg;
-    if (req.user.role === 'ADMIN') {
-      lo.approved = true;
-      successMsg = ' aprovado ';
-    } else {
-      successMsg = ' submetido para aprovação ';
-    }*/
+    }   
 
     const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
@@ -130,12 +123,19 @@ module.exports = {
         return res.status(403).send('Você não tem permissão');
       }
       req.flash('body', req.body);
-      Object.assign(lo,req.body);
+      Object.assign(lo, req.body, {approved: req.user.role === 'ADMIN' ? true : false});
       return lo.save(function(saveErr, saveResult){
         if(saveErr) {
           return res.send(saveErr);
         }
-        req.session.success_message = "Objeto enviado para análise com sucesso!";
+        let successMsg;
+        if (req.user.role === 'ADMIN') {
+          lo.approved = true;
+          successMsg = ' aprovado ';
+        } else {
+          successMsg = ' submetido para aprovação ';
+        }
+        req.session.success_message = `Objeto ${successMsg} com sucesso!`;
         return res.redirect('back');
       })
     });
