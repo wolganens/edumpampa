@@ -1,0 +1,25 @@
+extends ../layout
+include ../components/forms
+include ../components/panels
+
+//- OBS: A variavel post, como o nome já sugere, mantem os dados que foram submetidos
+//- através de uma requisição post, nela estão armazenados os valores que o usuário já
+//- tentou submeter anteriormente. Nesta página por ser CREATE, ou um campo está vazio
+//- ou seu valor está armazneado na variavel post
+block content
+  h3
+    | Cadastrar Objeto de Aprendizagem    
+  form(action="/learning-object/create-first-step", method="post")
+    //- Formulário de dados gerais do objeto de aprendizagem
+    +panel-default('Dados Gerais')
+        +input('Título *', 'title', oldInput('title'), 'Informe o título do objeto')(required=true)
+        +textarea('Descrição *', 'description', oldInput('description'), 'Informe a descrição do objeto')(required=true)
+        .row
+            .col-md-6
+                +input('Autores *', 'authors', oldInput('authors'), 'Informe o nome dos autores do objeto')(required=true)        
+            .col-md-6
+                +input('Ano de autoria *', 'year', oldInput('year'), 'Informe o ano de autoria do objeto')(required)
+        +submit('Continuar')(class="btn-lg pull-right")
+        .clearfix
+    
+    

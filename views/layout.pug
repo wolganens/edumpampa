@@ -53,8 +53,8 @@ html(lang='pt-br')
                     span.sr-only (current)
                 if currentUser
                   if currentUser.role != 'COMMON'
-                    li(class=currentPath == '/learning-object/create' ? 'active' : null)
-                      a(href="/learning-object/create", title="Cadastrar objeto de aprendizagem")
+                    li(class=currentPath == '/learning-object/create-first-step' ? 'active' : null)
+                      a(href="/learning-object/create-first-step", title="Cadastrar objeto de aprendizagem")
                         | Cadastrar OA
                     li(class=currentPath == '/learning-object/retrieve' ? 'active' : null)
                       a(href="/learning-object/retrieve", title="Meus objetos de aprendizagem")

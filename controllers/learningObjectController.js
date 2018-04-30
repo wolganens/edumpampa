@@ -15,11 +15,14 @@ const pug = require('pug');
 const config = require('../config/index');
 
 module.exports = {
-  getCreate(req, res) {
+  getCreateFirstStep(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
+    return res.render('learning-object/create-1');
+  },
+  getCreateSecondStep(req, res) {
     return async.parallel({
       accessibility_resources(callback) {
         AccessibilityResources.find(callback);
@@ -39,35 +42,44 @@ module.exports = {
       licenses(callback) {
         Licenses.find(callback);
       },
+      lo(callback) {
+        LearningObject.findById(req.params._id).exec(callback);
+      }
     }, (err, results) => {
-      res.render('learning-object/create', {
+      const {_id} = req.params;
+      let data = Object.assign({_id}, results);
+      console.log(data);
+      return res.render('learning-object/create-2', {
         error: err,
-        data: results,
+        data,
         title: 'Cadastro de OA - EduMPampa',
       });
     });
+
   },
-  postCreate(req, res) {
+  postCreateFirstStep(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
-    const lo = req.body;
-    lo.owner = req.user._id;
-
-    if (lo.file_name) {
-      lo.file = JSON.parse(lo.file_name);
-    } else {
-      lo.file_url = lo.file_url;
+    /*Extrai dados vindos do formulário*/
+    const {title, description, authors, year} = req.body
+    /*Cria o objeto para instanciar o modelo do usuário (mongoose)*/
+    let lo = {
+      title,
+      description,
+      authors,
+      year,
+      owner: req.user._id,
+      approved: false,
     }
-
-    let successMsg;
+    /*let successMsg;
     if (req.user.role === 'ADMIN') {
       lo.approved = true;
       successMsg = ' aprovado ';
     } else {
       successMsg = ' submetido para aprovação ';
-    }
+    }*/
 
     const learningObject = new LearningObject(lo);
     return learningObject.save((err) => {
@@ -79,8 +91,8 @@ module.exports = {
         req.flash('body', req.body);
         return res.redirect('back');
       }
-      successMsg = `Objeto ${successMsg} com sucesso!`;
-      const mailOptions = {
+      return res.redirect(`/learning-object/create-second-step/${learningObject._id}`);
+      /*const mailOptions = {
         to: 'edumpampa@gmail.com',
         subject: 'Novo OA submetido para aprovação',
         html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
@@ -89,14 +101,43 @@ module.exports = {
           lo_id: learningObject._id,
           url: config.baseUrl,
         }),
-      };
-      return email.sendMail(mailOptions, (mailErr) => {
+      };*/
+      /*return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
           return res.send(mailErr);
         }
         req.session.success_message = successMsg;
         return res.redirect(`/learning-object/single/${learningObject._id}`);
-      });
+      });*/
+    });
+  },
+  postCreateSecondStep(req, res){        
+    return LearningObject.findById(req.body._id, function(err, lo) {
+      let permission;
+      /*
+      * Verifica se o usuário autenticado é "dono"(owner) do OA
+      */
+      if (req.user._id.toString() === lo.owner.toString()) {
+        permission = ac.can(req.user.role).updateOwn('learningObject');
+      } else {
+        /*
+        * Se o usuário autenticado não for dono do OA, então verifica se quem está
+        * tentando acessar o OA tem permissão para alterar qualquer OA
+        */
+        permission = ac.can(req.user.role).updateAny('learningObject');
+      }
+      if (!permission.granted) {
+        return res.status(403).send('Você não tem permissão');
+      }
+      req.flash('body', req.body);
+      Object.assign(lo,req.body);
+      return lo.save(function(saveErr, saveResult){
+        if(saveErr) {
+          return res.send(saveErr);
+        }
+        req.session.success_message = "Objeto enviado para análise com sucesso!";
+        return res.redirect('back');
+      })
     });
   },
   postUpdate(req, res) {
@@ -231,9 +272,9 @@ module.exports = {
       });
   },
   postUploadFile(req, res) {
-    const { file } = req.files;
+    const { file } = req.files;    
     const fileAttrs = {};
-    const storageName = req.user._id + file.name;
+    const storageName = (req.user._id + file.name).replace(/\s*/g,'');
     if (req.files && file) {
       fileAttrs.name = file.name;
       fileAttrs.mimetype = file.mimetype;
@@ -241,52 +282,28 @@ module.exports = {
       fileAttrs.url = path.join('/uploads', 'lo', storageName);
       const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', storageName);
       fs.writeFileSync(filePath, file.data);
-      res.status(200).send({ file: fileAttrs });
+      return LearningObject.findByIdAndUpdate(req.body._id,{file: fileAttrs}, function(err, result) {
+        if (err) {
+          return res.send(err.error);
+        }        
+        return res.status(200).send({ file: fileAttrs });
+      })
     } else {
-      res.status(500).send({ error: 'Arquivo não especificado' });
+      return res.status(500).send({ error: 'Arquivo não especificado' });
     }
   },
   postRemoveFile(req, res) {
-    const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', req.user._id + req.body.file_name);
-    if (req.body.object_id) {
-      const permission = req.session.lo.owner.toString() === req.user._id.toString() ? ac.can(req.user.role).updateOwn('learningObject') : ac.can(req.user.role).updateAny('learningObject');
-      if (!permission.granted) {
-        return res.status(403).send('Você não tem permissão!');
+    const storageName = (req.user._id + req.body.filename).replace(/\s*/g,'');
+    const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', storageName);
+    return fs.unlink(filePath, (err) => {
+      if (err) {
+        return res.send(err);
       }
-      return LearningObject.findById(req.body.object_id, (findErr, result) => {
-        if (findErr) {
-          return res.status(500).send({ error: findErr });
+      return LearningObject.findByIdAndUpdate(req.body._id, {$unset: {file: 1}}, function(loErr, result) {
+        if (loErr) {
+          return res.send(loErr);
         }
-        const lo = result;
-        lo.file = null;
-        return lo.save((err) => {
-          if (err) {
-            console.log(err);
-          }
-          return fs.stat(filePath, (statErr) => {
-            if (statErr) {
-              console.log(`Falha ao remover arquivo: ${JSON.stringify(statErr)}`);
-              return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
-            }
-            return fs.unlink(filePath, (unlinkErr) => {
-              if (unlinkErr) {
-                return res.status(500).send({ error: unlinkErr });
-              }
-              return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
-            });
-          });
-        });
-      });
-    }
-    return fs.stat(filePath, (statErr) => {
-      if (statErr) {
-        return res.send(statErr);
-      }
-      return fs.unlink(filePath, (unlinkErr) => {
-        if (unlinkErr) {
-          return res.status(500).send({ error: unlinkErr });
-        }
-        return res.status(200).send({ success: 'Arquivo removido com sucesso!' });
+        return res.status(200).end();
       });
     });
   },

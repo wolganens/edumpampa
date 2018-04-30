@@ -413,6 +413,9 @@ $brand-danger:          #96281b !default; */
   background-size: 70px;
   padding: 10px;
   cursor: pointer; }
+  .drop .dz-image img {
+    max-width: 180px;
+    height: auto; }
   .drop.dz-drag-hover {
     opacity: 0.5; }
   .drop p {

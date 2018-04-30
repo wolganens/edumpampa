@@ -86,8 +86,7 @@ app.use((req, res, next) => {
   const queryBody = Object.assign({}, req.flash('body')[0], req.query);
   Object.keys(queryBody).forEach((key) => {
     res.locals.old.set(key, queryBody[key]);
-  });
-  console.log('Parâmetros get e post:', queryBody);
+  });  
   /*
   * Esta função é utilizada nas views para retornar valores da requisição
   * (ex: campos de formulários)Se o campo procurado não existir, pode ser

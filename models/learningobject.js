@@ -32,7 +32,7 @@ const learningObjectSchema = new Schema({
   resources: [{ type: Schema.Types.ObjectId, ref: 'Resources' }],
   license: {
     type: Schema.Types.ObjectId,
-    required: true,
+    /*required: true,*/
     ref: 'Licenses',
   },
   license_description: {
@@ -41,13 +41,13 @@ const learningObjectSchema = new Schema({
   },
   license_owner: {
     type: String,
-    required: true,
+    /*required: true,*/
   },
   file: {
     type: Object,
-    required: [function required() {
+    /*required: [function required() {
       return !this.file_url;
-    }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],
+    }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],*/
   },
   'file.name': {
     type: String,
@@ -63,9 +63,9 @@ const learningObjectSchema = new Schema({
   },
   file_url: {
     type: String,
-    required: [function required() {
+    /*required: [function required() {
       return !this.file;
-    }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],
+    }, 'Envie um arquivo ou insira uma URL(para arquivos com mais de 20mb)'],*/
   },
   approved: {
     type: Boolean,

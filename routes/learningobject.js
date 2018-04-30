@@ -3,8 +3,11 @@ const learningObjectController = require('../controllers/learningObjectControlle
 const router = express.Router();
 const { authMiddleware } = require('../helpers/custom_middlewares');
 
-router.get('/create', authMiddleware, learningObjectController.getCreate);
-router.post('/create', authMiddleware, learningObjectController.postCreate);
+router.get('/create-first-step', authMiddleware, learningObjectController.getCreateFirstStep);
+router.get('/create-second-step/:_id', authMiddleware, learningObjectController.getCreateSecondStep);
+router.post('/create-first-step', authMiddleware, learningObjectController.postCreateFirstStep);
+router.post('/create-second-step', authMiddleware, learningObjectController.postCreateSecondStep);
+
 router.post('/update', authMiddleware, learningObjectController.postUpdate);
 
 router.post('/upload-file', authMiddleware, learningObjectController.postUploadFile);
