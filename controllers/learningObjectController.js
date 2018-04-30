@@ -85,23 +85,6 @@ module.exports = {
         return res.redirect('back');
       }
       return res.redirect(`/learning-object/create-second-step/${learningObject._id}`);
-      /*const mailOptions = {
-        to: 'edumpampa@gmail.com',
-        subject: 'Novo OA submetido para aprovação',
-        html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
-          user: req.user.name,
-          title: learningObject.title,
-          lo_id: learningObject._id,
-          url: config.baseUrl,
-        }),
-      };*/
-      /*return email.sendMail(mailOptions, (mailErr) => {
-        if (mailErr) {
-          return res.send(mailErr);
-        }
-        req.session.success_message = successMsg;
-        return res.redirect(`/learning-object/single/${learningObject._id}`);
-      });*/
     });
   },
   postCreateSecondStep(req, res){        
@@ -135,8 +118,23 @@ module.exports = {
         } else {
           successMsg = ' submetido para aprovação ';
         }
-        req.session.success_message = `Objeto ${successMsg} com sucesso!`;
-        return res.redirect('back');
+        const mailOptions = {
+          to: 'edumpampa@gmail.com',
+          subject: 'Novo OA submetido para aprovação',
+          html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
+            user: req.user.name,
+            title: lo.title,
+            lo_id: lo._id,
+            url: config.baseUrl,
+          }),
+        };
+        return email.sendMail(mailOptions, (mailErr) => {
+          if (mailErr) {
+            return res.send(mailErr);
+          }          
+          req.session.success_message = `Objeto ${successMsg} com sucesso!`;
+          return res.redirect(`/learning-object/single/${lo._id}`);
+        });        
       })
     });
   },
