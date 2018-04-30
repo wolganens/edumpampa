@@ -295,7 +295,7 @@ const routeMethods = {
       }
 
       return res.render('admin/learning-object/manage', {
-        sortOptions, situationOptions, data, title: "Gerenciar OA's - EduMPampa",
+        sortOptions, situationOptions, data, title: "Gerenciar OAs - EduMPampa",
       });
     });
   },

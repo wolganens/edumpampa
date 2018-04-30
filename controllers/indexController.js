@@ -18,7 +18,7 @@ module.exports = {
         TeachingLevels.find(callback);
       },
     }, (err, results) => res.render('index', {
-      title: 'Repositório de Objetos de Aprendizagem',
+      title: 'EduMPampa - Repositório de Objetos de Aprendizagem',
       error: err,
       data: results,
     }));
