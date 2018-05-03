@@ -6,13 +6,13 @@ block content
   if data.lo.file_url
     h4
       | URL do OA
-      if currentUser
-        a(href=data.lo.file_url)
-          | !{data.lo.file_url}
-      else
-        div.alert.alert-danger
-          strong.text-danger
-            | Apenas usuários cadastrados podem baixar arquivos!
+    if currentUser
+      a(href=data.lo.file_url)
+        | !{data.lo.file_url}
+    else
+      div.alert.alert-danger
+        strong.text-danger
+          | Apenas usuários cadastrados podem baixar arquivos!
   if data.lo.file
     .row
       .col-md-4
