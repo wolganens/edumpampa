@@ -52,21 +52,24 @@ block content
   if data.lo.teaching_levels
     h4      
       | Níveis de ensino
-    each tlevel in data.lo.teaching_levels
-      p
-        | !{tlevel.name}
+    ul
+      each tlevel in data.lo.teaching_levels
+        li
+          | !{tlevel.name}
   if data.lo.axes
     h4
         | Eixos
-    each axe in data.lo.axes
-      p
-        | !{axe.name}
+    ul
+      each axe in data.lo.axes
+        li
+          | !{axe.name}
   if data.lo.accessibility_resources
     h4
         | Recurso de Acessibilidade
-    each ares in data.lo.accessibility_resources
-      p
-        | !{ares.name}
+    ul
+      each ares in data.lo.accessibility_resources
+        li
+          | !{ares.name}
   h4    
     | Detentor do direito autoral
   p
