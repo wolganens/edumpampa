@@ -1,7 +1,7 @@
 const postcss = require('postcss')
 module.exports = {
 	plugins: [
-		/*postcss([			
+		postcss([			
 			require('postcss-high-contrast')({
 				aggressiveHC: true,
 				aggressiveHCDefaultSelectorList: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'th', 'td', 'a'],
@@ -40,6 +40,6 @@ module.exports = {
 		            'border-left', 'border-right', 'border-color', 'border-top-color', 'border-right-color',
 		            'border-bottom-color', 'border-left-color', 'box-shadow', 'filter', 'text-shadow']
 			})
-		])*/
+		])
 	]
 };

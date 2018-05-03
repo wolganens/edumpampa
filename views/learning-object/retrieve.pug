@@ -15,7 +15,7 @@ block content
       each lo in data
         tr
           td
-            a(title=lo.title target="_blank" href=`/learning-object/single/${lo._id}`) #{lo.title}            
+            a(title=lo.title href=`/learning-object/single/${lo._id}`) #{lo.title}            
           td
             | !{lo.htmlSituation}
           td
