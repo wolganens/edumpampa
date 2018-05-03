@@ -214,45 +214,7 @@ module.exports = {
     }, (err, results) => {
       if (err) {
         return res.send(err);
-      }
-      /*
-      * Verifica se o usuário autenticado tem permissão para editar o
-      * objeto de aprendizagem
-      */
-      if (req.user) {
-        let permission;
-        /*
-        * Verifica se o usuário autenticado é "dono"(owner) do OA
-        */
-        if (req.user._id.toString() === results.lo.owner.toString()) {
-          permission = ac.can(req.user.role).updateOwn('learningObject');
-        } else {
-          /*
-          * Se o usuário autenticado não for dono do OA, então verifica se quem está
-          * tentando acessar o OA tem permissão para alterar qualquer OA
-          */
-          permission = ac.can(req.user.role).updateAny('learningObject');
-        }
-        /*
-        * Se o usuário não tem permissão para editar o OA, então ele é redirecionado
-        * para a página de detalhes do OA
-        */
-        if (!permission.granted) {
-          return res.redirect(`/learning-object/details/${results.lo._id}`);
-        }
-        /*
-        * Caso o usuário tenha permissão para editar o OA, o formulário de edição
-        * do OA é renderizado com as informações do OA em data.lo
-        */
-        return res.render('learning-object/single', {
-          data: results,
-          title: 'Atualização de OA - EduMPampa',
-        });
-      }
-      /*
-      * Se o usuário não está autenticado, então é redirecionado para
-      * a página de detalhes do OA
-      */
+      }      
       return res.redirect(`/learning-object/details/${results.lo._id}`);
     });
   },
