@@ -40,8 +40,7 @@ jQuery(document).ready(function($) {
 				dictFileTooBig: "Arquivo muito grande! Você pode enviar arquivos de até {{maxFilesize}} MB",
 				init: function(){
 					var file = $("#file-json").data('file');
-					if (file && file.trim()) {
-						console.log(file);
+					if (file && file.trim()) {						
 						var mockFile = { name: file.name, size: file.size, type: file.mimetype };
 						this.options.addedfile.call(this, mockFile);
 						this.options.thumbnail.call(this, mockFile, file.url);
