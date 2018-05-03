@@ -53,7 +53,8 @@
     "pug": "2.0.0-beta11",
     "remove": "^0.1.5",
     "serve-favicon": "~2.4.5",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "uglifyjs-webpack-plugin": "^1.2.5"
   },
   "devDependencies": {
     "css-loader": "^0.28.11",

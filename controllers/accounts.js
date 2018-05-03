@@ -101,12 +101,15 @@ module.exports = {
       * Caso o usuário seja cadastrado com sucesso, envia um email de boas vindas
       * para o email inserido
       */
+      const renderedEmail = pug.renderFile(path.join(__dirname, '..', 'views', 'emails/welcome.pug'), {
+        user: user.name,
+      });
+      console.log(renderedEmail);
+
       const mailOptions = {
         to: user.email,
         subject: 'Seja bem-vindo ao EduMPampa!',
-        html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/welcome.pug'), {
-          user: user.name,
-        }),
+        html: renderedEmail,
       };
       return email.sendMail(mailOptions, (mailErr) => {
         if (mailErr) {
