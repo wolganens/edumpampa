@@ -40,12 +40,14 @@ jQuery(document).ready(function($) {
 				dictFileTooBig: "Arquivo muito grande! Você pode enviar arquivos de até {{maxFilesize}} MB",
 				init: function(){
 					var file = $("#file-json").data('file');
-					console.log(file);
-					var mockFile = { name: file.name, size: file.size, type: file.mimetype };
-				   this.options.addedfile.call(this, mockFile);
-				   this.options.thumbnail.call(this, mockFile, file.url);
-				   mockFile.previewElement.classList.add('dz-success');
-				   mockFile.previewElement.classList.add('dz-complete');
+					if (file && file.trim()) {
+						console.log(file);
+						var mockFile = { name: file.name, size: file.size, type: file.mimetype };
+						this.options.addedfile.call(this, mockFile);
+						this.options.thumbnail.call(this, mockFile, file.url);
+						mockFile.previewElement.classList.add('dz-success');
+						mockFile.previewElement.classList.add('dz-complete');
+					}
 				}
 			}
 		);	
