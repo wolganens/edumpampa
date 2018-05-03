@@ -12,8 +12,8 @@ block content
     else
       div.alert.alert-danger
         strong.text-danger
-          | Apenas usuários cadastrados podem baixar arquivos!
-  if data.lo.file
+          | Apenas usuários cadastrados podem ter acesso ao objeto!
+  if data.lo.file.name
     .row
       .col-md-4
         p
@@ -36,7 +36,7 @@ block content
                 | Download
             else
               .badge.alert-danger
-                | Apenas usuários cadastrados podem baixar arquivos!
+                | Apenas usuários cadastrados podem ter acesso ao objeto!
   h4    
     | Título
   p

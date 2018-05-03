@@ -10,7 +10,7 @@ block content
   h3
     | Cadastrar Objeto de Aprendizagem    
   form(action="/learning-object/update", method="post", encType="multipart/form-data")    
-    input(type='hidden', name='object_id', value=data.lo._id)
+    input(type='hidden', id="_id" name='object_id', value=data.lo._id)
     //- Formulário de dados gerais do objeto de aprendizagem
     +panel-default('Dados Gerais')    
         +input('Título *', 'title', oldInput('title', data.lo.title), 'Informe o título do objeto')(required=true)
