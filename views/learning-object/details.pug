@@ -4,8 +4,8 @@ block content
   h3
     | !{data.lo.title}
   if data.lo.file_url
-    p
-      | URL do OA:
+    h4
+      | URL do OA
       if currentUser
         a(href=data.lo.file_url)
           | !{data.lo.file_url}
