@@ -244,7 +244,7 @@ module.exports = {
         * Caso o usuário tenha permissão para editar o OA, o formulário de edição
         * do OA é renderizado com as informações do OA em data.lo
         */
-        return res.render('learningobject/single', {
+        return res.render('learning-object/single', {
           data: results,
           title: 'Atualização de OA  EduMPampa',
         });
