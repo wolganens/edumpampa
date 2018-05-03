@@ -37,50 +37,43 @@ block content
             else
               .badge.alert-danger
                 | Apenas usuários cadastrados podem baixar arquivos!
-  p
-    strong
-      | Título
+  h4    
+    | Título
   p
     | !{ data.lo.title}
-  p
-    strong
-      | Descrição do recurso
+  h4    
+    | Descrição do recurso
   p
     | !{ data.lo.description}
-  p
-    strong
-      | Autor(es)
+  h4    
+    | Autor(es)
   p
     | !{data.lo.authors}
   if data.lo.teaching_levels
-    p
-      strong
-        | Níveis de ensino
+    h4      
+      | Níveis de ensino
     each tlevel in data.lo.teaching_levels
       p
         | !{tlevel.name}
   if data.lo.axes
-    p
-      strong
+    h4
         | Eixos
     each axe in data.lo.axes
       p
         | !{axe.name}
   if data.lo.accessibility_resources
-    p
-      strong
+    h4
         | Recurso de Acessibilidade
     each ares in data.lo.accessibility_resources
       p
         | !{ares.name}
-  p
-    strong
-      | Detentor do direito autoral
+  h4    
+    | Detentor do direito autoral
   p
     | !{data.lo.license_owner}
-  p
-    strong
-      | Licença
+  
+  h4
+    | Licença
   p
     | !{data.lo.license.name}
 
