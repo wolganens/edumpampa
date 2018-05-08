@@ -1,6 +1,6 @@
 include panels
 include forms
-mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, content, resources, lo })
+mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, contents, resources, lo })  
   .row
     .col-md-5
       +panel-default('Níveis de Ensino', 'teaching_levels[]')
@@ -32,12 +32,12 @@ mixin lo-metadata-panels({ teaching_levels, axes, accessibility_resources, conte
               accessibility_resource._id,
               oldInput('accessibility_resources', lo && lo.accessibility_resources)
             )(class="checked-string")
-  if content && resources
+  if contents && resources    
     .row
       .col-md-6
         +panel-default('Conteúdos', 'content[]')
           fieldset
-            each cont in content
+            each cont in contents
               +checkbox(
                 cont.name,
                 'content[]',

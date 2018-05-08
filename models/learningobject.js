@@ -76,6 +76,11 @@ const learningObjectSchema = new Schema({
     type: Date,
     default: new Date(),
   },
+  step: {
+    type: Number,
+    required: true,
+    default: 0
+  }
 });
 learningObjectSchema.virtual('htmlSituation').get(function htmlSituation() {
   if (this.approved) {

@@ -1,8 +1,8 @@
 include ../components/panels
 include ../components/forms
 mixin file-form({lo})
-  +panel-default('Arquivo')
-      input(type="hidden" data-file=lo ? JSON.stringify(lo.file) : '' id="file-json")
+  +panel-default('Arquivo')      
+      input(type="hidden" data-file=lo && JSON.stringify(lo.file) !== '{}' ? JSON.stringify(lo.file) : '' id="file-json")
       .form-group        
         label(for="file")
           | Arquivo (Indicado para arquivos de até 20MB)

@@ -53,12 +53,12 @@ module.exports = [
                 }
             }
         },
-        mode: 'production',
+        mode: process.env.NODE_ENV || 'development',
         plugins: [            
             new UglifyJSPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
-                  'NODE_ENV': JSON.stringify('production')
+                  'NODE_ENV': process.env.NODE_ENV || 'development'
                 }
             }),
             new MiniCssExtractPlugin({
@@ -119,12 +119,12 @@ module.exports = [
                 }
             }
         },
-        mode: 'production',
+        mode: process.env.NODE_ENV || 'development',
         plugins: [            
             new UglifyJSPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
-                  'NODE_ENV': JSON.stringify('production')
+                  'NODE_ENV': process.env.NODE_ENV || 'development'
                 }
             }),
             new MiniCssExtractPlugin({

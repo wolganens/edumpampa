@@ -40,7 +40,7 @@ jQuery(document).ready(function($) {
 				dictFileTooBig: "Arquivo muito grande! Você pode enviar arquivos de até {{maxFilesize}} MB",
 				init: function(){
 					var file = $("#file-json").data('file');
-					if (file && file.trim()) {						
+					if (file) {
 						var mockFile = { name: file.name, size: file.size, type: file.mimetype };
 						this.options.addedfile.call(this, mockFile);
 						this.options.thumbnail.call(this, mockFile, file.url);
@@ -57,6 +57,9 @@ jQuery(document).ready(function($) {
 					_id: $("#_id").val(),
 					filename: file.name
 				}, function(data, textStatus, xhr) {
+					console.log(data);
+					console.log(textStatus);
+					console.log(xhr);
 					if (xhr.status == 200) {
 						alert("Arquivo removido com sucesso!");
 					}
@@ -209,15 +212,20 @@ jQuery(document).ready(function($) {
 				status: action == 'approve' ? true : false
 			}, function(data, textStatus, xhr) {
 			if (data.ok == 1) {
-				var text = action == 'approve' ? 'Habilitado' : 'Desabilitado';
-				for (var i = _id.length - 1; i >= 0; i--) {
-					$('#' + _id[i])
-					.find('.badge')
-					.toggleClass('alert-danger alert-success')
-					.text(text);
+				if (action == 'remove') {
+					window.location.reload();
+				} else {
+					var text = action == 'approve' ? 'Habilitado' : 'Desabilitado';
+					for (var i = _id.length - 1; i >= 0; i--) {
+						$('#' + _id[i])
+						.find('.badge')
+						.toggleClass('alert-danger alert-success')
+						.text(text);
+					}
+					$('.table-checkall').prop('checked', false).trigger('change');
+					alert('Ação realizada com sucesso!');
+					
 				}
-				$('.table-checkall').prop('checked', false).trigger('change');
-				alert('Ação realizada com sucesso!');
 			}
 		});
     }
@@ -281,18 +289,20 @@ jQuery(document).ready(function($) {
 		})
 		function load_license_details(select) {
 			var selected = select.find(':selected').val();
+			console.log(selected);
 			selected = lookup[selected]
 			var description = selected.description || null;
-			console.log(description)
-			$("#license_description").text(description);
-			if (description) {
-				lic_img.src = selected.image;
-				lic_img.alt = selected.name;
-				lic_deed.href = selected.deed;
-				lic_legal.href = selected.legal;
-				lic_details.style.display = 'block'
-			} else {
-				lic_details.style.display = 'none'
+			if (lookup[selected].name !== 'Outra licença') {
+				$("#license_description").text(description);
+				if (description) {
+					lic_img.src = selected.image;
+					lic_img.alt = selected.name;
+					lic_deed.href = selected.deed;
+					lic_legal.href = selected.legal;
+					lic_details.style.display = 'block'
+				} else {
+					lic_details.style.display = 'none'
+				}
 			}
 
 		}

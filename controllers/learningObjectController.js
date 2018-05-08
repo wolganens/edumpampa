@@ -38,7 +38,22 @@ module.exports = {
       },
       content(callback) {
         Contents.find({}).sort('name').exec(callback);
-      },
+      },      
+      lo(callback) {
+        LearningObject.findById(req.params._id).exec(callback);
+      }
+    }, (err, results) => {
+
+      return res.render('learning-object/create-2', {
+        error: err,
+        data: results,
+        title: 'Cadastro de OA - EduMPampa',
+      });
+    });
+
+  },
+  getCreateThirdStep(req, res) {
+    return async.parallel({      
       licenses(callback) {
         Licenses.find(callback);
       },
@@ -46,12 +61,10 @@ module.exports = {
         LearningObject.findById(req.params._id).exec(callback);
       }
     }, (err, results) => {
-      const {_id} = req.params;
-      let data = Object.assign({_id}, results);
-      console.log(data);
-      return res.render('learning-object/create-2', {
+
+      return res.render('learning-object/create-3', {
         error: err,
-        data,
+        data: results,
         title: 'Cadastro de OA - EduMPampa',
       });
     });
@@ -65,17 +78,18 @@ module.exports = {
     /*Extrai dados vindos do formulário*/
     const {title, description, authors, year} = req.body
     /*Cria o objeto para instanciar o modelo do usuário (mongoose)*/
-    let lo = {
+    let data = {
       title,
       description,
       authors,
       year,
       owner: req.user._id,
       approved: false,
-    }   
+      step: 1,
+    }
+    const lo = new LearningObject(data);
 
-    const learningObject = new LearningObject(lo);
-    return learningObject.save((err) => {
+    return lo.save((err) => {
       if (err) {
         req.session.errors = err.errors;
         /*
@@ -84,7 +98,7 @@ module.exports = {
         req.flash('body', req.body);
         return res.redirect('back');
       }
-      return res.redirect(`/learning-object/create-second-step/${learningObject._id}`);
+      return res.redirect(`/learning-object/create-second-step/${lo._id}`);
     });
   },
   postCreateSecondStep(req, res){        
@@ -105,19 +119,50 @@ module.exports = {
       if (!permission.granted) {
         return res.status(403).send('Você não tem permissão');
       }
-      req.flash('body', req.body);
-      Object.assign(lo, req.body, {approved: req.user.role === 'ADMIN' ? true : false});
-      return lo.save(function(saveErr, saveResult){
-        if(saveErr) {
-          return res.send(saveErr);
+      
+      Object.assign(lo, req.body, {step: 2});
+      
+      return lo.save((saveError) => {
+        if (saveError) {
+          req.session.errors = saveError.errors;
+          /*
+          * Mantem o corpo do POST até a próxima requisição
+          */
+          req.flash('body', req.body);
+          return res.redirect('back');
         }
-        let successMsg;
-        if (req.user.role === 'ADMIN') {
-          lo.approved = true;
-          successMsg = ' aprovado ';
-        } else {
-          successMsg = ' submetido para aprovação ';
+        return res.redirect(`/learning-object/create-third-step/${lo._id}`);
+      });
+    });
+  },
+  postCreateThirdStep(req, res){        
+    return LearningObject.findById(req.body._id, function(err, lo) {
+      let permission;
+      /*
+      * Verifica se o usuário autenticado é "dono"(owner) do OA
+      */
+      if (req.user._id.toString() === lo.owner.toString()) {
+        permission = ac.can(req.user.role).updateOwn('learningObject');
+      } else {
+        /*
+        * Se o usuário autenticado não for dono do OA, então verifica se quem está
+        * tentando acessar o OA tem permissão para alterar qualquer OA
+        */
+        permission = ac.can(req.user.role).updateAny('learningObject');
+      }
+      if (!permission.granted) {
+        return res.status(403).send('Você não tem permissão');
+      }
+      
+      Object.assign(lo, req.body, {approved: req.user.role === 'ADMIN' ? true : false}, {step: 3});
+
+      return lo.save(function(saveError, saveResult){
+        if(saveError) {
+          return res.send(saveError);
         }
+
+        let successMsg = req.user.role === 'ADMIN' ? ' aprovado ' : ' submetido para aprovação ';
+        
         const mailOptions = {
           to: 'edumpampa@gmail.com',
           subject: 'Novo OA submetido para aprovação',
@@ -215,7 +260,7 @@ module.exports = {
       if (err) {
         return res.send(err);
       }
-            /*
+      /*
       * Verifica se o usuário autenticado tem permissão para editar o
       * objeto de aprendizagem
       */
@@ -240,14 +285,23 @@ module.exports = {
         if (!permission.granted) {
           return res.redirect(`/learningobject/details/${results.lo._id}`);
         }
-        /*
-        * Caso o usuário tenha permissão para editar o OA, o formulário de edição
-        * do OA é renderizado com as informações do OA em data.lo
-        */
-        return res.render('learning-object/single', {
-          data: results,
-          title: 'Atualização de OA  EduMPampa',
-        });
+        switch (results.lo.step) {
+          case 0:
+            return res.redirect(`/learning-object/create-first-step/${results.lo._id}`);
+            break;
+          case 1:
+            return res.redirect(`/learning-object/create-second-step/${results.lo._id}`);
+            break;
+          case 2:
+            return res.redirect(`/learning-object/create-third-step/${results.lo._id}`);
+            break;
+          default:            
+            return res.render('learning-object/single', {
+              data: results,
+              title: 'Atualização de OA  EduMPampa',
+            });            
+            break;
+        }
       }
       /*
       * Se o usuário não está autenticado, então é redirecionado para

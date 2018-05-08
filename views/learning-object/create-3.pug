@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+    h3 Cadastrar Objeto de Aprendizagem - Etapa 3/3
+    form(action="/learning-object/create-third-step", method="post", encType="multipart/form-data")
+        input(type="hidden" id="_id" name="_id" value=data.lo._id)        
+        //- A lista de licenças disponíveis está na variavel data.licenses
+        //- e na variavel post estão as informações submetidas previamente pelo usuário
+        //- dos campos da licença
+        include ../components/licenses-form
+        +license-form(data)
+
+        include ../components/file-form
+        +file-form(data)    
+        //- //- Botão de submissão do formulário    
+        +submit('Finalizar')(class="btn-lg pull-right")    
+        .clearfix

@@ -1,21 +1,14 @@
 extends ../layout
-include ../components/lo-metadata-panels
 
 block content
-    h3 Informações do OA  #{data.lo.title}
+    h3 Cadastrar Objeto de Aprendizagem - Etapa 2/3
     form(action="/learning-object/create-second-step", method="post", encType="multipart/form-data")
         input(type="hidden" id="_id" name="_id" value=data.lo._id)
         //- Paineis para seleção de Níveis de Ensino, Eixos e Recursos de acessibilidade
         //- do objeto de aprendizagem a ser cadastrado    
+        include ../components/lo-metadata-panels
         +lo-metadata-panels(data)
-        //- A lista de licenças disponíveis está na variavel data.licenses
-        //- e na variavel post estão as informações submetidas previamente pelo usuário
-        //- dos campos da licença
-        include ../components/licenses-form
-        +license-form(data)
-
-        include ../components/file-form
-        +file-form(data)    
+        
         //- //- Botão de submissão do formulário    
-        +submit('Cadastrar')(class="btn-lg pull-right")    
+        +submit('Continuar')(class="btn-lg pull-right")    
         .clearfix
