@@ -82,7 +82,7 @@ module.exports = {
     const mailOptions = {
       to: 'edumpampa@gmail.com',
       subject: req.body.subject,
-      html: `$(req.body.message)<p>Email de contato: ${req.body.email}</p>`,
+      html: `${req.body.message}<p>Email de contato: ${req.body.email}</p>`,
     };
     return email.sendMail(mailOptions, (error) => {
       if (error) {
