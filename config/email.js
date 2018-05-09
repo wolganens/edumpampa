@@ -6,12 +6,12 @@ const email = {
     from: '"Equipe EduMPampa" <edumpampa@gmail.com>',
     to: 'edumpampa@gmail.com',
     subject: '',
-    text: '',
+    html: '',
   },
   setEmailOptions(options) {
     this.emailOptions.to = options.to;
     this.emailOptions.subject = options.subject;
-    this.emailOptions.text = options.html;
+    this.emailOptions.html = options.html;
   },
   sendMail(options, callback) {    
     this.setEmailOptions(options);
