@@ -52,14 +52,14 @@ block content
             .btn-group
               if user.role == 'COMMON'
                 a.btn.btn-success.btn-xs(href="/admin/user/authorize/" + user._id)
-                  i(class="fa fa-thumbs-o-up" aria-hidden="true")
+                  i(class="glyphicon glyphicon-thumbs-up" aria-hidden="true")
                   | Autorizar
               else if user.role == 'AUTHORIZED'
                 a.btn.btn-danger.btn-xs(href="/admin/user/unauthorize/" + user._id)
-                  i(class="fa fa-thumbs-o-down" aria-hidden="true")
+                  i(class="glyphicon glyphicon-thumbs-down" aria-hidden="true")
                   | Desautorizar
               a.btn.btn-default.btn-xs.remove(href="/admin/user/remove/" + user._id)
-                i(class="fa fa-trash-o" aria-hidden="true")
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
                 | Remover
               button.btn.btn-default.btn-xs.mass-lo-action.single(data-user="true" data-action="approve" data-id=user._id)
                 | Habilitar OA's

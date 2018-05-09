@@ -47,14 +47,14 @@ block content
             .btn-group
               if !lo.approved
                 a.btn.btn-success.btn-xs(href="/learning-object/approve/"+lo._id)
-                  i(class="fa fa-thumbs-o-up" aria-hidden="true")
+                  i(class="glyphicon glyphicon-thumbs-up" aria-hidden="true")
                   | Habilitar
               else
                 a.btn.btn-danger.btn-xs(href="/learning-object/approve/"+lo._id)
-                  i(class="fa fa-thumbs-o-down" aria-hidden="true")
+                  i(class="glyphicon glyphicon-thumbs-down" aria-hidden="true")
                   | Desabilitar
               a.btn.btn-default.btn-xs.remove(href="/learning-object/remove/" + lo._id)
-                i(class="fa fa-trash-o" aria-hidden="true")
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
                 | Remover
   form(class="form-inline", action="", method="GET")
     +select('Ordenar: ', 'sort', oldInput('sort'), 'Ordenar resultados', sortOptions, {val: 'value', text: 'text'})
