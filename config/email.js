@@ -1,4 +1,10 @@
 var mailgun = require('mailgun-js')({apiKey: process.env.API_KEY, domain: process.env.DOMAIN});
+console.log("#######################################################################################################"
+  ,
+  process.env.API_KEY)
+  console.log("#######################################################################################################"
+  ,
+  process.env.process.env.DOMAIN)
 
 const email = {
   transport: null,
