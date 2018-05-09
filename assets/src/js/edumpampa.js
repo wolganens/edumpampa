@@ -56,10 +56,7 @@ jQuery(document).ready(function($) {
 				{
 					_id: $("#_id").val(),
 					filename: file.name
-				}, function(data, textStatus, xhr) {
-					console.log(data);
-					console.log(textStatus);
-					console.log(xhr);
+				}, function(data, textStatus, xhr) {					
 					if (xhr.status == 200) {
 						alert("Arquivo removido com sucesso!");
 					}
@@ -275,24 +272,23 @@ jQuery(document).ready(function($) {
 	if (lic_objects) {	
 		lic_objects = JSON.parse(lic_objects.value);
 		
-		var lookup = {};
+		var lookup = new Map();
 		for (var i = 0, len = lic_objects.length; i < len; i++) {
-		    lookup[lic_objects[i]._id] = lic_objects[i];
+			lookup.set(lic_objects[i]._id.toString(), lic_objects[i]);		    
 		}
 
 		var lic_img = document.getElementById('license-img');
 		var lic_deed = document.getElementById('license-deed');
 		var lic_legal = document.getElementById('license-legal');
-		load_license_details($("[name=license]"));
+		load_license_details($("[name=license]"), lookup);
 		$("[name=license]").change(function(){
-			load_license_details($(this));
+			load_license_details($(this), lookup);
 		})
-		function load_license_details(select) {
-			var selected = select.find(':selected').val();
-			console.log(selected);
-			selected = lookup[selected]
+		function load_license_details(select, lookup) {
+			var selected = select.find(':selected').val() || lic_objects[0]._id.toString();			
+			selected = lookup.get(selected);			
 			var description = selected.description || null;
-			if (lookup[selected].name !== 'Outra licença') {
+			if (selected.name !== 'Outra licença') {
 				$("#license_description").text(description);
 				if (description) {
 					lic_img.src = selected.image;
