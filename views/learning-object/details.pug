@@ -4,11 +4,11 @@ block content
   h3
     | !{data.lo.title}
   if data.lo.file_url
-    h4
-      | URL do OA
     if currentUser
-      a(href=data.lo.file_url)
-        | !{data.lo.file_url}
+      h4
+        | URL do OA
+        a(href=data.lo.file_url)
+          | !{data.lo.file_url}
     else
       div.alert.alert-danger
         strong.text-danger
