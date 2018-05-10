@@ -161,11 +161,11 @@ module.exports = {
           return res.send(saveError);
         }
 
-        let successMsg = req.user.role === 'ADMIN' ? ' aprovado ' : ' submetido para aprovação ';
+        let successMsg = req.user.role === 'ADMIN' ? ' aprovado ' : ' submetido para avaliação ';
         
         const mailOptions = {
           to: 'edumpampa@gmail.com',
-          subject: 'Novo OA submetido para aprovação',
+          subject: 'Novo OA submetido para avaliação',
           html: pug.renderFile(path.join(__dirname, '..', 'views', 'emails/submited-oa.pug'), {
             user: req.user.name,
             title: lo.title,
