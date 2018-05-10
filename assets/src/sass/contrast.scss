@@ -4,12 +4,17 @@ $navbar-default-link-hover-bg:     black !default;
 $navbar-default-link-hover-color:          #000 !default;
 $navbar-default-link-active-color:         #000 !default;
 $navbar-default-link-active-bg: 			black;
+$navbar-default-toggle-icon-bar-bg:        yellow !default;
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
-		font-weight: bold !important;
-		background-color: black !important;
-	}
+	font-weight: bold !important;
+	background-color: black !important;
+}
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
 	background-color: black !important;
 	font-weight: bold;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	color: #FFFF00;
+	background-color: yellow !important
 }
