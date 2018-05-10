@@ -443,7 +443,7 @@ module.exports = {
             pages: Math.ceil(count / 10),
             currentPage: page,
             queryUrl: req.originalUrl,
-            title: 'Busca de objetos - EduMPampa',
+            title: 'Resultados da busca',
           });
         });
       });
@@ -547,6 +547,7 @@ module.exports = {
             pages: Math.ceil(count / 10),
             currentPage: page,
             queryUrl: req.originalUrl,
+            title: 'Resultados da busca'
           });
         });
       });
