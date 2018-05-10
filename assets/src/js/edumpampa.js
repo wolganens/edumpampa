@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 				maxFilesize: 20,
 				thumbnailWidth: 100,
 				clickable: true,
-				acceptedFiles: ".pdf,.gif,.jpeg,.png,.txt,.rar,.zip,.mp4,.mp3,.flac,.wma,.mpeg4,.flv,.odt,.doc,.docx,.html,.midi.",
+				acceptedFiles: ".pdf,.gif,.jpg,.jpeg,.png,.txt,.rar,.zip,.mp4,.mp3,.flac,.wma,.mpeg4,.flv,.odt,.doc,.docx,.html,.midi.",
 				dictDefaultMessage: "Arraste e solte arquivos aqui, ou clique nesta área para selecionar do computador",
 				dictFallbackMessage: "Seu navegador não suporta o envio de arquivos",
 				dictCancelUpload: "Cancelar envio.",
