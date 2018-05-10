@@ -216,7 +216,8 @@ module.exports = {
           }
         });
         /*Desautoriza o objeto devido a sua atualização*/
-        loData.approved = false;
+
+        loData.approved = req.user.role === 'ADMIN' ? true : false;
         return loData.save((saveErr) => {
           if (saveErr) {
             req.session.error_message = saveErr;
@@ -225,7 +226,10 @@ module.exports = {
             */
             req.flash('body', req.body);
           }
-          req.session.success_message = 'Objeto atualizado com sucesso! <br/> <strong>Obs: O objeto será avaliado antes de sua publicação.</strong>';
+          req.session.success_message = 'Objeto atualizado com sucesso!';
+          if (req.user.role !== 'ADMIN') {
+            req.session.success_message += '<br/> <strong>Obs: O objeto será avaliado antes de sua publicação.</strong>';
+          }
           return res.redirect('back');
         });
       });
