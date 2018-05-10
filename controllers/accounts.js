@@ -16,7 +16,7 @@ module.exports = {
     /*
     * Exibe a página de login (autenticação de conta) de usuários
     */
-    return res.render('account/signin', { title: 'Página de login de usuário - EduMPampa' });
+    return res.render('account/signin', { title: 'Login' });
   },
   getSignUp(req, res) {
     /*
@@ -46,7 +46,7 @@ module.exports = {
       }
       return res.render('account/signup', {
         data: results,
-        title: 'Página de cadastro de usuário - EduMPampa',
+        title: 'Cadastro',
       });
     });
   },

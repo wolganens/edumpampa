@@ -36,7 +36,7 @@ module.exports = {
       Renderiza a página de formulário de contato
   */
   getContact(req, res) {
-    return res.render('contact', { title: 'Entre em contato - EduMPampa' });
+    return res.render('contact', { title: 'Contato' });
   },
   /*
       Envia a mensagem de contato para o email do administrador
@@ -88,7 +88,7 @@ module.exports = {
       if (error) {
         return console.log(error);
       }
-      req.session.success_message = 'Mensagem de contato enviada com sucesso, em breve entraremos em contato!';
+      req.session.success_message = 'Mensagem enviada com sucesso. Em breve entraremos em contato!';
       return res.redirect('back');
     });
   },
