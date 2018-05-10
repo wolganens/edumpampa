@@ -329,7 +329,13 @@ module.exports = {
       .populate('license')
       .exec((err, result) => {
         results.lo = result;
-        return res.render('learning-object/details', { error: err, data: results, title: 'Detalhes do Objeto de Aprendizagem - EduMPampa' });
+        return res.render('learning-object/details',
+          {
+            error: err,
+            data: results,
+            title: `${results.lo.title} - detalhes do objeto de aprendizagem` 
+          }
+        );
       });
   },
   postUploadFile(req, res) {
