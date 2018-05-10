@@ -18,3 +18,12 @@ $navbar-default-toggle-icon-bar-bg:        yellow !default;
 	color: #FFFF00;
 	background-color: yellow !important
 }
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+    background-color: black !important;
+    color: yellow !important;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus, .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+    background-color: black !important;
+    color: yellow !important;
+    font-weight:bold;
+}
