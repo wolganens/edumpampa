@@ -259,7 +259,7 @@ module.exports = {
     }, (err, results) => {
       if (err) {
         return res.send(err);
-      }
+      }      
       /*
       * Verifica se o usuário autenticado tem permissão para editar o
       * objeto de aprendizagem
