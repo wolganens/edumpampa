@@ -83,7 +83,7 @@ const routeMethods = {
       }
     }
     if (req.query.export && req.query.export === 'csv') {
-      let csv_string = `"Nome","Email","Aniversário","Formação","Área de Atuação","Vínculo Institucional","Cargo na Instituição","Instituição","Enredeço da Instituição"\n`;
+      let csv_string = `"Nome";"Email";"Aniversário";"Formação";"Área de Atuação";"Vínculo Institucional";"Cargo na Instituição";"Instituição";"Enredeço da Instituição"\n`;
       return users
       .populate('qualification_id')
       .populate('occupation_area_id')
@@ -92,7 +92,7 @@ const routeMethods = {
       .exec(function(err, result) {
         result.forEach(function(user) {
           
-          csv_string+= `"${user.name}","${user.email}","${moment(user.birthday).format('DD/MM/YYYY')}","${user.qualification_id ? user.qualification_id.name : user.qualification_text}","${user.occupation_area_id ? user.occupation_area_id.name: user.occupation_area_text}","${user.institutional_link_id ? user.institutional_link_id.name: user.institutional_link_text}","${user.institutional_post_id ? user.institutional_post_id.map(post => post.name).join(',') : user.institutional_post_text}","${user.institution_name}","${user.institution_address}"   
+          csv_string+= `"${user.name}";"${user.email}";"${moment(user.birthday).format('DD/MM/YYYY')}";"${user.qualification_id ? user.qualification_id.name : user.qualification_text}";"${user.occupation_area_id ? user.occupation_area_id.name: user.occupation_area_text}";"${user.institutional_link_id ? user.institutional_link_id.name: user.institutional_link_text}";"${user.institutional_post_id ? user.institutional_post_id.map(post => post.name).join(',') : user.institutional_post_text}";"${user.institution_name}";"${user.institution_address}"   
           `
         })
         res.statusCode = 200;
