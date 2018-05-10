@@ -280,7 +280,9 @@ jQuery(document).ready(function($) {
 		var lic_img = document.getElementById('license-img');
 		var lic_deed = document.getElementById('license-deed');
 		var lic_legal = document.getElementById('license-legal');
-		load_license_details($("[name=license]"), lookup);
+		if (!$("#license_description").val().trim()) {
+			load_license_details($("[name=license]"), lookup);
+		}
 		$("[name=license]").change(function(){
 			load_license_details($(this), lookup);
 		})
@@ -288,19 +290,19 @@ jQuery(document).ready(function($) {
 			var selected = select.find(':selected').val() || lic_objects[0]._id.toString();			
 			selected = lookup.get(selected);			
 			var description = selected.description || null;
-			if (selected.name !== 'Outra licença') {
+			if (!description) {
+				$("#license_description").focus();
+				alert("Por favor, certifique-se de inserir uma descrição para a licença");
+				lic_details.style.display = 'none'
+				$("#license_description").text('');
+			} else {
 				$("#license_description").text(description);
-				if (description) {
-					lic_img.src = selected.image;
-					lic_img.alt = selected.name;
-					lic_deed.href = selected.deed;
-					lic_legal.href = selected.legal;
-					lic_details.style.display = 'block'
-				} else {
-					lic_details.style.display = 'none'
-				}
-			}
-
+				lic_img.src = selected.image;
+				lic_img.alt = selected.name;
+				lic_deed.href = selected.deed;
+				lic_legal.href = selected.legal;
+				lic_details.style.display = 'block'
+			}	
 		}
 	}
 });
