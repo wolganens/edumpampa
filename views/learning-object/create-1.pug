@@ -15,7 +15,7 @@ block content
         +textarea('Descrição *', 'description', oldInput('description'), 'Informe a descrição do objeto')(required=true)
         .row
             .col-md-6
-                +input('Autores *', 'authors', oldInput('authors'), 'Informe o nome dos autores do objeto')(required=true)        
+                +input('Autor(es) *', 'authors', oldInput('authors'), 'Informe o nome dos autores do objeto')(required=true)        
             .col-md-6
                 +input('Ano de autoria *', 'year', oldInput('year'), 'Informe o ano de autoria do objeto')(required)
         +submit('Continuar')(class="btn-lg pull-right")
