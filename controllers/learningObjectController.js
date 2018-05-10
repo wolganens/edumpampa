@@ -14,6 +14,11 @@ const email = require('../config/email');
 const pug = require('pug');
 const config = require('../config/index');
 
+/*
+* Ordena um vetor de objetos com base em um campo do objeto
+*/
+const { sortDocsInArray } = require('../helpers/utils.js');
+
 module.exports = {
   getCreateFirstStep(req, res) {
     const permission = ac.can(req.user.role).createOwn('learningObject');
@@ -434,7 +439,7 @@ module.exports = {
           * Adiciona o objeto de aprendizagem nos resultados e renderiza a view
           */
           const data = results;
-          data.learningObject = lo;
+          data.learningObject = sortDocsInArray(lo, 'title');
           return res.render('learning-object/search', {
             data,
             selectedFilters,
@@ -538,7 +543,7 @@ module.exports = {
           * Adiciona o objeto de aprendizagem nos resultados e renderiza a view
           */
           const data = results;
-          data.learningObject = lo;
+          data.learningObject = sortDocsInArray(lo, 'title');
           return res.render('learning-object/search', {
             data,
             selectedFilters,
