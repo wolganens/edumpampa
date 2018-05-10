@@ -56,11 +56,11 @@ block content
                   |  0!{lo.createdAt.getDate()}/
                 else
                   | !{lo.createdAt.getDate()}/
-                if lo.createdAt.getMonth() < 10
-                  | 0!{lo.createdAt.getMonth()}/
+                if lo.createdAt.getMonth() + 1 < 10
+                  | 0!{lo.createdAt.getMonth() + 1}/
                 else
                   | !{lo.createdAt.getMonth()}/
-                |  !{lo.createdAt.getFullYear()} 
+                | !{lo.createdAt.getFullYear()} 
               | -  !{lo.description}
       else
         .alert.alert-info(role="alert")
