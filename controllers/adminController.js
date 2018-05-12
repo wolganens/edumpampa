@@ -122,7 +122,7 @@ const routeMethods = {
         sortOptions,
         situationOptions,
         data,
-        title: 'Gerenciar usuários - EduMPampa',
+        title: 'Gerenciar Usuários',
       });
     });
   },
@@ -295,7 +295,7 @@ const routeMethods = {
       }
 
       return res.render('admin/learning-object/manage', {
-        sortOptions, situationOptions, data, title: "Gerenciar OAs - EduMPampa",
+        sortOptions, situationOptions, data, title: "Gerenciar OA",
       });
     });
   },

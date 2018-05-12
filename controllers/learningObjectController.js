@@ -25,7 +25,7 @@ module.exports = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }
-    return res.render('learning-object/create-1');
+    return res.render('learning-object/create-1', {title: 'Cadastrar OA'});
   },
   getCreateSecondStep(req, res) {
     return async.parallel({
@@ -52,7 +52,7 @@ module.exports = {
       return res.render('learning-object/create-2', {
         error: err,
         data: results,
-        title: 'Cadastro de OA - EduMPampa',
+        title: 'Cadastrar OA',
       });
     });
 
@@ -70,7 +70,7 @@ module.exports = {
       return res.render('learning-object/create-3', {
         error: err,
         data: results,
-        title: 'Cadastro de OA - EduMPampa',
+        title: 'Cadastrar OA',
       });
     });
 
@@ -658,7 +658,7 @@ module.exports = {
         if (err) {
           return res.send(err);
         }
-        return res.render('learning-object/retrieve', { data: lo, title: 'Meus objetos de aprendizagem' });
+        return res.render('learning-object/retrieve', { data: lo, title: 'Ver meus OA' });
       },
     );
   },
