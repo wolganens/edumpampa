@@ -292,7 +292,7 @@ jQuery(document).ready(function($) {
 			var description = selected.description || null;
 			if (!description) {
 				$("#license_description").focus();
-				alert("Por favor, certifique-se de inserir uma descrição para a licença");
+				alert("Por favor, certifique-se de inserir uma descrição para a licença.");
 				lic_details.style.display = 'none'
 				$("#license_description").text('');
 			} else {
