@@ -7,14 +7,14 @@ block content
 	form(action="/contact", method="POST")
 		.form-group
 			label(for="name")
-				| Seu nome
+				| Nome Completo *
 			if currentUser
 				input(class="form-control", name="name", value=currentUser.name, readonly, required, placeholder="Digite seu nome")
 			else
 				input(class="form-control", name="name", value=inputs && inputs.name, required, placeholder="Digite seu nome")
 		.form-group
 			label(for="subject")
-				| Assunto				
+				| Assunto *			
 			select(class="form-control", name="subject")
 				option(value="")
 					| Selectione um assunto
@@ -26,11 +26,11 @@ block content
 					| Outro
 		.form-group
 			label(for="email")
-				| Email
+				| Email *
 			input(class="form-control", name="email", value=inputs && inputs.email, required, placeholder="Digite seu email para contato")
 		.form-group
-			lanel(for="message")
-				| Mensagem
+			label(for="message")
+				| Mensagem *
 			textarea(class="form-control", name="message", required, placeholder="Insira sua mensagem de contato")
 				| !{inputs && inputs.message}
 		.form-group
