@@ -96,7 +96,7 @@ const routeMethods = {
           `
         })
         res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
         res.setHeader('Content-disposition', 'attachment; filename=users.csv');
         res.write(csv_string);
         return res.end();
