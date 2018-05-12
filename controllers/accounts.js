@@ -133,8 +133,7 @@ module.exports = {
     /*
     * Busca a model do usuário autenticado
     */
-    return User.findById(req.user._id, (findErr, user) => {
-      const userData = user;
+    return User.findById(req.user._id, (findErr, user) => {      
       if (findErr) {
         return res.send(findErr);
       }
@@ -142,25 +141,24 @@ module.exports = {
       * Atualiza os valores dos campos do modelo, atribuindo aos mesmos
       * os valores enviados no formulário
       */
-      Object.keys(req.body).forEach((field) => {
-        /*
-        * Impede o usuário de inserir um campo fictício para alterar
-        * seu nível de permissão (role) dentro da aplicação
-        */
-        if (field !== 'role') {
-          userData[field] = req.body[field];
-        }
-        if (field === 'birthday') {
-          /*
-          * Converte a string de data em um objeto Date
-          */
-          userData[field] = strDateToObject(req.body[field]);
-        }
-      });
+      const userData = user;
+      userData.name = req.body.name;
+      userData.birthday = strDateToObject(req.body['birthday']);
+      userData.qualification_id = req.body.qualification_id || null;
+      userData.qualification_text = req.body.qualification_text || null;
+      userData.occupation_area_id = req.body.occupation_area_id || null;
+      userData.occupation_area_text = req.body.occupation_area_text || null;
+      userData.institutional_link_id = req.body.institutional_link_id || null;
+      userData.institutional_link_text = req.body.institutional_link_text || null;
+      userData.institutional_post_id = req.body.institutional_post_id || null;
+      userData.institutional_post_text = req.body.institutional_post_text || null;
+      userData.institution_name = req.body.institution_name || null;
+      userData.institution_address = req.body.institution_address || null;
       /*
       * Atualiza o modelo, exibindo a mensagem de sucesso ou os erros
       */
       return userData.save((saveErr) => {
+        console.log(saveErr);
         if (saveErr) {
           return res.send(saveErr);
         }
