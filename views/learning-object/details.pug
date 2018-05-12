@@ -7,8 +7,8 @@ block content
     if currentUser
       h4
         | URL do OA
-        a(href=data.lo.file_url)
-          | !{data.lo.file_url}
+      a(href=data.lo.file_url)
+        | !{data.lo.file_url}
     else
       div.alert.alert-danger
         strong.text-danger
