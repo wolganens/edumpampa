@@ -65,14 +65,14 @@ jQuery(document).ready(function($) {
 		});
 		dropzone_hndlr.on("success", function(file, data) {
 			alert("Arquivo adicionado com sucesso!");
-			$("loading").hide()
+			$("#loading").hide()
 		});
 		dropzone_hndlr.on("addedfile", function(file, data) {		
 			if (this.files[1] != null){
 				alert("Você pode enviar apenas um arquivo!")
 	        	this.removeFile(this.files[1]);        	
 	        } else {
-	        	$("loading").show()
+	        	$("#loading").show()
 	        }
 		});	
 		
