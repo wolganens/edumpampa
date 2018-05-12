@@ -67,6 +67,9 @@ jQuery(document).ready(function($) {
 			alert("Arquivo adicionado com sucesso!");
 			$("#loading").hide()
 		});
+		dropzone_hndlr.on("complete", function(file, data) {
+			$("#loading").hide()
+		});
 		dropzone_hndlr.on("addedfile", function(file, data) {		
 			if (this.files[1] != null){
 				alert("Você pode enviar apenas um arquivo!")
