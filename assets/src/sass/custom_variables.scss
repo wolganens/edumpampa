@@ -20,6 +20,11 @@ $navbar-default-link-hover-bg:     white !default;
 $navbar-default-link-hover-color:          #000 !default;
 $navbar-default-link-active-color:         #000 !default;
 $navbar-default-link-active-bg: 			white;
+// Navbar toggle
+$navbar-default-toggle-hover-bg:           transparent !default;
+$navbar-default-toggle-icon-bar-bg:        white !default;
+$navbar-default-toggle-border-color:       white !default;
+
 $panel-default-text:    white !default;
 //** Global color for active items (e.g., navs or dropdowns).
 $component-active-color:    #000 !default;
