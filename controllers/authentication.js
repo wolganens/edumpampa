@@ -9,24 +9,14 @@ module.exports = {
   signin(req, res, next) {
     return passport.authenticate('local', (authErr, user, info) => {
       if (authErr || !user) {
-        return res.format({
-          html() {
-            req.session.historyData = info;
-            return res.redirect('/account/signin');
-          },
-          // just in case :)
-          text() {
-            req.session.historyData = info;
-            return res.redirect('/account/signin');
-          },
-          json() {
-            return res.status(400).json(info);
-          },
-        });
+        req.session.error_message = info.message;
+        req.flash('body', req.body);
+        return res.redirect('back');
       }
       return req.logIn(user, (err) => {
         if (err) {
-          return next(err);
+          req.session.error_message = err.error;
+          return res.redirect('back');
         }
         return res.format({
           html() {
