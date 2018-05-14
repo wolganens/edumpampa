@@ -25,7 +25,7 @@ block content
                 h4
                   | Tamanho do arquivo
                 p
-                  | !{data.lo.file.size}
+                  | !{(data.lo.file.size / 1024 / 1024).toFixed(2) }MB
               .col-md-4
                 h4
                   |Download                      
