@@ -134,7 +134,7 @@ const routeMethods = {
     if (!permission.granted) {
       return res.status(403).send('Você não tem permissão!');
     }    
-    return User.updateMany({_id: req.body.resource_ids, role: {$ne: 'ADMIN'}}, {role: 'AUTHORIZED' }, (err, result) => {
+    return User.updateMany({_id: req.body.resource_ids}, {role: 'AUTHORIZED' }, (err, result) => {
       console.log(result)
       if (err) {
         return res.send(err);
@@ -155,14 +155,14 @@ const routeMethods = {
     * Remove todos os objetos de aprendizagem que são de propriedade
     * do usuário que está tentando ser excluído (owner)
     */
-    return LearningObject.remove({ owner: req.body.resource_ids }, (errLO) => {
+    return LearningObject.remove({ owner: req.body.resource_ids, role: {$ne: 'ADMIN'} }, (errLO) => {
       if (errLO) {
         return res.send(errLO);
       }
       /*
       * Remove o usuário em si
       */
-      return User.remove({_id: req.body.resource_ids}, (errUser) => {
+      return User.remove({_id: req.body.resource_ids, role: {$ne: 'ADMIN'}}, (errUser) => {
         if (errUser) {
           return res.send(errUser);
         }
