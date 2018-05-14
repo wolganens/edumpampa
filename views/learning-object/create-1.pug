@@ -17,7 +17,7 @@ block content
             .col-md-6
                 +input('Autor(es) *', 'authors', oldInput('authors'), 'Informe o nome dos autores do objeto')(required=true)        
             .col-md-6
-                +input('Ano de autoria *', 'year', oldInput('year'), 'Informe o ano de autoria do objeto')(required)
+                +input('Ano de autoria *', 'year', oldInput('year'), 'Informe o ano de autoria do objeto')(required, type="number")
         +submit('Continuar')(class="btn-lg pull-right")
         .clearfix
     

@@ -91,11 +91,13 @@ module.exports = {
       owner: req.user._id,
       approved: false,
       step: 1,
+      norm_title: title.toLowerCase(),
     }
     const lo = new LearningObject(data);
 
     return lo.save((err) => {
       if (err) {
+        console.log(err);
         req.session.errors = err.errors;
         /*
         * Mantem o corpo do POST até a próxima requisição
@@ -220,6 +222,11 @@ module.exports = {
             loData[field] = req.body[field];
           }
         });
+        loData.teaching_levels = req.body.teaching_levels || [];
+        loData.axes = req.body.axes || [];
+        loData.accessibility_resources = req.body.accessibility_resources || [];
+        loData.content = req.body.content || [];
+        loData.resources = req.body.resources || [];
         /*Desautoriza o objeto devido a sua atualização*/
 
         loData.approved = req.user.role === 'ADMIN' ? true : false;

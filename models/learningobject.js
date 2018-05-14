@@ -12,6 +12,11 @@ const learningObjectSchema = new Schema({
     maxlength: 255,
     required: true,
   },
+  norm_title:{
+    type: String,
+    maxlength: 255,
+    required: false,
+  },
   description: {
     type: String,
     required: true,
