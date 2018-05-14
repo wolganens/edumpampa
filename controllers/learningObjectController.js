@@ -469,7 +469,7 @@ module.exports = {
           * Adiciona o objeto de aprendizagem nos resultados e renderiza a view
           */
           const data = results;
-          data.learningObject = sortDocsInArray(lo, 'title');
+          data.learningObject = lo;
           return res.render('learning-object/search', {
             data,
             selectedFilters,
@@ -574,7 +574,7 @@ module.exports = {
           * Adiciona o objeto de aprendizagem nos resultados e renderiza a view
           */
           const data = results;
-          /*data.learningObject = sortDocsInArray(lo, 'title');*/
+          data.learningObject = lo;
           return res.render('learning-object/search', {
             data,
             selectedFilters,
