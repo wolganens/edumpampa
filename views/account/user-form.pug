@@ -13,7 +13,7 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             qualification.name,
             'qualification_id',
             qualification._id,
-            oldInput('qualification_id') === qualification._id.toString() || (user  && user.qualification_id.toString() === qualification._id.toString())
+            oldInput('qualification_id') === qualification._id.toString() || (user  && user.qualification_id && user.qualification_id.toString() === qualification._id.toString())
           )
       +input('Outra', 'qualification_text', oldInput('qualification_text', user && user.qualification_text), 'Insira uma formação alternativa')(class='js-other')
 
@@ -24,7 +24,7 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             occupation_area.name,
             'occupation_area_id',
             occupation_area._id,
-            oldInput('occupation_area_id') === occupation_area._id.toString() || (user && user.occupation_area_id.toString() === occupation_area._id.toString())
+            oldInput('occupation_area_id') === occupation_area._id.toString() || (user && user.occupation_area_id && user.occupation_area_id.toString() === occupation_area._id.toString())
           )
       +input('Outra', 'occupation_area_text', oldInput('occupation_area_text', user && user.occupation_area_text), 'Insira uma área de atuação alternativa')(class='js-other')
 
@@ -35,7 +35,7 @@ mixin user-form({ qualifications, occupation_areas, institutional_links, institu
             institutional_link.name,
             'institutional_link_id',
             institutional_link._id,
-            oldInput('institutional_link_id') === institutional_link._id.toString() || (institutional_link_id && user.institutional_link_id.toString() === institutional_link._id.toString())
+            oldInput('institutional_link_id') === institutional_link._id.toString() || (user && user.institutional_link_id && user.institutional_link_id.toString() === institutional_link._id.toString())
           )
       +input('Outro', 'institutional_link_text', oldInput('institutional_link_text', user && user.institutional_link_text), 'Insira um vínculo institucional alternativo')(class='js-other')
 
