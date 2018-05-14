@@ -14,23 +14,23 @@ block content
               | URL do OA
             a(href=data.lo.file_url)
               | !{data.lo.file_url}
-            if data.lo.file
-              .row
-                .col-md-4
-                  h4
-                    |Nome do arquivo
-                  p
-                    | !{data.lo.file.name}
-                .col-md-4
-                  h4
-                    | Tamanho do arquivo
-                  p
-                    | !{data.lo.file.size}
-                .col-md-4
-                  h4
-                    |Download                      
-                  a(href="/learning-object/download/" + data.lo._id, target="_blank", title="Baixar arquivo do objeto de aprendizagem")
-                    | Baixar arquivo do OA
+          if data.lo.file
+            .row
+              .col-md-4
+                h4
+                  |Nome do arquivo
+                p
+                  | !{data.lo.file.name}
+              .col-md-4
+                h4
+                  | Tamanho do arquivo
+                p
+                  | !{data.lo.file.size}
+              .col-md-4
+                h4
+                  |Download                      
+                a(href="/learning-object/download/" + data.lo._id, target="_blank", title="Baixar arquivo do objeto de aprendizagem")
+                  | Baixar arquivo do OA
       else
         div.alert.alert-danger
           strong.text-danger
