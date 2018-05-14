@@ -280,7 +280,11 @@ const routeMethods = {
         query.sort({ createdAt: -1 });
       } else if (sort === 'older') {
         query.sort({ createdAt: 1 });
+      } else {
+        query.sort('norm_title');
       }
+    } else {
+      query.sort('norm_title');
     }
     /*
     * Executa a consulta, buscando os dados na base de dados e armazenando na variavel result
@@ -289,10 +293,7 @@ const routeMethods = {
       let data = result;
       if (err) {
         return res.send(err);
-      }
-      if (!sort || sort === 'name') {
-        data = sortDocsInArray(data, 'title');
-      }
+      }      
 
       return res.render('admin/learning-object/manage', {
         sortOptions, situationOptions, data, title: "Gerenciar OA",

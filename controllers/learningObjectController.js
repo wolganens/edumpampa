@@ -427,7 +427,7 @@ module.exports = {
       */
       const queryObject = {
         title: {
-          $regex: new RegExp(searchText),
+          $regex: new RegExp(searchText.replace(/\$|\.|\*|[|]/, '')),
           $options: 'i',
         },
       };
@@ -443,7 +443,8 @@ module.exports = {
           description: 1,
         },
       ).where('approved')
-        .equals(true);
+        .equals(true)
+      .sort('norm_title');
       /*
       * Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca
       */
@@ -547,7 +548,8 @@ module.exports = {
           description: 1,
         },
       ).where('approved')
-        .equals(true);
+        .equals(true)
+      .sort('norm_title');
       /*
       * Caso o usuário esteja filtrando os resultados, adiciona os filtros na query de busca
       */
@@ -572,7 +574,7 @@ module.exports = {
           * Adiciona o objeto de aprendizagem nos resultados e renderiza a view
           */
           const data = results;
-          data.learningObject = sortDocsInArray(lo, 'title');
+          /*data.learningObject = sortDocsInArray(lo, 'title');*/
           return res.render('learning-object/search', {
             data,
             selectedFilters,
