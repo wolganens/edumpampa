@@ -1,4 +1,4 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function($) {	
 	$('.date').datepicker({
 		format: "dd/mm/yyyy",
 		weekStart: 0,
@@ -6,7 +6,8 @@ jQuery(document).ready(function($) {
 		language: "pt-BR",
 		orientation: "bottom auto",
 		todayHighlight: true
-	});
+	});			
+
 	$('.date input').mask('00/00/0000');
 	$(".panel-checkall").change(function(event) {
 		const target = this.getAttribute('data-target');

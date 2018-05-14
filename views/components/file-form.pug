@@ -1,14 +1,11 @@
 include ../components/panels
 include ../components/forms
 mixin file-form({lo})
-  +panel-default('Arquivo')      
-      input(type="hidden" data-file=lo && JSON.stringify(lo.file) !== '{}' ? JSON.stringify(lo.file) : '' id="file-json")
-      .form-group        
-        label(for="file")
-          | Arquivo (Indicado para arquivos de até 20MB)
-        #drop.drop
-          p(class="text-center")
-            | Arraste e solte os arquivos nesta área, ou clique para escolher do computador.
-          .fallback
-            input(type="file", id="file", class="form-control", name="file")
-      +textarea('URL (Para arquivos com mais de 20MB, a submissão da URL é obrigatória *)', 'file_url', oldInput('file_url', lo && lo.file_url) , 'URL do arquivo')    
+  +panel-default('Arquivo')
+      +input('Enviar arquivo', 'uploadcare-uploader', value=lo.file ? lo.file.uuid : '')(id="uploadcare-uploader" role="uploadcare-uploader", type="hidden")
+      #file-thumbnail
+      br
+      #file-control(style="display:none;")
+        button.btn.btn-danger#remove-file(type="button") Remover arquivo
+      //- input(type="hidden" role="uploadcare-uploader" name="content" data-public-key="1149ff0567d57aca2e74")      
+      +textarea('URL (Para arquivos com mais de 10MB, a submissão da URL é obrigatória *)', 'file_url', oldInput('file_url', lo && lo.file_url) , 'URL do arquivo')    

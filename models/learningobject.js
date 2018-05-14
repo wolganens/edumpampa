@@ -58,8 +58,14 @@ const learningObjectSchema = new Schema({
   'file.mimetype': {
     type: String,
   },
-  'file.url': {
+  'file.cdnUrl': {
     type: String,
+  },
+  'file.uui': {
+    type: String,
+  },
+  'file.isImage': {
+    type: Boolean,
   },
   file_url: {
     type: String,

@@ -13,7 +13,7 @@ const ac = require('../config/roles');
 const email = require('../config/email');
 const pug = require('pug');
 const config = require('../config/index');
-
+const request = require('request');
 /*
 * Ordena um vetor de objetos com base em um campo do objeto
 */
@@ -339,39 +339,55 @@ module.exports = {
       });
   },
   postUploadFile(req, res) {
-    const { file } = req.files;    
-    const fileAttrs = {};
-    const storageName = (req.user._id + file.name).replace(/\s*/g,'');
-    if (req.files && file) {
-      fileAttrs.name = file.name;
-      fileAttrs.mimetype = file.mimetype;
-      fileAttrs.size = req.headers['content-length'];
-      fileAttrs.url = path.join('/uploads', 'lo', storageName);
-      const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', storageName);
-      fs.writeFileSync(filePath, file.data);
-      return LearningObject.findByIdAndUpdate(req.body._id,{file: fileAttrs}, function(err, result) {
-        if (err) {
-          return res.send(err.error);
-        }        
-        return res.status(200).send({ file: fileAttrs });
-      })
-    } else {
-      return res.status(500).send({ error: 'Arquivo não especificado' });
-    }
+    const {cdnUrl, isImage, mimeType, name, size, uuid, _id} = req.body;    
+    const file = {
+      cdnUrl,
+      isImage,
+      mimeType,
+      name,
+      size,
+      uuid,
+    }    
+    return LearningObject.findById(_id, function(err, lo) {
+      if (err) {
+        return res.send(err.error);
+      }      
+      lo.file = file;
+      return lo.save(function(saveErr, result){
+        if(saveErr) {
+          return res.send(saveErr);
+        }
+        return res.status(200).send(file);
+      });      
+    })    
   },
   postRemoveFile(req, res) {
-    const storageName = (req.user._id + req.body.filename).replace(/\s*/g,'');
-    const filePath = path.join(__dirname, '..', 'public', 'uploads', 'lo', storageName);
-    return fs.unlink(filePath, (err) => {
-      if (err) {
-        return res.send(err);
+    const {_id} = req.body;
+    console.log(process.env.UPLOADCARE_PUBLIC_KEY + ':' + process.env.UPLOADCARE_SECRET_KEY)
+    return LearningObject.findByIdAndUpdate(_id, {file: null}, function(findErr, lo){
+      if(findErr) {
+        return res.send(findErr);
       }
-      return LearningObject.findByIdAndUpdate(req.body._id, {$unset: {file: 1}}, function(loErr, result) {
-        if (loErr) {
-          return res.send(loErr);
+      var options = {
+        url: 'https://api.uploadcare.com/files/' + lo.file.uuid + '/storage/',
+        headers: {
+          'User-Agent': 'request',
+          'Authorization': 'Uploadcare.Simple ' + process.env.UPLOADCARE_PUBLIC_KEY + ':' + process.env.UPLOADCARE_SECRET_KEY,
+        },
+        method: 'DELETE'
+      };
+       
+      function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+          var info = JSON.parse(body);
+          console.log(info.stargazers_count + " Stars");
+          console.log(info.forks_count + " Forks");
         }
-        return res.status(200).end();
-      });
+        return res.sendStatus(200);
+      }
+       
+      return request(options, callback);
+
     });
   },
   getTextSearch(req, res) {
@@ -686,15 +702,16 @@ module.exports = {
       * Se o OA tiver um arquivo, retorna o download do mesmo e salva o registro do download
       */
       if (lo.file) {
-        return res.download(path.join(__dirname, '..', 'public', lo.file.url), lo.title, (downloadErr) => {
-          if (downloadErr) {
-            res.send(downloadErr);
+        
+        return new Downloads({
+          user_id: req.user._id,
+          learning_object_id: req.params.id,
+        }).save(function(saveDownloadErr, result){
+          if(saveDownloadErr) {
+            return res.send(saveDownloadErr);
           }
-          return new Downloads({
-            user_id: req.user._id,
-            learning_object_id: req.params.id,
-          }).save();
-        });
+          return res.redirect(lo.file.cdnUrl);
+        });        
         /*
         * Caso o OA não tenha um arquivo, se houver uma URL, redireciona o usuário para a URL
         */

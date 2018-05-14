@@ -52,9 +52,12 @@
     "postcss-scss": "^1.0.5",
     "pug": "2.0.0-beta11",
     "remove": "^0.1.5",
+    "request": "^2.85.0",
     "serve-favicon": "~2.4.5",
     "swig": "^1.4.2",
-    "uglifyjs-webpack-plugin": "^1.2.5"
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "uploadcare": "^0.4.5",
+    "uploadcare-widget": "^3.3.0"
   },
   "devDependencies": {
     "css-loader": "^0.28.11",
