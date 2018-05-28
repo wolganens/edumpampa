@@ -3,7 +3,9 @@ extends layout
 block content
 	h3.page-header      
 		| Contato
-	p Através do formulário, a seguir, é possível entrar em contato com a administração deste repositório.
+	p Através do formulário, a seguir, é possível entrar em 
+		strong contato com a administração 
+		| deste repositório.
 	form(action="/contact", method="POST")
 		.form-group
 			label(for="name")

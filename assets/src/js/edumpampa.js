@@ -112,13 +112,27 @@ jQuery(document).ready(function($) {
 		var seleted_string = checked_lo_attributes.join();		
 		$("#checked-string").val(seleted_string.replace(/\,/g, ', '));
 	});
-	$(".js-other").change(function(event) {
+	$(".js-other").keydown(function(event) {		
+        if($(this).val().trim().length > 0) {
+        	var parent = $(this).parent().parent();        
+        	parent.find("[type=radio]:checked, [type=checkbox]:checked").prop('checked', false);
+            parent.find("[type=radio]:checked, [type=checkbox]:checked").removeAttr('checked');            
+        }
+    });
+    $(".js-other").keyup(function(event) {		
+        if($(this).val().trim().length > 0) {
+        	var parent = $(this).parent().parent();        
+        	parent.find("[type=radio]:checked, [type=checkbox]:checked").prop('checked', false);
+            parent.find("[type=radio]:checked, [type=checkbox]:checked").removeAttr('checked');            
+        }
+    });
+	/*$(".js-other").change(function(event) {
         var parent = $(this).parent().parent();        
         if($(this).val().trim().length > 0) {
         	parent.find("[type=radio]:checked, [type=checkbox]:checked").prop('checked', false);
             parent.find("[type=radio]:checked, [type=checkbox]:checked").removeAttr('checked');            
         }
-    });
+    });*/
     $("[type=radio]:not(:checked),[type=checkbox]:not(:checked)").change(function(event) {
         $(this).parents().eq(3).find(".js-other").val(null);
     });
