@@ -603,9 +603,9 @@ module.exports = {
       lo.approved = !lo.approved;
       lo.save();
       if (lo.approved) {
-        req.session.success_message = 'Objeto aprovado com sucesso!';
+        req.session.success_message = 'Objeto habilitado com sucesso!';
       } else {
-        req.session.success_message = 'Objeto desaprovado com sucesso!';
+        req.session.success_message = 'Objeto desabilitado com sucesso!';
       }
       return res.redirect('/admin/learning-object/manage');
     });
