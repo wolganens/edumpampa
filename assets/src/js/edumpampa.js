@@ -164,7 +164,7 @@ jQuery(document).ready(function($) {
     })
     $(".remove").click(function(event){
     	event.preventDefault();
-    	if (confirm("Você tem certeza?")) {
+    	if (confirm($(this).data('alert') || "Você tem certeza?")) {
     		window.location = this.href
     	}
     })
