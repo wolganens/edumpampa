@@ -277,7 +277,7 @@ UserSchema.virtual('getFormatedBirthday').get(function getFormatedBirthday() {
     date,
     month,
   ] = [this.birthday, this.birthday.getDate(), this.birthday.getMonth()];
-  return `${date < 10 ? `0${date}` : date}/${month < 10 ? `0${month}` : month}/${birthday.getFullYear()}`;
+  return `${date < 10 ? `0${date}` : date}/${month < 10 ? `0${month + 1}` : month + 1}/${birthday.getFullYear()}`;
 });
 // compile User model
 module.exports = mongoose.model('User', UserSchema);
