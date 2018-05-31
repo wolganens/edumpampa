@@ -57,10 +57,10 @@ block content
               a.btn.btn-default.btn-xs.remove(href="/learning-object/remove/" + lo._id)
                 i(class="glyphicon glyphicon-trash" aria-hidden="true")
                 | Remover
-  form(class="form-inline", action="", method="GET")
+  form(class="form-inline", action="#", method="GET")
     +select('Ordenar: ', 'sort', oldInput('sort'), 'Ordenar resultados', sortOptions, {val: 'value', text: 'text'})
     +select('Situação: ', 'situation', oldInput('situation'), 'Situação', situationOptions, {val: 'value', text: 'text'})
-    +input('Título: ', 'title', oldInput('title'), 'Filtrar por título')
+    +input('Título: ', 'title', oldInput('title'), 'Filtrar por título')(id="title_filter_bottom")
     +submit('Aplicar')    
     .clearfix
   br
