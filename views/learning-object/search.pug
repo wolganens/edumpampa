@@ -52,16 +52,17 @@ block content
                | !{lo.title}
             p
               | Publicado em 
-              time 
-                if lo.createdAt.getDate() < 10
-                  |  0!{lo.createdAt.getDate()}/
-                else
-                  | !{lo.createdAt.getDate()}/
-                if lo.createdAt.getMonth() + 1 < 10
-                  | 0!{lo.createdAt.getMonth() + 1}/
-                else
-                  | !{lo.createdAt.getMonth()}/
-                | !{lo.createdAt.getFullYear()} 
+              time(datetime=`${lo.createdAt.toISOString()}`)
+                | !{lo.createdAt.toLocaleString('pt-BR', {timeZone: 'UTC'})}
+                //- if lo.createdAt.getDate() < 10
+                //-   |  0!{lo.createdAt.getDate()}/
+                //- else
+                //-   | !{lo.createdAt.getDate()}/
+                //- if lo.createdAt.getMonth() + 1 < 10
+                //-   | 0!{lo.createdAt.getMonth() + 1}/
+                //- else
+                //-   | !{lo.createdAt.getMonth()}/
+                //- | !{lo.createdAt.getFullYear()} 
               | -  !{lo.description}
       else
         .alert.alert-info(role="alert")
