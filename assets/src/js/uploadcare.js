@@ -2,8 +2,7 @@ jQuery(document).ready(function($) {
 	if (document.getElementById('uploadcare-uploader')) {
 		window.UPLOADCARE_PUBLIC_KEY = '1149ff0567d57aca2e74';
 		UPLOADCARE_LOCALE = 'pt';			
-		var singleWidget = uploadcare.SingleWidget('[role=uploadcare-uploader]');
-		console.log(singleWidget);
+		var singleWidget = uploadcare.SingleWidget('#uploadcare-uploader');		
 		singleWidget.validators.push(function(fileInfo) {
 		  if (fileInfo.size !== null && fileInfo.size > (10 * 1024 * 1024)) {
 		    throw new Error("fileMaximumSize");
