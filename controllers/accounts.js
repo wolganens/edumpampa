@@ -277,7 +277,7 @@ module.exports = {
     /*
     * Exibe a página de alteração de senha
     */
-    return res.render('account/change-pw');
+    return res.render('account/change-pw', {title: 'Alterar minha senha'});
   },
   postChangePw(req, res) {
     /*

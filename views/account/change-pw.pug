@@ -4,7 +4,7 @@ include ../components/forms
 block content
   #centered-content
     h3
-      | Alterar senha
+      | Alterar minha senha
     form(action="/account/change-pw",method="post")
       +input('Senha antiga *', 'old_pw', null, 'Digite sua senha antiga')(type="password")
       +input('Senha nova *', 'password', null, 'Digite sua senha nova')(type="password")
