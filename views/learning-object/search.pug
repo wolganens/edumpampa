@@ -53,7 +53,7 @@ block content
             p
               | Publicado em 
               time(datetime=`${lo.createdAt.toISOString()}`)
-                | !{lo.createdAt.toLocaleString('en-GB', { timeZone: 'UTC' })};
+                | !{lo.createdAt.toLocaleString('en-GB', { timeZone: 'UTC' })} 
                 //- if lo.createdAt.getDate() < 10
                 //-   |  0!{lo.createdAt.getDate()}/
                 //- else
@@ -63,7 +63,7 @@ block content
                 //- else
                 //-   | !{lo.createdAt.getMonth()}/
                 //- | !{lo.createdAt.getFullYear()} 
-              | -  !{lo.description}
+              |  -  !{lo.description}
       else
         .alert.alert-info(role="alert")
           | Nenhum objeto encontrado
