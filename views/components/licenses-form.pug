@@ -30,7 +30,7 @@ mixin license-form({licenses, lo})
     //- Elementos auxiliares para dar detalhes da licença selecionada no select do topo,
     //- é exibida a imagem, descrição completa e descrição legal da licença
     #license-details
-      img#license-img
+      img(src="#", alt='Logo da licença')#license-img
       a#license-deed(target="_blank", title="Ver descrição completa da licensa")
         | Ver descrição completa
       a#license-legal(target="_blank", title="Ver descrição legal da licensa")
