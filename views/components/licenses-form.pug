@@ -10,7 +10,7 @@ mixin license-form({licenses, lo})
       'license',      
       oldInput('license', lo && lo.license),
       'Selecione uma licença',
-      licenses,
+      [{'name': 'Selecione uma Licença', '_id':''}].concat(licenses),
       {val: '_id', text: 'name'})(required=true)
     
     //- Campo para especificar quem é o detentor dos direitos autorais do OA
