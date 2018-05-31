@@ -26,16 +26,17 @@ block content
   a(href=currentPath + 'export=csv').btn.btn-primary Baixar CSV  
   table.table
     thead
-      th
-        .checkbox
-          label
-            strong
-              input(type="checkbox").table-checkall
-              | Usuário
-      th
-        | Situação
-      th
-        | Ações
+      tr
+        th
+          .checkbox
+            label
+              strong
+                input(type="checkbox").table-checkall
+                | Usuário
+        th
+          | Situação
+        th
+          | Ações
     tbody
       each user in data
         tr
