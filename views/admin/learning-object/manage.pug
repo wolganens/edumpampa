@@ -23,16 +23,17 @@ block content
         | Remover OA's
   table.table
     thead
-      th
-        .checkbox
-          label
-            input(type="checkbox").table-checkall
-            strong
-              | Objeto
-      th
-        | Situação
-      th
-        | Ações
+      tr
+        th
+          .checkbox
+            label
+              input(type="checkbox").table-checkall
+              strong
+                | Objeto
+        th
+          | Situação
+        th
+          | Ações
     tbody
       each lo in data
         tr(id=lo._id)
