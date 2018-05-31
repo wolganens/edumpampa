@@ -9,7 +9,7 @@ block content
         .form-group
           label(for="resource")
             | Recurso
-          select(name="resource", class="form-control")
+          select(name="resource", id="resource", class="form-control")
             option(selected=true, value="")
               | Selecione um recurso
             each resource in data.resources
@@ -18,7 +18,7 @@ block content
         .form-group
           label(for="content")
             | Conteúdo
-          select(name="content", class="form-control")
+          select(name="content", id="content", class="form-control")
             option(selected=true, value="")
               | Selecione um conteúdo
             each content in data.contents
