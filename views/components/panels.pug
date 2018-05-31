@@ -13,7 +13,7 @@ mixin panel(type, title, checkbox)
         .checkbox
           label
             input.panel-checkall(data-target=checkbox, type='checkbox')
-            h3.panel-title= title
+            span.panel-title= title
       else
         h3.panel-title= title
     .panel-body
