@@ -2,7 +2,7 @@ include ../components/panels
 include ../components/forms
 mixin file-form({lo})
   +panel-default('Arquivo')
-      +input('Enviar arquivo', 'uploadcare-uploader', value=lo.file ? lo.file.uuid : '')(id="uploadcare-uploader", type="hidden")
+      +input(null, 'uploadcare-uploader', value=lo.file ? lo.file.uuid : '')(id="uploadcare-uploader", type="hidden")
       #file-thumbnail
       br
       #file-control(style="display:none;")
