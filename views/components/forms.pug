@@ -45,7 +45,6 @@ mixin textarea(label, name, value, placeholder)
 mixin select(label, name, selected, placeholder, options, valText)
   -
     attributes.name = name    
-    attributes.placeholder = placeholder
   +formGroup(label)
     select.form-control(name=name, id=id)&attributes(attributes)
       each option in options
