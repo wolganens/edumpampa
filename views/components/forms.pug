@@ -7,6 +7,7 @@ mixin formGroup(label, name)
 mixin input(label, name, value, placeholder)
   -
     attributes.name = name
+    attributes.id = name
     attributes.value = value
     attributes.placeholder = placeholder
     attributes.type = attributes.type || 'text'
