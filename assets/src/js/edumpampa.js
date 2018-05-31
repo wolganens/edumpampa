@@ -203,17 +203,13 @@ jQuery(document).ready(function($) {
     $(".table-checkall, .mass-checkbox").change(function(event){
     	resource_ids = getMassSelectedCheckbox();
     	if (resource_ids.length > 0) {
-    		$(".mass-lo-action:not(.single)").removeClass("disabled");
-    		$(".mass-lo-action:not(.single)").removeAttr("disabled");
+    		$(".mass-lo-action:not(.single)").removeClass("disabled");    		
 
-    		$(".mass-user-action:not(.single)").removeClass("disabled");
-    		$(".mass-user-action:not(.single)").removeAttr("disabled");
+    		$(".mass-user-action:not(.single)").removeClass("disabled");    		
     	} else {
-    		$(".mass-lo-action:not(.single)").addClass("disabled");
-    		$(".mass-lo-action:not(.single)").attr("disabled", "disabled");
+    		$(".mass-lo-action:not(.single)").addClass("disabled");    		
 
-    		$(".mass-user-action:not(.single)").addClass("disabled");
-    		$(".mass-user-action:not(.single)").attr("disabled", "disabled");
+    		$(".mass-user-action:not(.single)").addClass("disabled");    		
     	}
     })
     function massActionRequest(_id, owner, action) {
