@@ -48,7 +48,8 @@ block content
         each lo in data.learningObject
           article
             a(href="/learning-object/details/" + lo._id.toString())
-              | !{lo.title}
+              h4
+               | !{lo.title}
             p
               | Publicado em 
               time 
