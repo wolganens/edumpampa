@@ -1,6 +1,12 @@
 const ac = require('../config/roles');
-const LearningObject = require('../models/learningobject');
+const async = require('async');
 const User = require('../models/user');
+const AccessibilityResources = require('../models/accessibilityresources');
+const Axes = require('../models/axes');
+const TeachingLevels = require('../models/teachinglevels');
+const LearningObject = require('../models/learningobject');
+const Contents = require('../models/contents');
+const Resources = require('../models/resources');
 const moment = require('moment')
 /*
 * Ordena um vetor de objetos com base em um campo do objeto
@@ -364,6 +370,87 @@ const routeMethods = {
       } else {        
         return res.send({ok: 1});
       }
+    });
+  },
+  getAttributes(req, res){
+    return async.parallel({
+      accessibility_resources(callback) {
+        AccessibilityResources.find({}).sort('name').exec(callback);
+      },
+      axes(callback) {
+        Axes.find({}).sort('name').exec(callback);
+      },
+      teaching_levels(callback) {
+        TeachingLevels.find({}).sort('name').exec(callback);
+      },
+      resources(callback) {
+        Resources.find({}).sort('name').exec(callback);
+      },
+      contents(callback) {
+        Contents.find({}).sort('name').exec(callback);
+      },            
+    }, (err, results) => {
+
+      return res.render('admin/learning-object/attributes', {
+        error: err,
+        data: results,
+        title: 'Gerenciar atributos dos OA',
+      });
+    });
+  },
+  postUpdateAttribute(req, res) {
+    const { _id, name, model } = req.body;    
+    return eval(model).findByIdAndUpdate(_id, {name}, (err, result) => {
+      if (err) {
+        return req.send(err);
+      }
+      req.session.success_message = `${name} atualizado com sucesso!`;
+      return res.redirect('back');
+    });
+  },
+  postCreateAttribute(req, res) {
+    const { name, model } = req.body;
+    const modelVariable = eval(model)
+    const modelInstance = new modelVariable({name});
+    return modelInstance.save((err, result) => {
+      if (err) {
+        return req.send(err);
+      }
+      req.session.success_message = `${name} criado com sucesso!`;
+      return res.redirect('back');
+    });
+  },
+  getRemoveAttribute(req, res) {
+    const { _id, model } = req.query;
+    let modelVariable = null;
+    switch (model) {
+      case 'TeachingLevels':
+        modelVariable = TeachingLevels
+        break;
+      case 'Axes':
+        modelVariable = Axes
+        break;
+      case 'AccessibilityResources':
+        modelVariable = AccessibilityResources
+        break;
+      case 'Contents':
+        modelVariable = Contents
+        break;
+      case 'Resources':
+        modelVariable = Resources
+        break;
+      default:
+        res.status(502);
+        return res.end();
+        break;
+    }
+    console.log(modelVariable)
+    return modelVariable.findOneAndRemove({_id}, (err, result) => {
+      if (err) {
+        return req.send(err);
+      }
+      req.session.success_message = 'Atributo removido com sucesso!';
+      return res.redirect('back');
     });
   }
 };

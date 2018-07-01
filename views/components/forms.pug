@@ -11,7 +11,7 @@ mixin input(label, name, value, placeholder)
     attributes.value = value
     attributes.placeholder = placeholder
     attributes.type = attributes.type || 'text'
-  +formGroup(label, name)
+  +formGroup(label, attributes.id || name)
     input.form-control&attributes(attributes)
     if errors && errors[name]
       .alert.alert-danger !{errors[name].message}

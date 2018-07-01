@@ -255,16 +255,16 @@ module.exports = {
         AccessibilityResources.find(callback);
       },
       axes(callback) {
-        Axes.find(callback);
+        Axes.find({}).sort('name').exec(callback);
       },
       teaching_levels(callback) {
-        TeachingLevels.find(callback);
+        TeachingLevels.find({}).sort('name').exec(callback);
       },
       resources(callback) {
-        Resources.find(callback);
+        Resources.find({}).sort('name').exec(callback);
       },
       contents(callback) {
-        Contents.find(callback);
+        Contents.find({}).sort('name').exec(callback);
       },
       licenses(callback) {
         Licenses.find(callback);

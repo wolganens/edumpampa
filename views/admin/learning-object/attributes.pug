@@ -1,0 +1,92 @@
+extends ../../layout
+include ../../components/forms
+include ../../components/panels
+
+block content
+  .row
+    .col-md-6
+        +panel('default','Níveis de Ensino')
+          .well
+            form(method="POST" action="/admin/learning-object/postCreateAttribute" class="form-inline")
+              input(type="hidden", name="model", value="TeachingLevels")
+              +input('Nome *', 'name', oldInput('name'), 'Insira o nome do atributo')(required=true)
+              +submit("Cadastrar")(class="btn-xs")          
+          each t_level in data.teaching_levels
+            form(method="POST" action="/admin/learning-object/postUpdateAttribute" class="form-inline")
+              input(type="hidden", name="_id", value=t_level._id)
+              input(type="hidden", name="model", value="TeachingLevels")
+              +input('Nome *', 'name', t_level.name, '')(required=true, id=t_level._id)
+              +submit('Atualizar')(class="btn-xs")
+              a.btn.btn-default.btn-xs.remove(href=`/admin/learning-object/getRemoveAttribute?_id=${t_level._id}&model=TeachingLevels`)
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
+                | Remover
+            br
+    .col-md-6
+        +panel('default','Eixos')
+          .well
+            form(method="POST" action="/admin/learning-object/postCreateAttribute" class="form-inline")
+              input(type="hidden", name="model", value="Axes")
+              +input('Nome *', 'name', oldInput('name'), 'Insira o nome do atributo')(required=true)
+              +submit("Cadastrar")(class="btn-xs")          
+          each axe in data.axes
+            form(method="POST" action="/admin/learning-object/postUpdateAttribute" class="form-inline")
+              input(type="hidden", name="_id", value=axe._id)
+              input(type="hidden", name="model", value="Axes")
+              +input('Nome *', 'name', axe.name, '')(required=true, id=axe._id)
+              +submit('Atualizar')(class="btn-xs")
+              a.btn.btn-default.btn-xs.remove(href=`/admin/learning-object/getRemoveAttribute?_id=${axe._id}&model=Axes`)
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
+                | Remover
+            br
+  .row
+    .col-md-6
+      +panel('default','Recursos de Acessibilidade')
+        .well
+          form(method="POST" action="/admin/learning-object/postCreateAttribute" class="form-inline")
+            input(type="hidden", name="model", value="AccessibilityResources")
+            +input('Nome *', 'name', oldInput('name'), 'Insira o nome do atributo')(required=true)
+            +submit("Cadastrar")(class="btn-xs")
+        each ar in data.accessibility_resources
+          form(method="POST" action="/admin/learning-object/postUpdateAttribute" class="form-inline")
+            input(type="hidden", name="_id", value=ar._id)
+            input(type="hidden", name="model", value="Resources")
+            +input('Nome *', 'name', ar.name, '')(required=true, id=ar._id)
+            +submit('Atualizar')(class="btn-xs")
+            a.btn.btn-default.btn-xs.remove(href=`/admin/learning-object/getRemoveAttribute?_id=${ar._id}&model=AccessibilityResources`)
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
+                | Remover
+          br
+      +panel('default','Recursos')
+        .well
+          form(method="POST" action="/admin/learning-object/postCreateAttribute" class="form-inline")
+            input(type="hidden", name="model", value="Resources")
+            +input('Nome *', 'name', oldInput('name'), 'Insira o nome do atributo')(required=true)
+            +submit("Cadastrar")(class="btn-xs")
+        each resource in data.resources
+          form(method="POST" action="/admin/learning-object/postUpdateAttribute" class="form-inline")
+            input(type="hidden", name="_id", value=resource._id)
+            input(type="hidden", name="model", value="Resources")
+            +input('Nome *', 'name', resource.name, '')(required=true, id=resource._id)
+            +submit('Atualizar')(class="btn-xs")
+            a.btn.btn-default.btn-xs.remove(href=`/admin/learning-object/getRemoveAttribute?_id=${resource._id}&model=Resources`)
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
+                | Remover
+          br  
+    .col-md-6
+      +panel('default','Conteúdos')
+        .well
+          form(method="POST" action="/admin/learning-object/postCreateAttribute" class="form-inline")
+            input(type="hidden", name="model", value="Contents")
+            +input('Nome *', 'name', oldInput('name'), 'Insira o nome do atributo')(required=true)
+            +submit("Cadastrar")(class="btn-xs")
+        each content in data.contents
+          form(method="POST" action="/admin/learning-object/postUpdateAttribute" class="form-inline")
+            input(type="hidden", name="_id", value=content._id)
+            input(type="hidden", name="model", value="Contents")
+            +input('Nome *', 'name', content.name, '')(required=true, id=content._id)
+            +submit('Atualizar')(class="btn-xs")
+            a.btn.btn-default.btn-xs.remove(href=`/admin/learning-object/getRemoveAttribute?_id=${content._id}&model=Contents`)
+                i(class="glyphicon glyphicon-trash" aria-hidden="true")
+                | Remover
+          br      
+    
