@@ -31,6 +31,8 @@ block content
               strong
                 | Objeto
         th
+          | Enviado por
+        th
           | Situação
         th
           | Ações
@@ -42,6 +44,8 @@ block content
               label
                 input(type="checkbox", value=lo._id, name="user-checkbox").mass-checkbox
               a(title=lo.title href=`/learning-object/single/${lo._id}`) #{lo.title}          
+          td
+            | !{lo.owner.name}
           td
             | !{lo.htmlSituation}
           td

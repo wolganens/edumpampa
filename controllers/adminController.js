@@ -254,7 +254,7 @@ const routeMethods = {
     /*
     * Inicia a cosulta trazendo todos os OA da base de dados
     */
-    const query = LearningObject.find();
+    const query = LearningObject.find().populate('owner');
     /*
     * Se na requisição existir um filtor pela situação do OA, aplica o filtro na consulta
     */

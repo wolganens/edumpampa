@@ -3,10 +3,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const learningObjectSchema = new Schema({
-  owner: {
-    type: Schema.Types.ObjectId,
-    required: true,
-  },
+  owner: { type: Schema.Types.ObjectId, ref: 'User', required: true},
   title: {
     type: String,
     maxlength: 255,
