@@ -7,6 +7,13 @@ block content
   h3 Novo Usuário
   form(action="/account/signup", method="post")
     +user-form(data)
-
+    div
+      div
+        .checkbox
+          label
+            input(type="checkbox" required="required")
+            | Li e estou de acordo com os 
+          a(href="#" data-toggle="modal" data-target="#terms" style="margin-right:10px;")
+              |  Termos do Serviço
     +submit('Cadastrar')(class="btn-lg pull-right")
     .clearfix

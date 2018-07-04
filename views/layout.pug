@@ -113,8 +113,13 @@ html(lang='pt-br')
           li
             a(href="http://www.mec.gov.br", title="Ministério da Educação", target="_blank")
               img(src="/images/logo_mec_topo.png", alt="Ministério da Educação", class="img-responsive pull-left")
+        a(href="#" data-toggle="modal" data-target="#terms" style="margin-right:10px;")
+          | Termos do Serviço
+        a(href="#" data-toggle="modal" data-target="#credits")
+          | Créditos
+      include terms
     if highContrast == '1'
       script(src='/app-contrast.js')
     else
       script(src='/app.js')
-    block scripts    
+    block scripts   
